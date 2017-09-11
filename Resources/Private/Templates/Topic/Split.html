@@ -1,0 +1,93 @@
+<div xmlns="http://www.w3.org/1999/xhtml" lang="en"
+     xmlns:v="http://typo3.org/ns/FluidTYPO3/Vhs/ViewHelpers"
+     xmlns:f="http://typo3.org/ns/TYPO3/Fluid/ViewHelpers"
+     xmlns:tbb="http://typo3.org/ns/LumIT/Typo3bb/ViewHelpers"
+
+     v:schemaLocation="http://fluidtypo3.org/schemas/vhs-1.8.5.xsd">
+
+    <f:layout name="Default" />
+    <f:section name="main">
+        <div class="forum-topic-split">
+            <tbb:breadcrumb rootline="{post.rootline}"/>
+
+            <h1><f:translate key="topic.split.headline" /></h1>
+
+            <div>
+                <ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation" class="active">
+                        <f:link.action action="split" arguments="{post: post}" section="split-single" additionalAttributes="{aria-controls: 'split-single', role: 'tab', data-toggle: 'tab'}">
+                            <f:translate key="topic.split.tabs.single" />
+                        </f:link.action>
+                    </li>
+                    <li role="presentation">
+                        <f:link.action action="split" arguments="{post: post}" section="split-following" additionalAttributes="{aria-controls: 'split-single', role: 'tab', data-toggle: 'tab'}">
+                            <f:translate key="topic.split.tabs.following" />
+                        </f:link.action>
+                    </li>
+                    <li role="presentation">
+                        <f:link.action action="split" arguments="{post: post}" section="split-selected" additionalAttributes="{aria-controls: 'split-single', role: 'tab', data-toggle: 'tab'}">
+                            <f:translate key="topic.split.tabs.selected" />
+                        </f:link.action>
+                    </li>
+                </ul>
+
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="split-single">
+                        <p><f:translate key="topic.split.single.description" /></p>
+                        <f:form action="executeSplit" controller="Topic" name="newTopic" object="{newTopic}" arguments="{author: user}">
+                            <f:form.hidden name="post" value="{post}" />
+                            <f:form.hidden name="oldTopic" value="{post.topic}" />
+                            <div class="form-group">
+                                <label for="topicName"><f:translate key="topic.split.form.topicName" /></label>
+                                <f:form.textfield class="form-control" property="title" placeholder="{f:translate(key: 'topic.split.form.topicName')}" />
+                            </div>
+
+                            <f:form.submit value="{f:translate(key: 'topic.split.form.btnLabel')}" class="btn btn-default" />
+                        </f:form>
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="split-following">
+                        <p><f:translate key="topic.split.following.description" /></p>
+                        <f:form action="executeSplit" controller="Topic" name="newTopic" object="{newTopic}" arguments="{author: user}" additionalParams="{posts: followingPosts}">
+                            <f:form.hidden name="oldTopic" value="{post.topic}" />
+                            <f:for each="{followingPosts}" as="followingPost">
+                                <f:form.hidden name="posts[]" value="{followingPost.uid}" />
+                            </f:for>
+                            <div class="form-group">
+                                <label for="topicName"><f:translate key="topic.split.form.topicName" /></label>
+                                <f:form.textfield class="form-control" property="title" placeholder="{f:translate(key: 'topic.split.form.topicName')}" />
+                            </div>
+
+                            <f:form.submit value="{f:translate(key: 'topic.split.form.btnLabel')}" class="btn btn-default" />
+                        </f:form>
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="split-selected">
+                        <p><f:translate key="topic.split.selected.description" /></p>
+                        <f:form action="executeSplit" controller="Topic" name="newTopic" object="{newTopic}" arguments="{author: user}">
+                            <f:form.hidden name="oldTopic" value="{post.topic}" />
+
+                            <div class="form-group">
+                                <label for="topicName"><f:translate key="topic.split.form.topicName" /></label>
+                                <f:form.textfield class="form-control" property="title" placeholder="{f:translate(key: 'topic.split.form.topicName')}" />
+                            </div>
+                            <f:for each="{post.topic.posts}" as="postToSelect">
+                                <div class="row">
+                                    <div class="col-xs-1">
+                                        <div class="checkbox">
+                                            <f:form.checkbox name="posts[]" value="{postToSelect.uid}" checked="{postToSelect} == {post}" />
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-11">
+                                        <f:render partial="Post/SinglePost" section="Content" arguments="{post: postToSelect, showOptions: 'false'}" />
+                                    </div>
+                                </div>
+                            </f:for>
+
+                            <f:form.submit value="{f:translate(key: 'topic.split.form.btnLabel')}" class="btn btn-default" />
+                        </f:form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </f:section>
+</div>

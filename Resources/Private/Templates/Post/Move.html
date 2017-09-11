@@ -1,0 +1,28 @@
+<div xmlns="http://www.w3.org/1999/xhtml" lang="en"
+     xmlns:v="http://typo3.org/ns/FluidTYPO3/Vhs/ViewHelpers"
+     xmlns:f="http://typo3.org/ns/TYPO3/Fluid/ViewHelpers"
+     xmlns:tbb="http://typo3.org/ns/LumIT/Typo3bb/ViewHelpers"
+
+     v:schemaLocation="http://fluidtypo3.org/schemas/vhs-1.8.5.xsd">
+
+    <f:layout name="Default" />
+    <f:section name="main">
+        <div class="forum-topic-post-move">
+            <tbb:breadcrumb rootline="{post.rootline}"/>
+
+            <h1><f:translate key="topic.move.headline" /></h1>
+            <p><f:translate key="post.move.destinationTopic.label" />:</p>
+            <f:form action="executeMove" controller="Post" arguments="{post: post}">
+                <f:for each="{topics}" as="rootline" key="uid">
+                    <div class="radio">
+                        <label>
+                            <f:form.radio name="destination" value="{uid}" checked="{post.topic.uid} == {uid}" />
+                            <f:format.raw>{rootline}</f:format.raw>
+                        </label>
+                    </div>
+                </f:for>
+                <f:form.submit value="{f:translate(key: 'post.move.submit')}" class="btn btn-default" />
+            </f:form>
+        </div>
+    </f:section>
+</div>

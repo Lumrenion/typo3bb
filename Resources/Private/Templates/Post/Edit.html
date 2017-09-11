@@ -1,0 +1,32 @@
+<div xmlns="http://www.w3.org/1999/xhtml" lang="en"
+     xmlns:v="http://typo3.org/ns/FluidTYPO3/Vhs/ViewHelpers"
+     xmlns:f="http://typo3.org/ns/TYPO3/Fluid/ViewHelpers"
+
+     v:schemaLocation="http://fluidtypo3.org/schemas/vhs-1.8.5.xsd">
+
+    <f:layout name="Default" />
+
+    <f:section name="main">
+
+        <tbb:breadcrumb rootline="{post.rootline}" />
+        <h1><f:translate key="post.edit.headline.label" /></h1>
+
+        <f:flashMessages />
+
+        <f:render partial="FormErrors" arguments="{object:Post}" />
+
+        <f:form action="update" enctype="multipart/form-data" name="post" object="{post}" >
+            <f:render partial="Post/FormFields" section="Content" arguments="{post:post}" />
+            <f:form.submit class="btn btn-default" value="{f:translate(key: 'post.edit.submit.label')}" />
+        </f:form>
+
+        <hr>
+
+        <div class="typo3bb-post-edit-previous-wrapper">
+            <h3><f:translate key="post.new.previousPosts" /></h3>
+            <f:for each="{previousPosts}" as="previousPost">
+                <f:render partial="Post/SinglePost" section="Content" arguments="{post: previousPost, showOptions: 'false'}" />
+            </f:for>
+        </div>
+    </f:section>
+</div>

@@ -1,0 +1,98 @@
+<div xmlns="http://www.w3.org/1999/xhtml" lang="en"
+     xmlns:v="http://typo3.org/ns/FluidTYPO3/Vhs/ViewHelpers"
+     xmlns:f="http://typo3.org/ns/TYPO3/Fluid/ViewHelpers"
+     xmlns:tbb="http://typo3.org/ns/LumIT/Typo3bb/ViewHelpers"
+
+     v:schemaLocation="http://fluidtypo3.org/schemas/vhs-1.8.5.xsd">
+    <f:section name="Content">
+
+        <h3 data-toggle="collapse" data-target="#pollForm" aria-expanded="false" aria-controls="pollForm"><f:translate key="formLabels.poll.headline" /></h3>
+        <div id="pollForm" class="collapse">
+
+            <div class="form-group">
+                <label for="topic-poll-question"><f:translate key="formLabels.poll.question" /></label>
+                <f:form.textfield name="poll[question]" value="{poll.question}" class="form-control" id="topic-poll-question" />
+            </div>
+            <hr/>
+
+            <div class="topic-poll-answers-wrapper">
+
+                <div class="form-group">
+                    <label for="poll-answer-0" class="control-label col-sm-2"><f:translate key="formLabels.poll.answer" arguments="{0: '1'}" /></label>
+                    <div class="col-sm-10">
+                        <f:form.textfield name="poll[choices][0][text]" class="form-control" id="poll-answer-0" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="poll-answer-1" class="control-label col-sm-2"><f:translate key="formLabels.poll.answer" arguments="{0: '2'}" /></label>
+                    <div class="col-sm-10">
+                        <f:form.textfield name="poll[choices][1][text]" class="form-control" id="poll-answer-1" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="poll-answer-2" class="control-label col-sm-2"><f:translate key="formLabels.poll.answer" arguments="{0: '3'}" /></label>
+                    <div class="col-sm-10">
+                        <f:form.textfield name="poll[choices][2][text]" class="form-control" id="poll-answer-2" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="poll-answer-3" class="control-label col-sm-2"><f:translate key="formLabels.poll.answer" arguments="{0: '4'}" /></label>
+                    <div class="col-sm-10">
+                        <f:form.textfield name="poll[choices][3][text]" class="form-control" id="poll-answer-3" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="poll-answer-4" class="control-label col-sm-2"><f:translate key="formLabels.poll.answer" arguments="{0: '5'}" /></label>
+                    <div class="col-sm-10">
+                        <f:form.textfield name="poll[choices][4][text]" class="form-control" id="poll-answer-4" />
+                    </div>
+                </div>
+
+            </div>
+
+            <hr/>
+
+            <div class="topic-poll-settings-wrapper">
+                <h4><f:translate key="formLabels.poll.options.headline" /></h4>
+
+                <div class="form-group">
+                    <label for="poll-endtime" class="control-label col-sm-2"><f:translate key="formLabels.poll.endtime.1" /></label>
+                    <div class="col-sm-10">
+                        <div class="input-group">
+                            <f:form.textfield type="number" name="poll[endtime]" class="form-control" id="poll-endtime" additionalAttributes="{min: '0', step: '1'}" />
+                            <span class="input-group-addon"><f:translate key="formLabels.poll.endtime.2"/></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="poll-max-choices-select" class="control-label col-sm-2"><f:translate key="formLabels.poll.maxChoicesSelect" /></label>
+                    <div class="col-sm-10">
+                        <f:form.textfield name="poll[maxChoicesSelect]" type="number" class="form-control" id="poll-max-choices-select" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <div class="checkbox">
+                            <label for="poll-result-hidden">
+                                <f:form.checkbox name="poll[resultHidden]" value="true" id="poll-result-hidden" />
+                                <b><f:translate key="formLabels.poll.resultHidden" /></b>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <div class="checkbox">
+                            <label for="poll-change-vote-allowed">
+                                <f:form.checkbox name="poll[changeVoteAllowed]" value="true" id="poll-change-vote-allowed" />
+                                <b><f:translate key="formLabels.poll.changeVoteAllowed" /></b>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </f:section>
+</div>

@@ -1,0 +1,104 @@
+<div xmlns="http://www.w3.org/1999/xhtml" lang="en"
+     xmlns:v="http://typo3.org/ns/FluidTYPO3/Vhs/ViewHelpers"
+     xmlns:f="http://typo3.org/ns/TYPO3/Fluid/ViewHelpers"
+     xmlns:tbb="http://typo3.org/ns/LumIT/Typo3bb/ViewHelpers"
+
+     v:schemaLocation="http://fluidtypo3.org/schemas/vhs-1.8.5.xsd">
+    <f:section name="Content">
+
+        <div class="forum-topic-post-wrapper">
+            <a class="section-anchor" id="post-{post.uid}"></a>
+            <div class="forum-topic-post">
+                <div class="row">
+
+                    <div class="col-xs-12 col-md-2">
+                        <div class="post-author-info-wrapper">
+                            <dl class="post-author-info">
+
+                                <f:if condition="{post.author}">
+                                    <f:then>
+                                        <dt class="author-avatar-container">
+                                            <v:media.exists file="uploads/pics/{post.author.image}">
+                                                <f:then>
+                                                    <f:image width="90" src="uploads/pics/{post.author.image}" class="image-responsive img-thumbnail profile-user-image"
+                                                             alt="{frontendUser.displayName}" title="{frontendUser.displayName}" />
+                                                </f:then>
+                                                <f:else>
+                                                    <i class="fa fa-user fa-5x" aria-hidden="true"></i>
+                                                </f:else>
+                                            </v:media.exists>
+                                        </dt>
+                                        <dt class="post-author-info-main">
+                                            <f:if condition="{post.author}">
+                                                <f:then>
+                                                    <f:link.action action="show" controller="FrontendUser" arguments="{user: post.author}" pageUid="{settings.pid.profile}">
+                                                        {post.authorName}
+                                                    </f:link.action>
+                                                </f:then>
+                                                <f:else>
+                                                    {post.authorName}
+                                                </f:else>
+                                            </f:if>
+                                            <span class="has-tooltip user-status-indicator" title="" data-original-title="Offline"></span>
+                                        </dt>
+                                        <f:if condition="{post.author}">
+                                            <dd class="post-author-info-posts">
+                                                <f:translate key="fe_users.postsCount.label" arguments="{0: post.author.postsCount}"/><br/>
+                                            </dd>
+                                            <dd class="post-author-info-joined">
+                                                <f:translate key="post.author.crdate.label" arguments="{0: '{f:format.date(date: post.author.crdate, format: \'d.m.Y\')}'}" />
+                                            </dd>
+                                        </f:if>
+                                    </f:then>
+                                </f:if>
+
+                            </dl>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 col-md-10 post-body-wrapper">
+                        <div class="post-body">
+
+                            <f:if condition="{showOptions}">
+                                <f:render partial="Post/Options" section="Content" arguments="{_all}" />
+                            </f:if>
+
+                            <div class="post-heading">
+                                <h3><f:link.action action="show" controller="Topic" arguments="{topic: post.topic, post: post}" section="post-{post.uid}">{post.topic.title}</f:link.action></h3>
+                                <f:format.date format="d.m.Y H:i">{post.crdate}</f:format.date>
+                            </div>
+
+                            <div class="post-content">
+                                <f:format.raw>{post.text}</f:format.raw>
+
+                                <div class="post-attachments">
+                                    <f:for each="{post.attachments}" as="attachment">
+                                        <f:link.action action="download" controller="Attachment" arguments="{attachment: attachment}">
+                                            <i class="fa fa-paperclip fa-fw" aria-hidden="true"></i> <f:translate key="post.attachment.download" arguments="{0: attachment.originalFileName}" />
+                                        </f:link.action> <small>(<f:translate key="post.attachment.downloadCount" arguments="{0: attachment.downloadCount}" />)</small> <br>
+                                    </f:for>
+                                </div>
+
+                                <f:if condition="{post.edited}">
+                                    <p class="post-edited-note">
+                                        <small>
+                                            <f:translate key="post.edited.label" arguments="{0: '{f:format.date(format: \'d.m.Y\', date: post.tstamp)}', 1: '{f:if(condition: post.editor, then: post.editor.displayName, else: post.editorName)}'}" />
+                                        </small>
+                                    </p>
+                                </f:if>
+
+                                <f:if condition="{post.author.signature}">
+                                    <hr>
+                                    <f:format.raw>{post.author.signature}</f:format.raw>
+                                </f:if>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </f:section>
+</div>

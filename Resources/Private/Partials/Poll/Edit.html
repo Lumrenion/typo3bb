@@ -1,0 +1,87 @@
+<div xmlns="http://www.w3.org/1999/xhtml" lang="en"
+     xmlns:v="http://typo3.org/ns/FluidTYPO3/Vhs/ViewHelpers"
+     xmlns:f="http://typo3.org/ns/TYPO3/Fluid/ViewHelpers"
+     xmlns:tbb="http://typo3.org/ns/LumIT/Typo3bb/ViewHelpers"
+
+     v:schemaLocation="http://fluidtypo3.org/schemas/vhs-1.8.5.xsd">
+    <f:section name="Content">
+
+        <h3 data-toggle="collapse" data-target="#pollForm" aria-expanded="false" aria-controls="pollForm"><f:translate key="formLabels.poll.headline" /></h3>
+        <div id="pollForm" class="collapse">
+
+            <div class="form-group">
+                <label for="topic-poll-question" class="col-sm-2 control-label"><f:translate key="formLabels.poll.question" /></label>
+                <div class="col-sm-10">
+                    <f:form.textfield value="{poll.question}" class="form-control" id="topic-poll-question" disabled="true" />
+                </div>
+            </div>
+            <hr/>
+
+            <div class="topic-poll-answers-wrapper">
+
+                <f:for each="{topic.poll.choices}" as="choice" iteration="it">
+                    <div class="form-group">
+                        <label for="poll-answer-{it.index}" class="control-label col-sm-2"><f:translate key="formLabels.poll.answer" arguments="{0: it.cycle}" /></label>
+                        <div class="col-sm-10">
+                            <f:form.textfield value="{choice.text}" id="poll-answer-{it.index}" class="form-control" disabled="true" />
+                        </div>
+                    </div>
+                </f:for>
+
+            </div>
+
+            <hr/>
+
+            <div class="topic-poll-settings-wrapper">
+                <h4><f:translate key="formLabels.poll.options.headline" /></h4>
+
+                <div class="form-group">
+                    <label for="poll-endtime" class="control-label col-sm-2"><f:translate key="formLabels.poll.endtime.1" /></label>
+                    <div class="col-sm-10">
+                        <div class="input-group">
+                            <f:form.textfield type="number" property="poll.endtime" class="form-control" id="poll-endtime" additionalAttributes="{min: '0', step: '1'}" />
+                            <span class="input-group-addon"><f:translate key="formLabels.poll.endtime.2"/></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="poll-max-choices-select" class="control-label col-sm-2"><f:translate key="formLabels.poll.maxChoicesSelect" /></label>
+                    <div class="col-sm-10">
+                        <f:form.textfield property="poll.maxChoicesSelect" type="number" class="form-control" id="poll-max-choices-select" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <div class="checkbox">
+                            <label for="poll-result-hidden">
+                                <f:form.checkbox property="poll.resultHidden" value="true" id="poll-result-hidden" />
+                                <b><f:translate key="formLabels.poll.resultHidden" /></b>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <div class="checkbox">
+                            <label for="poll-change-vote-allowed">
+                                <f:form.checkbox property="poll.changeVoteAllowed" value="true" id="poll-change-vote-allowed" />
+                                <b><f:translate key="formLabels.poll.changeVoteAllowed" /></b>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <f:link.action action="delete" controller="Poll" arguments="{topic: topic, redirectTo: '{action: \'edit\', controller: \'Topic\', arguments: \'{topic: topic}\'}'}" class="btn btn-default">
+                        <f:translate key="topic.edit.deletePoll" />
+                    </f:link.action>
+                </div>
+            </div>
+
+        </div>
+
+    </f:section>
+</div>

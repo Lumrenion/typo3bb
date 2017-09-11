@@ -1,0 +1,184 @@
+
+plugin.tx_typo3bb {
+    view {
+        templateRootPaths {
+            0 = EXT:typo3bb/Resources/Private/Templates
+            1 = {$plugin.tx_typo3bb.view.templateRootPath}
+        }
+        partialRootPaths {
+            0 = EXT:typo3bb/Resources/Private/Partials
+            1 = {$plugin.tx_typo3bb.view.partialRootPath}
+        }
+        layoutRootPaths {
+            0 = EXT:typo3bb/Resources/Private/Layouts
+            1 = {$plugin.tx_typo3bb.view.layoutRootPath}
+        }
+    }
+    persistence {
+        storagePid = {$plugin.tx_typo3bb.persistence.storagePid}
+
+        classes {
+            LumIT\Typo3bb\Domain\Model\Poll {
+                mapping.columns {
+                    starttime.mapOnProperty = starttime
+                    endtime.mapOnProperty = endtime
+                }
+            }
+            LumIT\Typo3bb\Domain\Model\Topic {
+                mapping.columns {
+                    crdate.mapOnProperty = crdate
+                }
+            }
+            LumIT\Typo3bb\Domain\Model\Post {
+                mapping.columns {
+                    crdate.mapOnProperty = crdate
+                    tstamp.mapOnProperty = tstamp
+                }
+            }
+            LumIT\Typo3bb\Domain\Model\FrontendUser {
+                mapping.columns {
+                    crdate.mapOnProperty = crdate
+                }
+            }
+            LumIT\Typo3bb\Domain\Model\Message {
+                mapping.columns {
+                    crdate.mapOnProperty = crdate
+                }
+            }
+        }
+    }
+    settings {
+        debug = {$plugin.tx_typo3bb.settings.debug}
+
+        emoticonPath = {$plugin.tx_typo3bb.settings.emoticonPath}
+        attachmentsPath = {$plugin.tx_typo3bb.settings.attachmentsPath}
+        onlineInterval = {$plugin.tx_typo3bb.settings.onlineInterval}
+        breadcrumb {
+            forumCategoryIconClass = {$plugin.tx_typo3bb.settings.breadcrumb.forumCategoryIconClass}
+            topicIconClass = {$plugin.tx_typo3bb.settings.breadcrumb.topicIconClass}
+            boardIconClass = {$plugin.tx_typo3bb.settings.breadcrumb.boardIconClass}
+            homeIconClass = {$plugin.tx_typo3bb.settings.breadcrumb.homeIconClass}
+            itemMaxChars = {$plugin.tx_typo3bb.settings.breadcrumb.itemMaxChars}
+        }
+        pid {
+            forum = {$plugin.tx_typo3bb.settings.pid.forum}
+            profile = {$plugin.tx_typo3bb.settings.pid.profile}
+
+            messages = {$plugin.tx_typo3bb.settings.pid.messages}
+            statistics = {$plugin.tx_typo3bb.settings.pid.statistics}
+        }
+
+        email {
+            fromEmail < plugin.tx_srfeuserregister_pi1.email
+            fromName < plugin.tx_srfeuserregister_pi1.siteName
+
+            replyEmail < plugin.tx_srfeuserregister_pi1.email
+            replyName < plugin.tx_srfeuserregister_pi1.siteName
+        }
+
+        accessValidation {
+            Board {
+                show {
+                    0 = HasReadPermission
+#                    1 = IsAdmin
+                    2 = IsBoardModerator
+                }
+                markAsRead {
+                    0 = IsLoggedIn
+                }
+                subscribe {
+                    0 = IsLoggedIn
+                }
+            }
+            Topic {
+                show < plugin.tx_typo3bb.settings.accessValidation.Board.show
+                create {
+                    0 = HasWritePermission
+#                    1 = IsAdmin
+                    2 = IsBoardModerator
+                }
+                edit {
+                    0 = IsAuthor
+                    1 = IsBoardModerator
+                }
+                delete < plugin.tx_typo3bb.settings.accessValidation.Topic.edit
+                close < plugin.tx_typo3bb.settings.accessValidation.Topic.edit
+                reopen < plugin.tx_typo3bb.settings.accessValidation.Topic.close
+                move {
+                    0 = IsBoardModerator
+                }
+                split {
+                    0 = IsBoardModerator
+                }
+                join {
+                    0 = IsBoardModerator
+                }
+                pin {
+                    0 = IsBoardModerator
+                }
+                subscribe {
+                    0 = IsLoggedIn
+                }
+            }
+            Post {
+                show < plugin.tx_typo3bb.settings.accessValidation.Topic.show
+                create {
+                    AND1 {
+                        OR1 < plugin.tx_typo3bb.settings.accessValidation.Topic.create
+                        2 = IsNotClosed
+                    }
+                }
+                # create < plugin.tx_typo3bb.settings.accessValidation.Topic.create
+                # create.10 = IsClosed
+                edit {
+                    0 = IsAuthor
+                    1 = IsBoardModerator
+                }
+                delete < plugin.tx_typo3bb.settings.accessValidation.Post.edit
+                move {
+                    1 = IsBoardModerator
+                }
+            }
+            Poll {
+                vote < plugin.tx_typo3bb.settings.accessValidation.Topic.show
+                vote.10 = TopicHasPoll
+            }
+            FrontendUser {
+                show {
+                    0 = IsLoggedIn
+                }
+            }
+            Message {
+                inbox {
+                    0 = IsLoggedIn
+                }
+                outbox {
+                    0 = IsLoggedIn
+                }
+                send {
+                    0 = IsLoggedIn
+                }
+                delete {
+                    0 = IsLoggedIn
+                }
+            }
+        }
+    }
+}
+
+[globalVar = TSFE:id={$plugin.tx_typo3bb.settings.pid.forum}, TSFE:id={$plugin.tx_typo3bb.settings.pid.profile}, TSFE:id={$plugin.tx_typo3bb.settings.pid.profileEdit}, TSFE:id={$plugin.tx_typo3bb.settings.pid.passwordEdit}, TSFE:id={$plugin.tx_typo3bb.settings.pid.profileDelete}, TSFE:id={$plugin.tx_typo3bb.settings.pid.messages}, TSFE:id={$plugin.tx_typo3bb.settings.pid.statistics}]
+page {
+    includeJSFooterlibs {
+        tinymce = EXT:typo3bb/Resources/Public/tinymce/tinymce.jquery.min.js
+        tinymceTheme = EXT:typo3bb/Resources/Public/tinymce/themes/modern/theme.js
+        select2 = EXT:typo3bb/Resources/Public/select2/dist/js/select2.full.min.js
+    }
+    includeJSFooter {
+        typo3bbscript = EXT:typo3bb/Resources/Public/assets/js/footer.min.js
+    }
+    includeCSS {
+        select2 = EXT:typo3bb/Resources/Public/select2/dist/css/select2.min.css
+        typo3bb = EXT:typo3bb/Resources/Public/assets/css/main.min.css
+    }
+}
+[global]

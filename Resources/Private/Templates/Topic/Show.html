@@ -1,0 +1,29 @@
+<div xmlns="http://www.w3.org/1999/xhtml" lang="en"
+     xmlns:v="http://typo3.org/ns/FluidTYPO3/Vhs/ViewHelpers"
+     xmlns:f="http://typo3.org/ns/TYPO3/Fluid/ViewHelpers"
+     xmlns:tbb="http://typo3.org/ns/LumIT/Typo3bb/ViewHelpers"
+
+     v:schemaLocation="http://fluidtypo3.org/schemas/vhs-1.8.5.xsd">
+
+    <f:layout name="Default" />
+    <f:section name="main">
+        <div class="forum-topic-posts">
+            <tbb:breadcrumb rootline="{topic.rootline}"/>
+
+            <f:render partial="Poll/Show" section="Content" arguments="{_all}" />
+
+            <tbb:widget.paginatePosts objects="{topic.posts}" as="paginatedPosts" currentPost="{currentPost}" configuration="{itemsPerPage: 20, insertAbove: 1, insertBelow: 1, maximumNumberOfLinks: 10, currentPost: currentPost}">
+                <f:for each="{paginatedPosts}" as="post">
+                    <f:if condition="{post}">
+
+                        <f:render partial="Post/SinglePost" section="Content" arguments="{post: post, showOptions: 'true'}" />
+
+                    </f:if>
+                </f:for>
+            </tbb:widget.paginatePosts>
+        </div>
+        <div class="forum-topic-actions">
+            <f:render partial="Topic/Options" section="Content" arguments="{topic: topic}" />
+        </div>
+    </f:section>
+</div>

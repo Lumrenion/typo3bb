@@ -1,0 +1,26 @@
+<div xmlns="http://www.w3.org/1999/xhtml" lang="en"
+     xmlns:v="http://typo3.org/ns/FluidTYPO3/Vhs/ViewHelpers"
+     xmlns:f="http://typo3.org/ns/TYPO3/Fluid/ViewHelpers"
+     xmlns:tbb="http://typo3.org/ns/LumIT/Typo3bb/ViewHelpers"
+
+     v:schemaLocation="http://fluidtypo3.org/schemas/vhs-1.8.5.xsd">
+    <f:section name="Content">
+
+        <p>{topic.poll.question}</p>
+        <f:form action="vote" controller="Poll" arguments="{topic: topic}">
+            <f:for each="{topic.poll.choices}" as="choice">
+                <div class="checkbox">
+                    <label>
+                        <f:form.checkbox name="selection[]" value="{choice.uid}" />
+                        <f:if condition="{choice.frontendUserVoted}"><f:then><b>{choice.text}</b></f:then><f:else>{choice.text}</f:else></f:if><f:if condition="{hidePollResult}"><f:else> ({choice.voteCount})</f:else></f:if>
+                    </label>
+                </div>
+            </f:for>
+            <f:if condition="{topic.poll.maxChoicesSelect} > 0">
+                <div><f:translate key="poll.maxChoicesSelect.label" arguments="{0: topic.poll.maxChoicesSelect}" /></div>
+            </f:if>
+            <f:form.submit value="{f:translate(key: 'poll.vote.submit.label')}" />
+            <small><f:translate key="poll.endtime.label" arguments="{0: '{f:format.date(date: topic.poll.endtime, format: \'d.m.Y H:i\')}'}" /></small>
+        </f:form>
+    </f:section>
+</div>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+    <file source-language="en" datatype="plaintext" original="messages" date="2016-03-21T18:56:53Z" product-name="typo3bb">
+        <header/>
+        <body>
+            <trans-unit id="title.description">
+                <source>title</source>
+            </trans-unit>
+            <trans-unit id="sticky.description">
+                <source>If the topic is pinned</source>
+            </trans-unit>
+            <trans-unit id="closed.description">
+                <source>If new posts can be added to the topic</source>
+            </trans-unit>
+            <trans-unit id="crdate.description">
+                <source>crdate</source>
+            </trans-unit>
+            <trans-unit id="posts_count.description">
+                <source>Number of posts, added for performance reasons</source>
+            </trans-unit>
+            <trans-unit id="latest_post_crdate.description">
+                <source>The Crdate of the latest post. Enables sorting of topics without database join</source>
+            </trans-unit>
+            <trans-unit id="posts.description">
+                <source>posts</source>
+            </trans-unit>
+            <trans-unit id="poll.description">
+                <source>poll</source>
+            </trans-unit>
+            <trans-unit id="author.description">
+                <source>The creator of the topic</source>
+            </trans-unit>
+            <trans-unit id="subscribers.description">
+                <source>The users subscribed this topic</source>
+            </trans-unit>
+            <trans-unit id="readers.description">
+                <source>The users that have read this topic</source>
+            </trans-unit>
+            <trans-unit id="latest_post.description">
+                <source>Pointer to the latest post of the topic.</source>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

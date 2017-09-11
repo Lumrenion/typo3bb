@@ -1,0 +1,27 @@
+config.tx_extbase{
+    persistence{
+        classes{
+
+            TYPO3\CMS\Extbase\Domain\Model\FrontendUser {
+                subclasses {
+                    0 = LumIT\Typo3bb\Domain\Model\FrontendUser
+                }
+            }
+            LumIT\Typo3bb\Domain\Model\FileReference {
+                mapping {
+                    tableName = sys_file_reference
+                }
+            }
+            LumIT\Typo3bb\Domain\Model\FrontendUser {
+                mapping {
+                    recordType = 0
+                    tableName = fe_users
+                    columns {
+                        tx_typo3bb_display_name.mapOnProperty = displayName
+                    }
+                }
+            }
+            
+        }
+    }
+}

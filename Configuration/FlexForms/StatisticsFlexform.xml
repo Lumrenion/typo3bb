@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<T3DataStructure>
+    <sheets>
+        <general>
+            <ROOT>
+                <TCEforms>
+                    <sheetTitle>LLL:EXT:typo3bb/Resources/Private/Language/locallang.xlf:plugin.statistics.flexform.settings</sheetTitle>
+                </TCEforms>
+                <type>array</type>
+                <el>
+                    <switchableControllerActions>
+                        <TCEforms>
+                            <label>LLL:EXT:typo3bb/Resources/Private/Language/locallang.xlf:plugin.statistics.flexform.view</label>
+                            <!--<onChange>reload</onChange>-->
+                            <config>
+                                <type>select</type>
+                                <items type="array">
+                                    <numIndex index="1" type="array">
+                                        <numIndex index="0">LLL:EXT:typo3bb/Resources/Private/Language/locallang.xlf:plugin.statistics.flexform.view.infoCenter</numIndex>
+                                        <numIndex index="1">Statistic->infoCenter</numIndex>
+                                    </numIndex>
+                                    <numIndex index="2" type="array">
+                                        <numIndex index="0">LLL:EXT:typo3bb/Resources/Private/Language/locallang.xlf:plugin.statistics.flexform.view.allStatistics</numIndex>
+                                        <numIndex index="1">Statistic->statistics</numIndex>
+                                    </numIndex>
+                                </items>
+                            </config>
+                        </TCEforms>
+                    </switchableControllerActions>
+                </el>
+            </ROOT>
+        </general>
+    </sheets>
+</T3DataStructure>

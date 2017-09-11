@@ -1,0 +1,950 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+    <file source-language="en" target-language="de" datatype="plaintext" original="messages" date="2017-02-13T21:45:48Z" product-name="typo3bb">
+        <header/>
+        <body>
+            <trans-unit id="tx_typo3bb_domain_model_forumcategory">
+                <source>Forum Category</source>
+                <target>Forum Kategorie</target>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_forumcategory.title">
+                <source>Title</source>
+                <target>Titel</target>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_forumcategory.boards">
+                <source>Boards</source>
+                <target>Boards</target>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_board">
+                <source>Board</source>
+                <target>Board</target>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_board.title">
+                <source>Title</source>
+                <target>Titel</target>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_board.description">
+                <source>Description</source>
+                <target>Beschreibung</target>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_board.redirect">
+                <source>Redirect</source>
+                <target>Weiterleitung</target>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_board.link">
+                <source>Link</source>
+                <target>Link</target>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_board.topics">
+                <source>Topics</source>
+                <target>Thema</target>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_board.sub_boards">
+                <source>Sub Boards</source>
+                <target>Unter-Boards</target>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_board.permission">
+                <source>Permission</source>
+                <target>Berechtigung</target>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_board.parent_board">
+                <source>Parent Board</source>
+                <target>Übergeordnetes Board</target>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_board.forum_category">
+                <source>Forum Category</source>
+                <target>Forum Kategorie</target>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_topic">
+                <source>Topic</source>
+                <target>Thema</target>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_topic.title">
+                <source>Title</source>
+                <target>Titel</target>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_topic.sticky">
+                <source>Sticky</source>
+                <target>Angeheftet</target>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_topic.closed">
+                <source>Closed</source>
+                <target>Geschlossen</target>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_topic.crdate">
+                <source>Crdate</source>
+                <target>Erstellungsdatum</target>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_topic.posts_count">
+                <source>Posts Count</source>
+                <target>Anzahl Beiträge</target>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_topic.latest_post_crdate">
+                <source>Latest Post Crdate</source>
+                <target>Erstellungsdatum des letzten Beitrags</target>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_topic.posts">
+                <source>Posts</source>
+                <target>Beiträge</target>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_topic.poll">
+                <source>Poll</source>
+                <target>Umfrage</target>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_topic.author">
+                <source>Author</source>
+                <target>Autor</target>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_topic.subscribers">
+                <source>Subscribers</source>
+                <target>Abonnenten</target>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_topic.readers">
+                <source>Readers</source>
+                <target>Gesehen von</target>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_topic.latest_post">
+                <source>Latest Post</source>
+                <target>Letzter Beitrag</target>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_post">
+                <source>Post</source>
+                <target>Beitrag</target>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_post.text">
+                <source>Text</source>
+                <target>Text</target>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_post.author_name">
+                <source>Author Name</source>
+                <target>Autor-Name</target>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_post.crdate">
+                <source>Crdate</source>
+                <target>Erstellungsdatum</target>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_post.tstamp">
+                <source>Tstamp</source>
+                <target>Änderungsdatum</target>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_post.attachments">
+                <source>Attachments</source>
+                <target>Anhänge</target>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_post.author">
+                <source>Author</source>
+                <target>Autor</target>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_poll">
+                <source>Poll</source>
+                <target>Umfrage</target>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_poll.question">
+                <source>Question</source>
+                <target>Frage</target>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_poll.max_choices_select">
+                <source>Max Choices Select</source>
+                <target>Maximale Auswahlmöglichkeiten</target>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_poll.change_vote_allowed">
+                <source>Change Vote Allowed</source>
+                <target>Änderung der Auswahl erlaubt</target>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_poll.vote_count">
+                <source>Vote Count</source>
+                <target>Anzahl der Abstimmungen</target>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_poll.result_hidden">
+                <source>Result Hidden (will be visible when ended)</source>
+                <target>Ergebnis versteckt (wird nach Ablauf öffentlich)</target>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_poll.choices">
+                <source>Choices</source>
+                <target>Antworten</target>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_pollchoice">
+                <source>Poll Choice</source>
+                <target>Umfrage-Antworten</target>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_pollchoice.text">
+                <source>Text</source>
+                <target>Text</target>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_pollchoice.vote_count">
+                <source>Vote Count</source>
+                <target>Anzahl Abstimmungen</target>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_pollchoice.poll">
+                <source>Poll</source>
+                <target>Umfrage</target>
+            </trans-unit>
+            <trans-unit id="frontendUser">
+                <source>Frontend User</source>
+                <target>Benutzer</target>
+            </trans-unit>
+            <trans-unit id="frontendUser.name">
+                <source>Display name</source>
+                <target>Anzeigename</target>
+            </trans-unit>
+            <trans-unit id="frontendUser.signature">
+                <source>Signature</source>
+                <target>Signatur</target>
+            </trans-unit>
+            <trans-unit id="frontendUser.created_topics">
+                <source>Created Topics</source>
+                <target>Erstellte Themen</target>
+            </trans-unit>
+            <trans-unit id="frontendUser.subscribed_topics">
+                <source>Subscribed Topics</source>
+                <target>Abonnierte Themen</target>
+            </trans-unit>
+            <trans-unit id="frontendUser.selected_poll_choices">
+                <source>Selected Poll Choices</source>
+                <target>Gewählte Umfrage-Antworten</target>
+            </trans-unit>
+
+
+            <trans-unit id="validator.authorName.noneSet">
+                <source>An author name is required.</source>
+                <target>Der Autor-Name wird benötigt.</target>
+            </trans-unit>
+            <trans-unit id="validator.unique.notValid">
+                <source>There is already a user with this name.</source>
+                <target>Es gibt bereits einen Nutzer mit diesem Namen.</target>
+            </trans-unit>
+            <trans-unit id="validator.noEmailAddress.notvalid">
+                <source>The field %1s must not resemble an email address.</source>
+                <target>Das Feld %1s darf keine E-Mail Adresse enthalten</target>
+            </trans-unit>
+
+            <trans-unit id="forum.breadcrumb.home">
+                <source>Forum</source>
+                <target>Forum</target>
+            </trans-unit>
+
+            <trans-unit id="exception.accessValidation">
+                <source>You do not have enough access rights for this action.</source>
+                <target>Du hast nicht genügend Berechtigungen für diese Aktion.</target>
+            </trans-unit>
+            <trans-unit id="exception.delete.firstPost">
+                <source>Deleting the first post of a topic is not allowed.</source>
+                <target>Den ersten Beitrag eines Themas zu löschen ist nicht möglich.</target>
+            </trans-unit>
+            <trans-unit id="exception.poll.alreadyVoted">
+                <source>This poll does not allow changing the voting.</source>
+                <target>Diese Umfrage erlaubt die Änderung der Auswahl nicht.</target>
+            </trans-unit>
+            <trans-unit id="exception.poll.maxVotesExceeded">
+                <source>You must only select up to %1d choices.</source>
+                <target>Du darfst nur maximal %1d Auswahlmöglichkeiten wählen.</target>
+            </trans-unit>
+            <trans-unit id="exception.markAsRead.missingBoard">
+                <source>To mark a board as read, please specify a board.</source>
+                <target>Um ein Board als gelesen zu markieren, wähle bitte ein Board.</target>
+            </trans-unit>
+            <trans-unit id="exception.message.send.noReceiver">
+                <source>No receiver specified.</source>
+                <target>Kein Empfänger angegeben.</target>
+            </trans-unit>
+            <trans-unit id="exception.message.send.invalidReceiver">
+                <source>One or more receivers do not exist.</source>
+                <target>Ein oder mehr Empfänger existieren nicht.</target>
+            </trans-unit>
+
+            <trans-unit id="formLabels.post.authorName">
+                <source>Name</source>
+                <target>Name</target>
+            </trans-unit>
+            <trans-unit id="formLabels.topic.title">
+                <source>Topic title</source>
+                <target>Titel des Themas</target>
+            </trans-unit>
+            <trans-unit id="formLabels.post.text">
+                <source>Text</source>
+                <target>Text</target>
+            </trans-unit>
+            <trans-unit id="formLabels.post.attachment.remove">
+                <source>Remove attachment %1s</source>
+                <target>Anhang %1s entfernen</target>
+            </trans-unit>
+            <trans-unit id="formLabels.post.attachment.add">
+                <source>Add attachments</source>
+                <target>Anhang hinzufügen</target>
+            </trans-unit>
+            <trans-unit id="formLabels.topic.sticky">
+                <source>Pinned</source>
+                <target>Angeheftet</target>
+            </trans-unit>
+            <trans-unit id="formLabels.topic.closed">
+                <source>Closed</source>
+                <target>Geschlossen</target>
+            </trans-unit>
+            <trans-unit id="formLabels.poll.headline">
+                <source>Poll</source>
+                <target>Umfrage</target>
+            </trans-unit>
+            <trans-unit id="formLabels.poll.question">
+                <source>Question</source>
+                <target>Frage</target>
+            </trans-unit>
+            <trans-unit id="formLabels.poll.options.headline">
+                <source>Options</source>
+                <target>Optionen</target>
+            </trans-unit>
+            <trans-unit id="formLabels.poll.maxChoicesSelect">
+                <source>Max. choices the user can make</source>
+                <target>Maximale Anzahl Antworten, die der Benutzer wählen kann</target>
+            </trans-unit>
+
+            <trans-unit id="formLabels.poll.answers.headline">
+                <source>Answers</source>
+                <target>Antworten</target>
+            </trans-unit>
+
+            <trans-unit id="formLabels.poll.endtime.1">
+                <source>Poll ends in:</source>
+                <target>Umfrage endet in:</target>
+            </trans-unit>
+            <trans-unit id="formLabels.poll.endtime.2">
+                <source>days.</source>
+                <target>Tagen.</target>
+            </trans-unit>
+            <trans-unit id="formLabels.poll.answer">
+                <source>Answer #%1d: </source>
+                <target>Antwort #%1d: </target>
+            </trans-unit>
+            <trans-unit id="formLabels.poll.resultHidden">
+                <source>Users can only see results after poll has ended</source>
+                <target>Benutzer können das Ergebnis erst nach Beendigung der Umfrage sehen</target>
+            </trans-unit>
+            <trans-unit id="formLabels.poll.changeVoteAllowed">
+                <source>Users can change their voting</source>
+                <target>Benutzer können ihre Auswahl ändern</target>
+            </trans-unit>
+
+            <trans-unit id="fe_users.postsCount.label">
+                <source>Posts: %1d</source>
+                <target>Beiträge: %1d</target>
+            </trans-unit>
+
+            <trans-unit id="forumCategory.options.markAsRead">
+                <source>Read all</source>
+                <target>Alles gelesen</target>
+            </trans-unit>
+
+            <trans-unit id="board.options.createTopic">
+                <source>New Topic</source>
+                <target>Neues Thema</target>
+            </trans-unit>
+            <trans-unit id="board.options.subscribe">
+                <source>Subscribe</source>
+                <target>Abonnieren</target>
+            </trans-unit>
+            <trans-unit id="board.options.unsubscribe">
+                <source>Unsubscribe</source>
+                <target>Abbestellen</target>
+            </trans-unit>
+            <trans-unit id="board.options.markAsRead">
+                <source>Read all</source>
+                <target>Alles gelesen</target>
+            </trans-unit>
+
+            <trans-unit id="topic.hasNew">
+                <source>New</source>
+                <target>Neu</target>
+            </trans-unit>
+            <trans-unit id="topic.author.label">
+                <source>Created by</source>
+                <target>Erstellt von</target>
+            </trans-unit>
+            <trans-unit id="topic.latestPost.author.label">
+                <source>By</source>
+                <target>Von</target>
+            </trans-unit>
+            <trans-unit id="topic.postsCount.label">
+                <source>Posts</source>
+                <target>Beiträge</target>
+            </trans-unit>
+            <trans-unit id="topic.options.createPost">
+                <source>Answer</source>
+                <target>Antworten</target>
+            </trans-unit>
+            <trans-unit id="topic.options.subscribe">
+                <source>Subscribe</source>
+                <target>Abonnieren</target>
+            </trans-unit>
+            <trans-unit id="topic.options.unsubscribe">
+                <source>Unsubscribe</source>
+                <target>Abbestellen</target>
+            </trans-unit>
+            <trans-unit id="topic.options.editTopic">
+                <source>Edit Topic</source>
+                <target>Thema ändern</target>
+            </trans-unit>
+            <trans-unit id="topic.options.deleteTopic">
+                <source>Delete Topic</source>
+                <target>Thema löschen</target>
+            </trans-unit>
+            <trans-unit id="topic.options.unpinTopic">
+                <source>Unpin Topic</source>
+                <target>Thema losheften</target>
+            </trans-unit>
+            <trans-unit id="topic.options.pinTopic">
+                <source>Pin Topic</source>
+                <target>Thema anheften</target>
+            </trans-unit>
+            <trans-unit id="topic.options.close">
+                <source>Close Topic</source>
+                <target>Thema schließen</target>
+            </trans-unit>
+            <trans-unit id="topic.options.reopen">
+                <source>Reopen Topic</source>
+                <target>Thema wiedereröffnen</target>
+            </trans-unit>
+            <trans-unit id="topic.options.moveTopic">
+                <source>Move Topic</source>
+                <target>Thema verschieben</target>
+            </trans-unit>
+            <trans-unit id="topic.options.joinTopic">
+                <source>Join Topic</source>
+                <target>Thema zusammenführen</target>
+            </trans-unit>
+
+            <trans-unit id="topic.new.headline.label">
+                <source>New Topic</source>
+                <target>Neues Thema</target>
+            </trans-unit>
+            <trans-unit id="topic.new.submit.label">
+                <source>Create</source>
+                <target>Erstellen</target>
+            </trans-unit>
+
+            <trans-unit id="topic.edit.headline.label">
+                <source>Edit Topic %1s</source>
+                <target>Thema %1s bearbeiten</target>
+            </trans-unit>
+            <trans-unit id="topic.edit.submit.label">
+                <source>Edit</source>
+                <target>Ändern</target>
+            </trans-unit>
+
+            <trans-unit id="topic.move.headline.label">
+                <source>Move topic</source>
+                <target>Thema verschieben</target>
+            </trans-unit>
+            <trans-unit id="topic.move.submit.label">
+                <source>Move</source>
+                <target>Verschieben</target>
+            </trans-unit>
+
+            <trans-unit id="poll.vote.submit.label">
+                <source>Vote</source>
+                <target>Abstimmen</target>
+            </trans-unit>
+            <trans-unit id="poll.endtime.label">
+                <source>Poll will end on %1s</source>
+                <target>Umfrage wird am %1s enden</target>
+            </trans-unit>
+            <trans-unit id="poll.endtime.ended.label">
+                <source>Poll ended on %1s</source>
+                <target>Umfrage endete am %1s</target>
+            </trans-unit>
+            <trans-unit id="poll.maxChoicesSelect.label">
+                <source>Max. %1d choices.</source>
+                <target>Maximal %1d Auswahlen</target>
+            </trans-unit>
+
+            <trans-unit id="topic.move.destinationBoard.label">
+                <source>Destination: </source>
+                <target>Ziel: </target>
+            </trans-unit>
+
+            <trans-unit id="topic.split.headline">
+                <source>Split topic</source>
+                <target>Thema teilen</target>
+            </trans-unit>
+            <trans-unit id="topic.split.tabs.single">
+                <source>Split single</source>
+                <target>Einzeln abtrennen</target>
+            </trans-unit>
+            <trans-unit id="topic.split.tabs.following">
+                <source>Split following</source>
+                <target>Nachfolgende abtrennen</target>
+            </trans-unit>
+            <trans-unit id="topic.split.tabs.selected">
+                <source>Split selected</source>
+                <target>Ausgewählte abtrennen</target>
+            </trans-unit>
+            <trans-unit id="topic.split.single.description">
+                <source>The selected post will be removed from it's topic and added to a newly created topic with the selected name. The new topic will be created in the same board.</source>
+                <target>Der gewählte Beitrag wird aus dem Thema entfernt und einem neuen Thema mit dem gewählten Titel hinzugefügt. Das neue Thema wird in demselben Board erstellt werden.</target>
+            </trans-unit>
+            <trans-unit id="topic.split.following.description">
+                <source>The selected post and all following posts of the topic will be removed from their topic and added to a newly created topic with the selected name. The new topic will be created in the same board.</source>
+                <target>Der gewählte Beitrag und alle nachfolgenden Beiträge werden aus dem Thema entfernt und einem neuen Thema mit dem gewählten Titel hinzugefügt. Das neue Thema wird in demselben Board erstellt werden.</target>
+            </trans-unit>
+            <trans-unit id="topic.split.selected.description">
+                <source>All selected posts of the topic will be removed from it and added to a newly created topic with the selected name. The new topic will be created in the same board.</source>
+                <target>Alle ausgewählten Beiträge werden aus dem Thema entfernt und einem neuen Thema mit dem gewählten Titel hinzugefügt. Das neue Thema wird in demselben Board erstellt werden.</target>
+            </trans-unit>
+            <trans-unit id="topic.split.form.btnLabel">
+                <source>Split</source>
+                <target>Teilen</target>
+            </trans-unit>
+            <trans-unit id="topic.split.form.topicName">
+                <source>Topic name</source>
+                <target>Titel des Themas</target>
+            </trans-unit>
+
+            <trans-unit id="topic.join.headline">
+                <source>Join topics</source>
+                <target>Themen zusammenführen</target>
+            </trans-unit>
+            <trans-unit id="topic.join.step1.description">
+                <source>Select the topic to join with.</source>
+                <target>Thema zum zusammenführen wählen.</target>
+            </trans-unit>
+            <trans-unit id="topic.join.step1.joinLabel">
+                <source>Join topic %1s with topic %2s</source>
+                <target>Thema %1s mit Thema %2s zusammenführen</target>
+            </trans-unit>
+            <trans-unit id="topic.join.step2.type.label">
+                <source>Title for joined topics</source>
+                <target>Titel des zusammengeführten Themas</target>
+            </trans-unit>
+            <trans-unit id="topic.join.step2.type.newTitle">
+                <source>New Title</source>
+                <target>Neuer Titel</target>
+            </trans-unit>
+            <trans-unit id="topic.join.step2.newTitle.label">
+                <source>New Title</source>
+                <target>Neuer Titel</target>
+            </trans-unit>
+            <trans-unit id="topic.join.step2.submit">
+                <source>Join topics</source>
+                <target>Themen zusammenführen</target>
+            </trans-unit>
+
+            <trans-unit id="topic.edit.deletePoll">
+                <source>Delete poll (to change question or answers)</source>
+                <target>Umfrage löschen (um Frage oder Antwortmöglichkeiten zu ändern)</target>
+            </trans-unit>
+
+            <trans-unit id="post.author.crdate.label">
+                <source>Joined: %1s</source>
+                <target>Beigetreten: %1s</target>
+            </trans-unit>
+            <trans-unit id="post.attachment.download">
+                <source>Download attachment %1s</source>
+                <target>Anhang %1s herunterladen</target>
+            </trans-unit>
+            <trans-unit id="post.attachment.downloadCount">
+                <source>Downloads: %1d</source>
+                <target>%1d mal heruntergeladen</target>
+            </trans-unit>
+            <trans-unit id="post.edited.label">
+                <source><![CDATA[Last edited: <em>%1s</em> by <em>%2s</em>]]></source>
+                <target><![CDATA[Zuletzt geändert: <em>%1s</em> von <em>%2s</em>]]></target>
+            </trans-unit>
+            <trans-unit id="post.options.quote">
+                <source>Quote this post</source>
+                <target>Diesen Beitrag zitieren</target>
+            </trans-unit>
+            <trans-unit id="post.options.edit">
+                <source>Edit post</source>
+                <target>Beitrag ändern</target>
+            </trans-unit>
+            <trans-unit id="post.options.delete">
+                <source>Delete post</source>
+                <target>Beitrag löschen</target>
+            </trans-unit>
+            <trans-unit id="post.options.move">
+                <source>Move post</source>
+                <target>Beitrag verschieben</target>
+            </trans-unit>
+            <trans-unit id="post.options.splitTopic">
+                <source>Split topic here</source>
+                <target>Thema hier teilen</target>
+            </trans-unit>
+
+            <trans-unit id="post.new.headline.label">
+                <source>Answer to %1s</source>
+                <target>Beitrag zu %1s</target>
+            </trans-unit>
+            <trans-unit id="post.new.submit.label">
+                <source>Submit</source>
+                <target>Abschicken</target>
+            </trans-unit>
+            <trans-unit id="post.new.previousPosts">
+                <source>Previous posts</source>
+                <target>Vorige Beiträge</target>
+                <target></target>
+            </trans-unit>
+            <trans-unit id="post.edit.headline.label">
+                <source>Edit post</source>
+                <target>Beitrag ändern</target>
+            </trans-unit>
+            <trans-unit id="post.edit.submit.label">
+                <source>Submit</source>
+                <target>Abschicken</target>
+            </trans-unit>
+
+            <trans-unit id="post.move.headline">
+                <source>Move post</source>
+                <target>Beitrag verschieben</target>
+            </trans-unit>
+            <trans-unit id="post.move.destinationTopic.label">
+                <source>Choose the topic to move the post to</source>
+                <target>Thema wählen, in das der Beitrag verschoben werden soll</target>
+            </trans-unit>
+            <trans-unit id="post.move.submit">
+                <source>Move</source>
+                <target>Verschieben</target>
+            </trans-unit>
+
+            <trans-unit id="board.subboards.label">
+                <source>Subboards:</source>
+                <target>Unter-Boards:</target>
+            </trans-unit>
+            <trans-unit id="boards.topicsCount.label">
+                <source>Topics</source>
+                <target>Themen</target>
+            </trans-unit>
+            <trans-unit id="boards.postsCount.label">
+                <source>Posts</source>
+                <target>Beiträge</target>
+            </trans-unit>
+            <trans-unit id="boards.redirectCount.label">
+                <source>Redirects</source>
+                <target>mal weitergeleitet</target>
+            </trans-unit>
+
+            <trans-unit id="latestPost.author.label">
+                <source><![CDATA[Latest post by <i>%1s</i>]]></source>
+                <target><![CDATA[Jüngster Beitrag von <i>%1s</i>]]></target>
+            </trans-unit>
+            <trans-unit id="latestPost.topic.label">
+                <source><![CDATA[In <i>%1s</i>]]></source>
+                <target><![CDATA[In <i>%1s</i>]]></target>
+            </trans-unit>
+            <trans-unit id="latestPost.crdate.label">
+                <source><![CDATA[On <i>%1s</i>]]></source>
+                <target><![CDATA[Am <i>%1s</i>]]></target>
+            </trans-unit>
+
+
+            <trans-unit id="users.profile.edit.showOnline">
+                <source>Show my online status</source>
+                <target>Meinen Online-Status anzeigen</target>
+            </trans-unit>
+            <trans-unit id="users.profile.edit.messageNotification">
+                <source>Send me an email notification when I receive a new personal message</source>
+                <target>Eine Benachrichtigung beim Empfang einer privaten Nachricht senden</target>
+            </trans-unit>
+            <trans-unit id="users.profile.edit.hideSensitiveData">
+                <source>Hide my sensitive data in profile (e.g. contact information)</source>
+                <target>Verstecke meine persönlichen Daten im Profil (z.B. Kontaktinformationen)</target>
+            </trans-unit>
+
+            <trans-unit id="users.profile.preview.headline">
+                <source>Preview</source>
+                <target>Vorschau</target>
+            </trans-unit>
+            <trans-unit id="users.profile.preview.description">
+                <source>Please verify your submitted data and then confirm on the bottom right of this page. To change your data, please use the button on the bottom left of this page.</source>
+                <target>Bitte überprüfe deine Daten und bestätige sie mit einem Klick auf den Button unten rechts. Um deine Daten zu korrigieren, klicke bitte auf den Button unten links.</target>
+            </trans-unit>
+
+            <trans-unit id="users.profile.delete.headline">
+                <source>Delete my user account</source>
+                <target>Meinen Benutzeraccount löschen</target>
+            </trans-unit>
+            <trans-unit id="users.profile.delete.notice">
+                <source>To permanently delete your account, please enter your password. The account cannot be restored.</source>
+                <target>Um deinen Benutzeraccount unwiderruflich zu löschen, gib bitte dein Passwort ein. Der Account kann nicht wiederhergestellt werden.</target>
+            </trans-unit>
+            <trans-unit id="users.profile.delete.submit_delete">
+                <source>Delete my account!</source>
+                <target>Meinen Account löschen!</target>
+            </trans-unit>
+
+            <trans-unit id="users.profile.editPassword.backToProfile">
+                <source>Back to my profile</source>
+                <target>Zurück zum Profil</target>
+            </trans-unit>
+            <trans-unit id="users.profile.edit.headline">
+                <source>Edit profile</source>
+                <target>Profil ändern</target>
+            </trans-unit>
+            <trans-unit id="users.profile.passwordEdit.headline">
+                <source>Change password</source>
+                <target>Passwort ändern</target>
+            </trans-unit>
+
+            <trans-unit id="messages.header.action.inbox">
+                <source>Show Inbox</source>
+                <target>Posteingang zeigen</target>
+            </trans-unit>
+            <trans-unit id="messages.header.action.outbox">
+                <source>Show Outbox</source>
+                <target>Postaugang zeigen</target>
+            </trans-unit>
+            <trans-unit id="messages.header.action.new">
+                <source>Write new message</source>
+                <target>Neue Nachricht verfassen</target>
+            </trans-unit>
+            <trans-unit id="messages.inbox.headline">
+                <source>Inbox</source>
+                <target>Posteingang</target>
+            </trans-unit>
+            <trans-unit id="messages.inbox.newMessageLabel">
+                <source>New message</source>
+                <target>Neue Nachricht</target>
+            </trans-unit>
+            <trans-unit id="messages.outbox.headline">
+                <source>Outbox</source>
+                <target>Postausgang</target>
+            </trans-unit>
+            <trans-unit id="messages.new.headline">
+                <source>New message</source>
+                <target>Neue Nachricht</target>
+            </trans-unit>
+            <trans-unit id="messages.new.form.receivers">
+                <source>Receivers</source>
+                <target>Empfänger</target>
+            </trans-unit>
+            <trans-unit id="messages.new.form.subject">
+                <source>Subject</source>
+                <target>Betreff</target>
+            </trans-unit>
+            <trans-unit id="messages.new.form.text">
+                <source>Message</source>
+                <target>Nachricht</target>
+            </trans-unit>
+            <trans-unit id="messages.new.form.submit">
+                <source>Submit</source>
+                <target>Abschicken</target>
+            </trans-unit>
+
+            <trans-unit id="messages.subject.empty">
+                <source>No subject</source>
+                <target>Kein Betreff</target>
+            </trans-unit>
+
+            <trans-unit id="emailNotification.salutation">
+                <source>Dear forum user,</source>
+                <target>Lieber Forum-Benutzer,</target>
+            </trans-unit>
+            <trans-unit id="emailNotification.farwell">
+                <source><![CDATA[Sincerely,<br>%1s]]></source>
+                <target><![CDATA[Viele Grüße,<br>%1s]]></target>
+            </trans-unit>
+            <trans-unit id="emailNotification.autoGenerated">
+                <source><![CDATA[<-- This E-Mail was generated automatically. Please do not answer to this email -->]]></source>
+                <target><![CDATA[<-- Diese Antwort wurde automatisch generiert. Bitte antworte nicht darauf -->]]></target>
+            </trans-unit>
+
+            <trans-unit id="emailNotification.onMessageSent.subject">
+                <source>New Message received</source>
+                <target>Neue Nachricht erhalten</target>
+            </trans-unit>
+            <trans-unit id="emailNotification.onMessageSent.body">
+                <source><![CDATA[%1s has sent you a personal message with the subject <b>%2s</b>. To read it, please visit your inbox:<br><a href="%3s">%3s</a>]]></source>
+                <target><![CDATA[%1s hat dir eine private Nachricht mit dem Betreff <b>%2s</b> gesendet. Um sie zu lesen, besuche bitte deinen Posteingang im Forum:<br><a href="%3s">%3s</a>]]></target>
+            </trans-unit>
+
+            <trans-unit id="emailNotification.onPostCreated.subject">
+                <source>New post created</source>
+                <target>Neuer Beitrag</target>
+            </trans-unit>
+            <trans-unit id="emailNotification.onPostCreated.body">
+                <source><![CDATA[%1s has created a new post in topic <b>%2s</b>. To see it, please visit<br><a href="%3s">%3s</a><br><br>
+                You have received this notification, because you are subscribed to the posts topic or it's parent board. If you do not want to receive this notifications, please visit the topic or board and click the button "unsubscribe".]]></source>
+                <target><![CDATA[%1s hat einen neuen Beitrag im Thema <b>%2s</b> erstellt. Um ihn anzusehen, besuche bitte<br><a href="%3s">%3s</a><br><br>
+                Du erhältst diese Benachrichtigung, da du dieses Thema oder sein übergeordnetes Board abonniert hast. Wenn du diese Benachrichtigungen nicht mehr erhalten möchtest, besuche bitte das Thema oder das Board und klicke auf den Button "abbestellen".]]></target>
+            </trans-unit>
+
+            <trans-unit id="emailNotification.onTopicCreated.subject">
+                <source>New topic created</source>
+                <target>Neues Thema</target>
+            </trans-unit>
+            <trans-unit id="emailNotification.onTopicCreated.body">
+                <source><![CDATA[%1s has created the new topic <b>%2s</b> in board <b>%3s</b>. To see it, please visit<br><a href="%4s">%4s</a><br><br>
+                You have received this notification, because you are subscribed to the topics parent board. If you do not want to receive this notifications, please visit the board and click the button "unsubscribe".]]></source>
+                <target><![CDATA[%1s hat ein neues Thema <b>%2s</b> im Board <b>%3s</b> erstellt. Um es anzusehen, besuche bitte<br><a href="%4s">%4s</a><br><br>
+                Du erhältst diese Benachrichtigung, da du das übergeordnete Board des Themas abonniert hast. Wenn du diese Benachrichtigungen nicht mehr erhalten möchtest, besuche bitte das Board und klicke auf den Button "abbestellen".]]></target>
+            </trans-unit>
+
+            <trans-unit id="plugin.statistics.infoCenter.headline.label">
+                <source>Info Center</source>
+                <target>Info Center</target>
+            </trans-unit>
+            <trans-unit id="plugin.statistics.infoCenter.latestPosts.headline.label">
+                <source>Latest posts</source>
+                <target>Jüngste Beiträge</target>
+            </trans-unit>
+            <trans-unit id="plugin.statistics.infoCenter.latestPosts.post">
+                <source><![CDATA[In <a href="%1s"><i>%2s</i></a> by <a href="%3s"><i>%4s</i></a>]]></source>
+                <target><![CDATA[In <a href="%1s"><i>%2s</i></a> von <a href="%3s"><i>%4s</i></a>]]></target>
+            </trans-unit>
+            <trans-unit id="plugin.statistics.infoCenter.statisticsSummary.headline.label">
+                <source>Forum statistics</source>
+                <target>Forum-Statistik</target>
+            </trans-unit>
+            <trans-unit id="plugin.statistics.infoCenter.statisticsSummary.counts">
+                <source>%1s posts in %2s topics by %3s members</source>
+                <target>%1s Beiträge in %2s Themen von %3s Mitgliedern</target>
+            </trans-unit>
+            <trans-unit id="plugin.statistics.infoCenter.statisticsSummary.newestMember">
+                <source><![CDATA[Newest member: <a href="%1s">%2s</a>]]></source>
+                <target><![CDATA[Neuestes Mitglied: <a href="%1s">%2s</a>]]></target>
+            </trans-unit>
+            <trans-unit id="plugin.statistics.infoCenter.statisticsSummary.moreStatistics">
+                <source>More statistics</source>
+                <target>Mehr Statistiken</target>
+            </trans-unit>
+            <trans-unit id="plugin.statistics.infoCenter.onlineUsers.headline.label">
+                <source>Users online</source>
+                <target>Benutzer online</target>
+            </trans-unit>
+
+            <trans-unit id="plugin.statistics.statistics.general.headline.label">
+                <source>General Statistics</source>
+                <target>Allgemeine Statistiken</target>
+            </trans-unit>
+            <trans-unit id="plugin.statistics.statistics.general.totalMembers">
+                <source>Total members</source>
+                <target>Mitglieder gesamt</target>
+            </trans-unit>
+            <trans-unit id="plugin.statistics.statistics.general.totalPosts">
+                <source>Total posts</source>
+                <target>Beiträge gesamt</target>
+            </trans-unit>
+            <trans-unit id="plugin.statistics.statistics.general.totalTopics">
+                <source>Total topics</source>
+                <target>Themen gesamt</target>
+            </trans-unit>
+            <trans-unit id="plugin.statistics.statistics.general.totalBoards">
+                <source>Total boards</source>
+                <target>Boards gesamt</target>
+            </trans-unit>
+            <trans-unit id="plugin.statistics.statistics.general.totalForumCategories">
+                <source>Total categories</source>
+                <target>Kategorien gesamt</target>
+            </trans-unit>
+            <trans-unit id="plugin.statistics.statistics.general.usersOnline">
+                <source>Users currently online</source>
+                <target>Derzeit online</target>
+            </trans-unit>
+            <trans-unit id="plugin.statistics.statistics.general.mostOnlineToday">
+                <source>Most online today</source>
+                <target>Heute am meisten online</target>
+            </trans-unit>
+            <trans-unit id="plugin.statistics.statistics.general.mostOnline">
+                <source>Most online</source>
+                <target>Am meisten online</target>
+            </trans-unit>
+            <trans-unit id="plugin.statistics.statistics.general.mostOnline.text">
+                <source>%1s, at %2s</source>
+                <target>%1s, am %2s</target>
+            </trans-unit>
+            <trans-unit id="plugin.statistics.statistics.general.averageRegisters">
+                <source>Average registrations per day</source>
+                <target>Durchschn. Registrierungen pro Tag</target>
+            </trans-unit>
+            <trans-unit id="plugin.statistics.statistics.general.averagePosts">
+                <source>Average new posts per day</source>
+                <target>Durchschn. neue Posts pro Tag</target>
+            </trans-unit>
+            <trans-unit id="plugin.statistics.statistics.general.averageTopics">
+                <source>Average new topics per day</source>
+                <target>Durchschn. neue Themen pro Tag</target>
+            </trans-unit>
+            <trans-unit id="plugin.statistics.statistics.general.averageMostOn">
+                <source>Average online users per day</source>
+                <target>Durchschn. Benutzer pro Tag online</target>
+            </trans-unit>
+            <trans-unit id="plugin.statistics.statistics.topAuthors.headline.label">
+                <source>Top authors</source>
+                <target>Top-Autoren</target>
+            </trans-unit>
+            <trans-unit id="plugin.statistics.statistics.topTopicStarters.headline.label">
+                <source>Top topic starters</source>
+                <target>Top-Themenstarter</target>
+            </trans-unit>
+            <trans-unit id="plugin.statistics.statistics.longestTimeOnline.headline.label">
+                <source>Longest time online</source>
+                <target>Längste Zeit online</target>
+            </trans-unit>
+            <trans-unit id="plugin.statistics.statistics.topTopicsByViews.headline.label">
+                <source>Top topics by views</source>
+                <target>Top-Themen nach Aufrufen</target>
+            </trans-unit>
+            <trans-unit id="plugin.statistics.statistics.topTopicsByPosts.headline.label">
+                <source>Top topics by posts</source>
+                <target>Top-Themen nach Beiträgen</target>
+            </trans-unit>
+
+            <trans-unit id="plugin.statistics.flexform.settings">
+                <source>General Settings</source>
+                <target>Allgemeine Einstellungen</target>
+            </trans-unit>
+            <trans-unit id="plugin.statistics.flexform.view">
+                <source>View</source>
+                <target>Ansicht</target>
+            </trans-unit>
+            <trans-unit id="plugin.statistics.flexform.view.infoCenter">
+                <source>Info Center</source>
+                <target>Info Center</target>
+            </trans-unit>
+            <trans-unit id="plugin.statistics.flexform.view.allStatistics">
+                <source>All Statistics</source>
+                <target>Alle Statistiken</target>
+            </trans-unit>
+
+
+            <trans-unit id="viewHelpers.format.csv.endingAnd">
+                <source>and</source>
+                <target>und</target>
+            </trans-unit>
+
+            <trans-unit id="viewHelpers.format.prettifySeconds.days.plural">
+                <source>%1s Days</source>
+                <target>%1s Tage</target>
+            </trans-unit>
+            <trans-unit id="viewHelpers.format.prettifySeconds.days.singular">
+                <source>%1s Day</source>
+                <target>%1s Tag</target>
+            </trans-unit>
+            <trans-unit id="viewHelpers.format.prettifySeconds.days.shortcut">
+                <source>%1sD</source>
+                <target>%1sT</target>
+            </trans-unit>
+            <trans-unit id="viewHelpers.format.prettifySeconds.h.plural">
+                <source>%1s Hours</source>
+                <target>%1s Stunden</target>
+            </trans-unit>
+            <trans-unit id="viewHelpers.format.prettifySeconds.h.singular">
+                <source>%1s hour</source>
+                <target>%1s stunde</target>
+            </trans-unit>
+            <trans-unit id="viewHelpers.format.prettifySeconds.h.shortcut">
+                <source>%1sH</source>
+                <target>%1sS</target>
+            </trans-unit>
+            <trans-unit id="viewHelpers.format.prettifySeconds.i.plural">
+                <source>%1s Minutes</source>
+                <target>%1s Minuten</target>
+            </trans-unit>
+            <trans-unit id="viewHelpers.format.prettifySeconds.i.singular">
+                <source>%1s Minute</source>
+                <target>%1s Minute</target>
+            </trans-unit>
+            <trans-unit id="viewHelpers.format.prettifySeconds.i.shortcut">
+                <source>%1sM</source>
+                <target>%1sM</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

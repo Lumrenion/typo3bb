@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+    <file source-language="en" datatype="plaintext" original="messages" date="2016-03-21T18:56:53Z" product-name="typo3bb">
+        <header/>
+        <body>
+            <trans-unit id="text.description">
+                <source>text</source>
+            </trans-unit>
+            <trans-unit id="vote_count.description">
+                <source>The number of votes for this choice</source>
+            </trans-unit>
+            <trans-unit id="poll.description">
+                <source>The poll that contains the choice</source>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

@@ -1,0 +1,18 @@
+<div xmlns="http://www.w3.org/1999/xhtml" lang="en"
+     xmlns:v="http://typo3.org/ns/FluidTYPO3/Vhs/ViewHelpers"
+     xmlns:f="http://typo3.org/ns/TYPO3/Fluid/ViewHelpers"
+     xmlns:tbb="http://typo3.org/ns/LumIT/Typo3bb/ViewHelpers"
+
+     v:schemaLocation="http://fluidtypo3.org/schemas/vhs-1.8.5.xsd">
+    <f:section name="Content">
+        <div class="clearfix"></div>
+        <div class="pull-right">
+            <tbb:hasAccess key="Board.markAsRead" object="{forumCategory}">
+                <f:link.action action="markAsRead" controller="Board" arguments="{all: true}" class="btn btn-default">
+                    <f:translate key="forumCategory.options.markAsRead" />
+                </f:link.action>
+            </tbb:hasAccess>
+        </div>
+        <div class="clearfix"></div>
+    </f:section>
+</div>

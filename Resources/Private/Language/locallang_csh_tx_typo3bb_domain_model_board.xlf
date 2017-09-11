@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+    <file source-language="en" datatype="plaintext" original="messages" date="2016-03-21T18:56:53Z" product-name="typo3bb">
+        <header/>
+        <body>
+            <trans-unit id="title.description">
+                <source>title</source>
+            </trans-unit>
+            <trans-unit id="description.description">
+                <source>description</source>
+            </trans-unit>
+            <trans-unit id="redirect.description">
+                <source>redirect</source>
+            </trans-unit>
+            <trans-unit id="link.description">
+                <source>link</source>
+            </trans-unit>
+            <trans-unit id="topics.description">
+                <source>Topics of this board</source>
+            </trans-unit>
+            <trans-unit id="sub_boards.description">
+                <source>sub boards of the board</source>
+            </trans-unit>
+            <trans-unit id="permission.description">
+                <source>user group permissions of this board</source>
+            </trans-unit>
+            <trans-unit id="parent_board.description">
+                <source>Parent board of the board</source>
+            </trans-unit>
+            <trans-unit id="forum_category.description">
+                <source>The category the board is in</source>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

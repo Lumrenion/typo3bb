@@ -1,0 +1,40 @@
+<div xmlns="http://www.w3.org/1999/xhtml" lang="en"
+     xmlns:v="http://typo3.org/ns/FluidTYPO3/Vhs/ViewHelpers"
+     xmlns:f="http://typo3.org/ns/TYPO3/Fluid/ViewHelpers"
+     xmlns:tbb="http://typo3.org/ns/LumIT/Typo3bb/ViewHelpers"
+
+     v:schemaLocation="http://fluidtypo3.org/schemas/vhs-1.8.5.xsd">
+    <f:section name="Content">
+
+        <f:form.hidden property="topic" value="{topic}" />
+
+        <div class="form-group">
+            <label for="topic-author-name"><f:translate key="formLabels.post.authorName" /></label>
+            <f:security.ifAuthenticated>
+                <f:then>
+                    <f:form.textfield value="{f:if(condition: post, then: post.authorName, else: frontendUser.displayName)}" class="form-control" id="topic-author-name" additionalAttributes="{disabled: 'disabled'}" />
+                </f:then>
+                <f:else>
+                    <f:form.textfield property="authorName" value="{post.authorName}" class="form-control" id="topic-author-name" />
+                </f:else>
+            </f:security.ifAuthenticated>
+        </div>
+
+        <div class="form-group">
+            <label for="post-text"><f:translate key="formLabels.post.text"/></label>
+            <f:form.textarea property="text" value="{quotedText}" class="form-control typo3bb-rte-editor" id="post-text" rows="10" />
+        </div>
+
+        <div class="attachments">
+            <f:for each="{post.attachments}" as="attachment">
+                <f:link.action action="remove" controller="Attachment" arguments="{attachment: attachment, returnTo: 'editPost'}">
+                    <f:translate key="formLabels.post.attachment.remove" arguments="{0: attachment.originalFileName}" />
+                </f:link.action><br>
+            </f:for>
+            <div class="form-group">
+                <label for="post-new-attachments"><f:translate key="formLabels.post.attachment.add" /></label>
+                <f:form.upload id="post-new-attachments" name="attachments" multiple="true" class="form-control" />
+            </div>
+        </div>
+    </f:section>
+</div>

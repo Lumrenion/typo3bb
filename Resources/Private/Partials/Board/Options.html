@@ -1,0 +1,37 @@
+<div xmlns="http://www.w3.org/1999/xhtml" lang="en"
+     xmlns:v="http://typo3.org/ns/FluidTYPO3/Vhs/ViewHelpers"
+     xmlns:f="http://typo3.org/ns/TYPO3/Fluid/ViewHelpers"
+     xmlns:tbb="http://typo3.org/ns/LumIT/Typo3bb/ViewHelpers"
+
+     v:schemaLocation="http://fluidtypo3.org/schemas/vhs-1.8.5.xsd">
+    <f:section name="Content">
+        <div class="clearfix"></div>
+        <div class="pull-right">
+            <tbb:hasAccess key="Topic.create" object="{board}">
+                <f:link.action action="new" controller="Topic" arguments="{board: board}" class="btn btn-default">
+                    <f:translate key="board.options.createTopic" />
+                </f:link.action>
+            </tbb:hasAccess>
+            <tbb:hasAccess key="Board.subscribe" object="{board}">
+                <f:if condition="{board.subscribed}">
+                    <f:then>
+                        <f:link.action action="subscribe" controller="Board" arguments="{board: board, unsubscribe: 1}" class="btn btn-default">
+                            <f:translate key="board.options.unsubscribe" />
+                        </f:link.action>
+                    </f:then>
+                    <f:else>
+                        <f:link.action action="subscribe" controller="Board" arguments="{board: board}" class="btn btn-default">
+                            <f:translate key="board.options.subscribe" />
+                        </f:link.action>
+                    </f:else>
+                </f:if>
+            </tbb:hasAccess>
+            <tbb:hasAccess key="Board.markAsRead" object="{board}">
+                <f:link.action action="markAsRead" controller="Board" arguments="{all: false, board: board}" class="btn btn-default">
+                    <f:translate key="forumCategory.options.markAsRead" />
+                </f:link.action>
+            </tbb:hasAccess>
+        </div>
+        <div class="clearfix"></div>
+    </f:section>
+</div>

@@ -1,0 +1,33 @@
+
+plugin.tx_typo3bb {
+    view {
+        # cat=plugin.tx_typo3bb_forum/file; type=string; label=Path to template root (FE)
+        templateRootPath = 
+        # cat=plugin.tx_typo3bb_forum/file; type=string; label=Path to template partials (FE)
+        partialRootPath = 
+        # cat=plugin.tx_typo3bb_forum/file; type=string; label=Path to template layouts (FE)
+        layoutRootPath = 
+    }
+    persistence {
+        # cat=plugin.tx_typo3bb_forum//a; type=string; label=Default storage PID
+        storagePid = 
+    }
+    settings {
+        emoticonPath = uploads/tx_typo3bb
+        attachmentsPath = uploads/tx_typo3bb/attachments
+        onlineInterval = 15
+        breadcrumb {
+            forumCategoryIconClass = fa fa-list-alt fa-fw
+            topicIconClass = fa fa-comments fa-fw
+            boardIconClass = fa fa-folder-open fa-fw
+            homeIconClass = fa fa-home fa-fw
+            itemMaxChars = 40
+        }
+        pid {
+            forum = 
+            profile = 
+            messages = 
+            statistics = 
+        }
+    }
+}

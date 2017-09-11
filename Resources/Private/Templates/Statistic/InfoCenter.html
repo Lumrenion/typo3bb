@@ -1,0 +1,58 @@
+<div xmlns="http://www.w3.org/1999/xhtml" lang="en"
+     xmlns:v="http://typo3.org/ns/FluidTYPO3/Vhs/ViewHelpers"
+     xmlns:f="http://typo3.org/ns/TYPO3/Fluid/ViewHelpers"
+     xmlns:tbb="http://typo3.org/ns/LumIT/Typo3bb/ViewHelpers"
+
+     v:schemaLocation="http://fluidtypo3.org/schemas/vhs-1.8.5.xsd">
+
+    <f:layout name="Default" />
+
+    <f:section name="main">
+
+        <h2><f:translate key="plugin.statistics.infoCenter.headline.label" /></h2>
+
+        <h3><i class="fa fa-comments-o" fa-fw></i> <f:translate key="plugin.statistics.infoCenter.latestPosts.headline.label" /></h3>
+        <f:for each="{latestPosts}" as="latestPost">
+            <div class="row">
+                <div class="col-xs-8">
+                    <f:translate
+                        key="plugin.statistics.infoCenter.latestPosts.post"
+                        arguments="{
+                        0: '{f:uri.action(controller: \'Topic\', action: \'show\', arguments: \'{topic: latestPost.topic, post: latestPost}\')}',
+                        1: latestPost.topic.title,
+                        2: '{f:uri.action(controller: \'FrontendUser\', action: \'show\', pageUid: settings.pid.profile, arguments: {user: latestPost.author})}',
+                        3: latestPost.authorName
+                    }"/>
+                </div>
+                <div class="col-xs-4">
+                    {latestPost.crdate -> f:format.date(format: 'd.m.Y H:i')}
+                </div>
+            </div>
+        </f:for>
+
+        <h3><i class="fa fa-bar-chart fa-fw"></i> <f:translate key="plugin.statistics.infoCenter.statisticsSummary.headline.label" /></h3>
+        <p>
+            <f:translate key="plugin.statistics.infoCenter.statisticsSummary.counts" arguments="{0: postsCount, 1: topicsCount, 2: membersCount}" />.
+            <f:translate
+                key="plugin.statistics.infoCenter.statisticsSummary.newestMember"
+                arguments="{
+                    0: '{f:uri.action(controller: \'FrontendUser\', action: \'show\', pageUid: settings.pid.profile, arguments: \'{user: newestMember}\')}',
+                    1: newestMember.displayName
+                }"/>
+        </p>
+        <p>
+            <f:link.page pageUid="{settings.pid.statistics}">
+                <f:translate key="plugin.statistics.infoCenter.statisticsSummary.moreStatistics" />
+            </f:link.page>
+        </p>
+
+        <h3><i class="fa fa-users fa-fw"></i> <f:translate key="plugin.statistics.infoCenter.onlineUsers.headline.label" /></h3>
+        <p>
+            <tbb:format.csv subject="{onlineUsers}" as="author">
+                <f:link.action action="show" controller="FrontendUser" arguments="{user: author}" pageUid="{settings.pid.profile}">
+                    {author.displayName}
+                </f:link.action>
+            </tbb:format.csv>
+        </p>
+    </f:section>
+</div>

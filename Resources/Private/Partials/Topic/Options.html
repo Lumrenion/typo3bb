@@ -1,0 +1,76 @@
+<div xmlns="http://www.w3.org/1999/xhtml" lang="en"
+     xmlns:v="http://typo3.org/ns/FluidTYPO3/Vhs/ViewHelpers"
+     xmlns:f="http://typo3.org/ns/TYPO3/Fluid/ViewHelpers"
+     xmlns:tbb="http://typo3.org/ns/LumIT/Typo3bb/ViewHelpers"
+
+     v:schemaLocation="http://fluidtypo3.org/schemas/vhs-1.8.5.xsd">
+    <f:section name="Content">
+        <div class="clearfix"></div>
+        <div class="pull-right">
+            <tbb:hasAccess key="Post.create" object="{topic}">
+                <f:link.action action="new" controller="Post" arguments="{topic: topic}" class="btn btn-default">
+                    <f:translate key="topic.options.createPost" />
+                </f:link.action>
+            </tbb:hasAccess>
+            <tbb:hasAccess key="Topic.subscribe" object="{topic}">
+                <f:if condition="{topic.subscribed}">
+                    <f:then>
+                        <f:link.action action="subscribe" controller="Topic" arguments="{topic: topic, unsubscribe: 1}" class="btn btn-default">
+                            <f:translate key="topic.options.unsubscribe" />
+                        </f:link.action>
+                    </f:then>
+                    <f:else>
+                        <f:link.action action="subscribe" controller="Topic" arguments="{topic: topic}" class="btn btn-default">
+                            <f:translate key="topic.options.subscribe" />
+                        </f:link.action>
+                    </f:else>
+                </f:if>
+            </tbb:hasAccess>
+            <tbb:hasAccess key="Topic.edit" object="{topic}">
+                <f:link.action action="edit" controller="Topic" arguments="{topic: topic}" class="btn btn-default">
+                    <f:translate key="topic.options.editTopic" />
+                </f:link.action>
+            </tbb:hasAccess>
+            <tbb:hasAccess key="Topic.pin" object="{topic}">
+                <f:link.action action="pin" controller="Topic" arguments="{topic: topic}" class="btn btn-default">
+                    <f:if condition="{topic.sticky}">
+                        <f:then><f:translate key="topic.options.unpinTopic" /></f:then>
+                        <f:else><f:translate key="topic.options.pinTopic" /></f:else>
+                    </f:if>
+                </f:link.action>
+            </tbb:hasAccess>
+            <f:if condition="{topic.closed}">
+                <f:then>
+                    <tbb:hasAccess key="Topic.reopen" object="{topic}">
+                        <f:link.action action="close" controller="Topic" arguments="{topic: topic}" class="btn btn-default">
+                            <f:translate key="topic.options.reopen" />
+                        </f:link.action>
+                    </tbb:hasAccess>
+                </f:then>
+                <f:else>
+                    <tbb:hasAccess key="Topic.close" object="{topic}">
+                        <f:link.action action="close" controller="Topic" arguments="{topic: topic}" class="btn btn-default">
+                            <f:translate key="topic.options.close" />
+                        </f:link.action>
+                    </tbb:hasAccess>
+                </f:else>
+            </f:if>
+            <tbb:hasAccess key="Topic.move" object="{topic}">
+                <f:link.action action="move" controller="Topic" arguments="{topic: topic}" class="btn btn-default">
+                    <f:translate key="topic.options.moveTopic" />
+                </f:link.action>
+            </tbb:hasAccess>
+            <tbb:hasAccess key="Topic.join" object="{topic}">
+                <f:link.action action="join" controller="Topic" arguments="{topic: topic}" class="btn btn-default">
+                    <f:translate key="topic.options.joinTopic" />
+                </f:link.action>
+            </tbb:hasAccess>
+            <tbb:hasAccess key="Topic.delete" object="{topic}">
+                <f:link.action action="delete" controller="Topic" arguments="{topic: topic}" class="btn btn-default">
+                    <f:translate key="topic.options.deleteTopic" />
+                </f:link.action>
+            </tbb:hasAccess>
+        </div>
+        <div class="clearfix"></div>
+    </f:section>
+</div>

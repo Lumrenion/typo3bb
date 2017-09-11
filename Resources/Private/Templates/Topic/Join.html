@@ -1,0 +1,54 @@
+<div xmlns="http://www.w3.org/1999/xhtml" lang="en"
+     xmlns:v="http://typo3.org/ns/FluidTYPO3/Vhs/ViewHelpers"
+     xmlns:f="http://typo3.org/ns/TYPO3/Fluid/ViewHelpers"
+     xmlns:tbb="http://typo3.org/ns/LumIT/Typo3bb/ViewHelpers"
+
+     v:schemaLocation="http://fluidtypo3.org/schemas/vhs-1.8.5.xsd">
+
+    <f:layout name="Default" />
+    <f:section name="main">
+        <div class="forum-topic-join">
+            <tbb:breadcrumb rootline="{topic.rootline}"/>
+
+            <h1><f:translate key="topic.join.headline" /></h1>
+
+            <f:if condition="{topic2}">
+                <f:then>
+                    <f:form action="executeJoin">
+                        <f:form.hidden name="topic1" value="{topic}" />
+                        <f:form.hidden name="topic2" value="{topic2}" />
+                        <div class="form-group">
+                            <label for="type"><f:translate key="topic.join.step2.type.label" /></label>
+                            <f:form.select id="type" class="form-control" name="type" options="{options}" additionalAttributes="{data-toggle: 'changeHide', data-hide-element: '.new-topic-name-field'}" />
+                        </div>
+
+                        <div class="form-group new-topic-name-field"
+                             data-hide-for='["0","1"]'>
+                            <label for="new-title"><f:translate key="topic.join.step2.newTitle.label" /></label>
+                            <f:form.textfield id="new-title" class="form-control" name="newTitle" />
+                        </div>
+
+                        <f:form.submit class="btn btn-default" value="{f:translate(key: 'topic.join.step2.submit')}" />
+                    </f:form>
+                </f:then>
+                <f:else>
+                    <p><f:translate key="topic.join.step1.description" /></p>
+                    <f:for each="{topics}" as="topic2">
+                        <div>
+                            <hr>
+                            <f:link.action action="join" controller="Topic" arguments="{topic: topic, topic2: topic2}"
+                                           title="{f:translate(key: 'topic.join.step1.joinLabel' arguments: '{0: topic.title, 1: topic2.title}')}"
+                                           additionalAttributes="{aria-label: '{f:translate(key: \'topic.join.step1.joinLabel\', arguments: \'{0: topic.title, 1: topic2.title}\')}'}"
+                                           class="btn btn-default btn-sm">
+                                <i class="fa fa-share-alt fa-lg fa-rotate-180" aria-hidden="true"></i>
+                            </f:link.action>
+                            <f:link.action action="show" controller="Topic" arguments="{topic: topic2}" target="_blank">
+                                <tbb:format.csv subject="{topic2.rootline}" property="title" glue=" &raquo; " />
+                            </f:link.action>
+                        </div>
+                    </f:for>
+                </f:else>
+            </f:if>
+        </div>
+    </f:section>
+</div>

@@ -1,0 +1,38 @@
+<div xmlns="http://www.w3.org/1999/xhtml" lang="en"
+     xmlns:v="http://typo3.org/ns/FluidTYPO3/Vhs/ViewHelpers"
+     xmlns:f="http://typo3.org/ns/TYPO3/Fluid/ViewHelpers"
+     xmlns:tbb="http://typo3.org/ns/LumIT/Typo3bb/ViewHelpers"
+
+     v:schemaLocation="http://fluidtypo3.org/schemas/vhs-1.8.5.xsd">
+
+    <f:layout name="Default" />
+
+    <f:section name="main">
+        <div class="profile-header">
+            <div class="pull-right">
+                <f:link.action action="inbox" class="btn btn-default" title="{f:translate(key: 'messages.header.action.inbox')}" additionalAttributes="{aria-label: '{f:translate(key: \'messages.header.action.inbox\')}'}">
+                    <span class="fa-stack">
+                        <i class="fa fa-inbox fa-stack-2x"></i>
+                        <i class="fa fa-arrow-circle-down fa-stack-1x"></i>
+                    </span>
+                </f:link.action>
+                <f:link.action action="new" class="btn btn-default" title="{f:translate(key: 'messages.header.action.new')}" additionalAttributes="{aria-label: '{f:translate(key: \'messages.header.action.new\')}'}">
+                    <i class="fa fa-envelope-o fa-2x"></i>
+                </f:link.action>
+            </div>
+            <h1><f:translate key="messages.outbox.headline" /></h1>
+        </div>
+
+        <div class="clearfix"></div>
+
+        <div class="typo3bb-messages">
+            <tbb:widget.paginateMessages objects="{messages}" as="paginatedMessages" configuration="{itemsPerPage: 20, insertAbove: 1, insertBelow: 1, maximumNumberOfLinks: 10}">
+                <f:for each="{paginatedMessages}" as="message">
+                    <f:if condition="{message}">
+                        <f:render partial="Message/SingleMessage" section="Content" arguments="{_all}" />
+                    </f:if>
+                </f:for>
+            </tbb:widget.paginateMessages>
+        </div>
+    </f:section>
+</div>

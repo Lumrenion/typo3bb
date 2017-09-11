@@ -1,0 +1,46 @@
+<div xmlns="http://www.w3.org/1999/xhtml" lang="en"
+     xmlns:v="http://typo3.org/ns/FluidTYPO3/Vhs/ViewHelpers"
+     xmlns:f="http://typo3.org/ns/TYPO3/Fluid/ViewHelpers"
+     xmlns:tbb="http://typo3.org/ns/LumIT/Typo3bb/ViewHelpers"
+
+     v:schemaLocation="http://fluidtypo3.org/schemas/vhs-1.8.5.xsd">
+    <f:section name="Content">
+        <ul class="post-options pull-right">
+            <tbb:hasAccess key="Post.create" object="{post.topic}">
+                <li>
+                    <f:link.action action="new" controller="Post" arguments="{topic: post.topic, quotedPost: post}" class="btn btn-default btn-xs" title="{f:translate(key: 'post.options.quote')}" additionalAttributes="{aria-label: '{f:translate(key: \'post.options.quote\')}'}">
+                        <i class="fa fa-quote-right fa-fw" aria-hidden="true"></i>
+                    </f:link.action>
+                </li>
+            </tbb:hasAccess>
+            <tbb:hasAccess key="Post.edit" object="{post}">
+                <li>
+                    <f:link.action action="edit" controller="Post" arguments="{post: post}" class="btn btn-default btn-xs" title="{f:translate(key: 'post.options.edit')}" additionalAttributes="{aria-label: '{f:translate(key: \'post.options.edit\')}'}">
+                        <i class="fa fa-pencil fa-fw" aria-hidden="true"></i>
+                    </f:link.action>
+                </li>
+            </tbb:hasAccess>
+            <tbb:hasAccess key="Post.delete" object="{post}">
+                <li>
+                    <f:link.action action="delete" controller="Post" arguments="{post: post}" class="btn btn-default btn-xs" title="{f:translate(key: 'post.options.delete')}" additionalAttributes="{aria-label: '{f:translate(key: \'post.options.delete\')}'}">
+                        <i class="fa fa-trash fa-fw" aria-hidden="true"></i>
+                    </f:link.action>
+                </li>
+            </tbb:hasAccess>
+            <tbb:hasAccess key="Post.move" object="{post}">
+                <li>
+                    <f:link.action action="move" controller="Post" arguments="{post: post}" class="btn btn-default btn-xs" title="{f:translate(key: 'post.options.move')}" additionalAttributes="{aria-label: '{f:translate(key: \'post.options.move\')}'}">
+                        <i class="fa fa-share fa-fw" aria-hidden="true"></i>
+                    </f:link.action>
+                </li>
+            </tbb:hasAccess>
+            <tbb:hasAccess key="Topic.split" object="{post.topic}">
+                <li>
+                    <f:link.action action="split" controller="Topic" arguments="{post: post}" class="btn btn-default btn-xs" title="{f:translate(key: 'post.options.splitTopic')}" additionalAttributes="{aria-label: '{f:translate(key: \'post.options.partTopic\')}'}">
+                        <i class="fa fa-cut fa-fw" aria-hidden="true"></i>
+                    </f:link.action>
+                </li>
+            </tbb:hasAccess>
+        </ul>
+    </f:section>
+</div>

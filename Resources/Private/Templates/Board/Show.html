@@ -1,0 +1,66 @@
+<div xmlns="http://www.w3.org/1999/xhtml" lang="en"
+     xmlns:v="http://typo3.org/ns/FluidTYPO3/Vhs/ViewHelpers"
+     xmlns:f="http://typo3.org/ns/TYPO3/Fluid/ViewHelpers"
+     xmlns:tbb="http://typo3.org/ns/LumIT/Typo3bb/ViewHelpers"
+
+     v:schemaLocation="http://fluidtypo3.org/schemas/vhs-1.8.5.xsd">
+
+    <f:layout name="Default" />
+    <f:section name="main">
+        <tbb:breadcrumb rootline="{board.rootline}" />
+
+        <f:if condition="{board.allowedSubBoardsCount}">
+            <div class="board-sub-boards-wrapper">
+                <f:render partial="Board/List" section="Content" arguments="{boards: board.allowedSubBoards}" />
+            </div>
+        </f:if>
+
+        <div class="forum-board-topics">
+            <f:widget.paginate objects="{v:iterator.sort(subject: '{v:iterator.sort(subject: board.topics, sortBy: \'latestPostCrdate\', order: \'ASC\', sortFlags: \'SORT_REGULAR\')}', sortBy: 'sticky', order: 'DESC', sortFlags: 'SORT_REGULAR')}"
+                               as="paginatedTopics" configuration="{itemsPerPage: 20, insertAbove: 1, insertBelow: 1, maximumNumberOfLinks: 10}">
+                <f:for each="{paginatedTopics}" as="topic">
+                    <f:if condition="{topic}">
+
+                        <div class="forum-board-topic">
+                            <div class="row row-eq-height">
+                                <div class="col-xs-8 col-md-7 forum-board-topic-title">
+                                    <div class="clearfix">
+                                        <f:link.action action="show" controller="Topic" arguments="{topic: topic}">{topic.title}</f:link.action>
+                                        <f:if condition="{topic.read} == 0">&nbsp;<f:link.action action="showNewPost" controller="Topic" arguments="{topic: topic}"><span class="label label-primary"><f:translate key="topic.hasNew" />&nbsp;<i class="fa fa-arrow-circle-right"></i></span></f:link.action></f:if>
+                                        <div class="pull-right">
+                                            <f:if condition="{topic.sticky}"><span class="glyphicon glyphicon-pushpin"></span></f:if>
+                                            <f:if condition="{topic.closed}"><span class="glyphicon glyphicon-lock"></span></f:if>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <small>
+                                            <f:translate key="topic.author.label" /> <f:if condition="{topic.author}"><f:then><f:link.action action="show" controller="FrontendUser" pageUid="{settings.pid.profile}" arguments="{user: topic.author}">{topic.authorName}</f:link.action></f:then><f:else>{topic.authorName}</f:else></f:if>
+                                        </small>
+                                    </div>
+                                </div>
+                                <div class="hidden-xs hidden-sm col-md-2 forum-board-topic-counters">
+                                    <span class="topic-posts-count-number">{topic.postsCount}</span>
+                                    <span class="topic-posts-count-label"><f:translate key="topic.postsCount.label" /></span>
+                                </div>
+                                <div class="col-xs-4 forum-board-topic-latest-post">
+                                    <small>
+                                        <f:format.date format="d.m.Y, H:i">{topic.latestPost.crdate}</f:format.date><br>
+                                        <f:translate key="topic.latestPost.author.label" />&nbsp;<f:if condition="{topic.latestPost.author}">
+                                            <f:then><f:link.action action="show" controller="FrontendUser" arguments="{user: topic.latestPost.author}" pageUid="{settings.pid.profile}">{topic.latestPost.authorName}</f:link.action></f:then>
+                                            <f:else>{topic.latestPost.authorName}</f:else>
+                                        </f:if>
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+
+                    </f:if>
+                </f:for>
+            </f:widget.paginate>
+
+            <div class="forum-board-actions">
+                <f:render partial="Board/Options" section="Content" arguments="{_all}" />
+            </div>
+        </div>
+    </f:section>
+</div>

@@ -1,0 +1,29 @@
+{
+  "name": "lumit/typo3bb",
+  "description": "Bulletin Board for typo3.",
+  "version": "1.0.0",
+  "type": "typo3-cms-extension",
+  "license": "GPL-2.0+",
+  "authors": [
+    {
+      "name": "Philipp Seßner",
+      "role": "Developer"
+    }
+  ],
+  "homepage": "",
+  "support": {
+	"issues": ""
+  },
+  "require": {
+  	  "typo3/cms-core": ">=7.6,<8.0"
+  },
+  "suggest": {
+      "evoweb/sf-register": "For user registration and additional user fields.",
+      "typo3-ter/community": "For community features like private messaging and friend lists."
+  },
+  "autoload": {
+    "psr-4": {
+      "LumIT\\Typo3bb\\": "Classes/"
+    }
+  }
+}

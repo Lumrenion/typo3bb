@@ -1,0 +1,67 @@
+<div xmlns="http://www.w3.org/1999/xhtml" lang="en"
+     xmlns:v="http://typo3.org/ns/FluidTYPO3/Vhs/ViewHelpers"
+     xmlns:f="http://typo3.org/ns/TYPO3/Fluid/ViewHelpers"
+     xmlns:tbb="http://typo3.org/ns/LumIT/Typo3bb/ViewHelpers"
+
+     v:schemaLocation="http://fluidtypo3.org/schemas/vhs-1.8.5.xsd">
+<f:section name="Content">
+    <f:form.hidden name="board" value="{board}" />
+
+    <div class="form-group">
+        <label for="topic-author-name"><f:translate key="formLabels.post.authorName" /></label>
+        <f:form.textfield value="{topic.authorName}" class="form-control" id="topic-author-name" disabled="true" />
+    </div>
+    <div class="form-group">
+        <label for="topic-title"><f:translate key="formLabels.topic.title"/> <span class="required">(required)</span></label>
+        <f:form.textfield property="title" class="form-control" id="topic-title" />
+    </div>
+
+    <hr>
+
+    <div class="form-group">
+        <label for="post-text"><f:translate key="formLabels.post.text"/></label>
+        <f:form.textarea property="posts.0.text" class="form-control typo3bb-rte-editor" id="post-text" rows="10" />
+    </div>
+
+
+    <div class="attachments">
+        <f:for each="{topic.posts.0.attachments}" as="attachment">
+            <f:link.action action="remove" controller="Attachment" arguments="{attachment: attachment, returnTo: 'editTopic'}">
+                <f:translate key="formLabels.post.attachment.remove" arguments="{0: attachment.originalFileName}" />
+            </f:link.action><br>
+        </f:for>
+        <div class="form-group">
+            <label for="post-new-attachments"><f:translate key="formLabels.post.attachment.add" /></label>
+            <f:form.upload id="post-new-attachments" name="attachments" multiple="true" class="form-control" />
+        </div>
+    </div>
+
+
+    <tbb:hasAccess key="Topic.pin" object="{board}">
+        <div class="checkbox">
+            <label for="topic-sticky">
+                <f:form.checkbox property="sticky" value="1" id="topic-sticky" />
+                <b><f:translate key="formLabels.topic.sticky" /></b>
+            </label>
+        </div>
+    </tbb:hasAccess>
+
+    <div class="checkbox">
+        <label for="topic-closed">
+            <f:form.checkbox property="closed" value="1" id="topic-closed" />
+            <b><f:translate key="formLabels.topic.closed" /></b>
+        </label>
+    </div>
+
+    <div class="topic-poll-wrapper well form-horizontal">
+        <f:if condition="{topic.poll}">
+            <f:then>
+                <f:render partial="Poll/Edit" section="Content" arguments="{_all}" />
+            </f:then>
+            <f:else>
+                <f:render partial="Poll/New" section="Content" arguments="{_all}" />
+            </f:else>
+        </f:if>
+    </div>
+</f:section>
+</div>

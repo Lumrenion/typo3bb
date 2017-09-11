@@ -1,0 +1,92 @@
+<div xmlns="http://www.w3.org/1999/xhtml" lang="en"
+     xmlns:v="http://typo3.org/ns/FluidTYPO3/Vhs/ViewHelpers"
+     xmlns:f="http://typo3.org/ns/TYPO3/Fluid/ViewHelpers"
+     xmlns:tbb="http://typo3.org/ns/LumIT/Typo3bb/ViewHelpers"
+
+     v:schemaLocation="http://fluidtypo3.org/schemas/vhs-1.8.5.xsd">
+    <f:section name="Content">
+        <div class="typo3bb-message-wrapper">
+            <a class="hidden" id="message-{message.uid}">&nbsp;</a>
+            <div class="typo3bb-message{f:if(condition: message.viewed, else: ' new')}">
+                <f:if condition="{message.viewed}"><f:else>
+                    <i class="fa fa-caret-up fa-rotate-45 fa-5x typo3bb-message-new-indicator" aria-hidden="true"></i>
+                    <i class="fa fa-caret-up fa-rotate-135 fa-5x typo3bb-message-new-indicator" aria-hidden="true"></i>
+                    <i class="fa fa-caret-up fa-rotate-225 fa-5x typo3bb-message-new-indicator" aria-hidden="true"></i>
+                    <i class="fa fa-caret-up fa-rotate-315 fa-5x typo3bb-message-new-indicator" aria-hidden="true"></i>
+                    <span class="sr-only"><f:translate key="messages.inbox.newMessageLabel" /></span>
+                </f:else></f:if>
+                <div class="row">
+
+                    <div class="col-xs-12 col-md-2">
+                        <div class="typo3bb-message-info-wrapper">
+                            <dl class="typo3bb-message-sender-info">
+                                <dt class="typo3bb-message-sender-avatar-container">
+                                    <v:media.exists file="uploads/pics/{message.sender.user.image}">
+                                        <f:then>
+                                            <f:image width="90" src="uploads/pics/{message.sender.user.image}" class="image-responsive img-thumbnail"
+                                                     alt="{frontendUser.displayName}" title="{frontendUser.displayName}" />
+                                        </f:then>
+                                        <f:else>
+                                            <i class="fa fa-user fa-5x" aria-hidden="true"></i>
+                                        </f:else>
+                                    </v:media.exists>
+                                </dt>
+                                <dt class="typo3bb-message-sender-info-main">
+                                    <f:if condition="{message.sender.user}">
+                                        <f:then>
+                                            <f:link.action action="show" controller="FrontendUser" arguments="{user: message.sender.user}" pageUid="{settings.pid.profile}">
+                                                {message.sender.userName}
+                                            </f:link.action>
+                                        </f:then>
+                                        <f:else>
+                                            {message.sender.userName}
+                                        </f:else>
+                                    </f:if>
+                                    <span class="has-tooltip user-status-indicator" title="" data-original-title="Offline"></span>
+                                </dt>
+                                <f:if condition="{message.sender.user}">
+                                    <dd class="typo3bb-message-sender-info-posts">
+                                        <f:translate key="fe_users.postsCount.label" arguments="{0: message.sender.user.postsCount}"/><br/>
+                                    </dd>
+                                    <dd class="typo3bb-message-sender-info-joined">
+                                        <f:translate key="post.author.crdate.label" arguments="{0: '{f:format.date(date: message.sender.user.crdate, format: \'d.m.Y\')}'}" />
+                                    </dd>
+                                </f:if>
+                            </dl>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 col-md-10 typo3bb-message-body-wrapper">
+                        <div class="typo3bb-message-body">
+
+                            <ul class="typo3bb-message-options pull-right">
+                                <li>
+                                    <f:link.action action="new" controller="Message" arguments="{parentMessage: message}" class="btn btn-default">
+                                        <i class="fa fa-reply{f:if(condition: '{f:count(subject: message.receivers)} > 1', then: '-all')}"></i>
+                                    </f:link.action>
+                                </li>
+                                <li>
+                                    <f:link.action action="delete" controller="Message" arguments="{message: message, from: 'outbox'}" class="btn btn-default">
+                                        <i class="fa fa-trash"></i>
+                                    </f:link.action>
+                                </li>
+                            </ul>
+
+                            <div class="typo3bb-message-heading">
+                                <h3 class="typo3bb-message-heading-headline">{message.subject}</h3>
+                                <f:format.date format="d.m.Y H:i">{message.crdate}</f:format.date><br>
+                                <f:translate key="messages.new.form.receivers" />: <tbb:format.csv subject="{message.receivers}" property="userName" />
+                            </div>
+
+                            <div class="typo3-message-content">
+                                <f:format.raw>{message.text}</f:format.raw>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </f:section>
+</div>

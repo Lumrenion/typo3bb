@@ -1,0 +1,29 @@
+<div xmlns="http://www.w3.org/1999/xhtml" lang="en"
+     xmlns:v="http://typo3.org/ns/FluidTYPO3/Vhs/ViewHelpers"
+     xmlns:f="http://typo3.org/ns/TYPO3/Fluid/ViewHelpers"
+
+     v:schemaLocation="http://fluidtypo3.org/schemas/vhs-1.8.5.xsd">
+
+    <f:layout name="Default" />
+    <f:section name="main">
+        <f:for each="{forumCategories}" as="forumCategory">
+            <f:if condition="{forumCategory.allowedBoardsCount}">
+                <div class="forum-category">
+                    <a class="section-anchor" id="forum-category-{forumCategory.uid}"></a>
+                    <div class="forum-category-header">
+                        <h2><f:format.raw>{forumCategory.title}</f:format.raw></h2>
+                    </div>
+                    <f:render partial="Board/List" section="Content" arguments="{boards: forumCategory.allowedBoards}" />
+                </div>
+            </f:if>
+        </f:for>
+
+        <div class="forum-forum-category-actions">
+            <f:render partial="ForumCategory/Options" section="Content" arguments="{_all}" />
+        </div>
+
+        <div class="info-center">
+
+        </div>
+    </f:section>
+</div>

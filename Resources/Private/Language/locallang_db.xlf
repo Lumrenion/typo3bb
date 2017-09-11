@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+    <file source-language="en" datatype="plaintext" original="messages" date="2016-03-21T18:56:53Z" product-name="typo3bb">
+        <header/>
+        <body>
+            <trans-unit id="LGL.anonymous">
+                <source>Only Anonymous</source>
+            </trans-unit>
+            <trans-unit id="LGL.public">
+                <source>Show always</source>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_forumcategory">
+                <source>Forum Category</source>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_forumcategory.title">
+                <source>Title</source>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_forumcategory.boards">
+                <source>Boards</source>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_board">
+                <source>Board</source>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_board.title">
+                <source>Title</source>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_board.description">
+                <source>Description</source>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_board.redirect">
+                <source>Redirect</source>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_board.redirect_count">
+                <source>Redirect count</source>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_board.link">
+                <source>Link</source>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_board.topics">
+                <source>Topics</source>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_board.sub_boards">
+                <source>Sub Boards</source>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_board.read_permissions">
+                <source>Read Permission</source>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_board.moderators">
+                <source>Moderators</source>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_board.subscribers">
+                <source>Subscribers</source>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_board.write_permissions">
+                <source>Write Permission</source>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_board.parent_board">
+                <source>Parent Board</source>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_board.forum_category">
+                <source>Forum Category</source>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_topic">
+                <source>Topic</source>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_topic.title">
+                <source>Title</source>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_topic.sticky">
+                <source>Sticky</source>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_topic.closed">
+                <source>Closed</source>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_topic.crdate">
+                <source>Crdate</source>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_topic.posts_count">
+                <source>Posts Count</source>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_topic.latest_post_crdate">
+                <source>Latest Post Crdate</source>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_topic.posts">
+                <source>Posts</source>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_topic.poll">
+                <source>Poll</source>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_topic.author">
+                <source>Author</source>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_topic.subscribers">
+                <source>Subscribers</source>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_topic.readers">
+                <source>Readers</source>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_topic.latest_post">
+                <source>Latest Post</source>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_post">
+                <source>Post</source>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_post.text">
+                <source>Text</source>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_post.author_name">
+                <source>Author Name</source>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_post.editor">
+                <source>Editor</source>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_post.editor_name">
+                <source>Editor Name</source>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_post.edited">
+                <source>Edited</source>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_post.crdate">
+                <source>Crdate</source>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_post.tstamp">
+                <source>Tstamp</source>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_post.attachments">
+                <source>Attachments</source>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_post.author">
+                <source>Author</source>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_poll">
+                <source>Poll</source>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_poll.question">
+                <source>Question</source>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_poll.max_choices_select">
+                <source>Max Choices Select</source>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_poll.change_vote_allowed">
+                <source>Change Vote Allowed</source>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_poll.vote_count">
+                <source>Vote Count</source>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_poll.result_hidden">
+                <source>Result Hidden</source>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_poll.choices">
+                <source>Choices</source>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_pollchoice">
+                <source>Poll Choice</source>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_pollchoice.text">
+                <source>Text</source>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_pollchoice.vote_count">
+                <source>Vote Count</source>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_pollchoice.poll">
+                <source>Poll</source>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_frontenduser">
+                <source>Frontend User</source>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_frontenduser.display_name">
+                <source>Display name</source>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_frontenduser.signature">
+                <source>Signature</source>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_frontenduser.created_topics">
+                <source>Created Topics</source>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_frontenduser.subscribed_topics">
+                <source>Subscribed Topics</source>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_frontenduser.subscribed_boards">
+                <source>Subscribed Boards</source>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_frontenduser.created_posts">
+                <source>Created Posts</source>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_frontenduser.edited_posts">
+                <source>Edited Posts</source>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_frontenduser.selected_poll_choices">
+                <source>Selected Poll Choices</source>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_frontendUser.owned_messages">
+                <source>Owned messages</source>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_frontendUser.sent_messages">
+                <source>Sent messages</source>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_frontendUser.received_messages">
+                <source>Received Messages</source>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_frontendUser.hide_sensitive_data">
+                <source>Hide sensitive user data</source>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_frontendUser.show_online">
+                <source>Show online status</source>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_frontendUser.message_notification">
+                <source>Send email notification when new private message is received</source>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_frontendUser.login_time">
+                <source>Total time the user has been logged in</source>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_message">
+                <source>Message</source>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_message.subject">
+                <source>Subject</source>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_message.text">
+                <source>Text</source>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_message.owner">
+                <source>Owner</source>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_message.sender">
+                <source>Sender</source>
+            </trans-unit>
+
+            <trans-unit id="tx_typo3bb_domain_model_messageparticipant">
+                <source>Message participant</source>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_messageparticipant.viewed">
+                <source>Viewed</source>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_messageparticipant.user">
+                <source>User</source>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_messageparticipant.user_name">
+                <source>User Name</source>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_messageparticipant.deleted">
+                <source>Deleted</source>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_messageparticipant.sent_message">
+                <source>Sent message</source>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_messageparticipant.received_message">
+                <source>Received message</source>
+            </trans-unit>
+
+            <trans-unit id="fe_users.tx_extbase_type.Tx_Typo3bb_FrontendUser">
+                <source>Typo3-BB FrontendUser</source>
+            </trans-unit>
+
+            <trans-unit id="fe_user.tab.typo3bb_settings.label">
+                <source>Typo3BB</source>
+            </trans-unit>
+
+            <trans-unit id="tx_typo3bb_domain_model_attachment">
+                <source>Attachment</source>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_attachment.post">
+                <source>Post</source>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_attachment.file">
+                <source>File</source>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_attachment.original_file_name">
+                <source>Original File Name</source>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_attachment.download_count">
+                <source>Download Count</source>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

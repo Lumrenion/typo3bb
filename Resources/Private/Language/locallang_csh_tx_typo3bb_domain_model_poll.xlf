@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+    <file source-language="en" datatype="plaintext" original="messages" date="2016-03-21T18:56:53Z" product-name="typo3bb">
+        <header/>
+        <body>
+            <trans-unit id="question.description">
+                <source>The question of the poll</source>
+            </trans-unit>
+            <trans-unit id="max_choices_select.description">
+                <source>The maximum number of choices a user can select</source>
+            </trans-unit>
+            <trans-unit id="change_vote_allowed.description">
+                <source>If the user is allowed to change his selection afterwards</source>
+            </trans-unit>
+            <trans-unit id="vote_count.description">
+                <source>Number of votes, added for performance reasons</source>
+            </trans-unit>
+            <trans-unit id="result_hidden.description">
+                <source>If the results should be hidden until the poll ended</source>
+            </trans-unit>
+            <trans-unit id="choices.description">
+                <source>The choices the poll contains</source>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

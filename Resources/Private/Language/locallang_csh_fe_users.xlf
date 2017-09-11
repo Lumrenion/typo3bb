@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+    <file source-language="en" datatype="plaintext" original="messages" date="2016-03-21T18:56:53Z" product-name="typo3bb">
+        <header/>
+        <body>
+            <trans-unit id="signature.description">
+                <source>Personal text of the frontend user appended to each post of the user.</source>
+            </trans-unit>
+            <trans-unit id="created_topics.description">
+                <source>The topics created by this frontend user</source>
+            </trans-unit>
+            <trans-unit id="subscribed_topics.description">
+                <source>The topics subscribed by this user</source>
+            </trans-unit>
+            <trans-unit id="created_posts.description">
+                <source>The posts created by this user</source>
+            </trans-unit>
+            <trans-unit id="selected_poll_choices.description">
+                <source>The poll choices the frontend user selected</source>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

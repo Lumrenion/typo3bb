@@ -1,0 +1,210 @@
+<div xmlns="http://www.w3.org/1999/xhtml" lang="en"
+     xmlns:v="http://typo3.org/ns/FluidTYPO3/Vhs/ViewHelpers"
+     xmlns:f="http://typo3.org/ns/TYPO3/Fluid/ViewHelpers"
+     xmlns:tbb="http://typo3.org/ns/LumIT/Typo3bb/ViewHelpers"
+
+     v:schemaLocation="http://fluidtypo3.org/schemas/vhs-1.8.5.xsd">
+
+    <f:layout name="Default" />
+
+    <f:section name="main">
+
+        <div class="tx_typo3bb_statistics">
+
+            <h2><f:translate key="plugin.statistics.statistics.general.headline.label" /></h2>
+            <div class="row">
+                <div class="col-xs-12">
+                    <table class="table table-striped table-responsive">
+                        <tr>
+                            <th>
+                                <f:translate key="plugin.statistics.statistics.general.totalMembers" />
+                            </th>
+                            <td>
+                                {membersCount}
+                            </td>
+
+                            <th>
+                                <f:translate key="plugin.statistics.statistics.general.averageRegisters" />
+                            </th>
+                            <td>
+                                {averages.registers}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                <f:translate key="plugin.statistics.statistics.general.totalPosts" />
+                            </th>
+                            <td>
+                                {postsCount}
+                            </td>
+
+                            <th>
+                                <f:translate key="plugin.statistics.statistics.general.averagePosts" />
+                            </th>
+                            <td>
+                                {averages.posts}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                <f:translate key="plugin.statistics.statistics.general.totalTopics" />
+                            </th>
+                            <td>
+                                {topicsCount}
+                            </td>
+
+                            <th>
+                                <f:translate key="plugin.statistics.statistics.general.averageTopics" />
+                            </th>
+                            <td>
+                                {averages.topics}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                <f:translate key="plugin.statistics.statistics.general.totalBoards" />
+                            </th>
+                            <td>
+                                {boardsCount}
+                            </td>
+
+                            <th>
+                                <f:translate key="plugin.statistics.statistics.general.totalForumCategories" />
+                            </th>
+                            <td>
+                                {forumCategoriesCount}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                <f:translate key="plugin.statistics.statistics.general.usersOnline" />
+                            </th>
+                            <td>
+                                {membersOnlineCount}
+                            </td>
+
+
+                            <th>
+                                <f:translate key="plugin.statistics.statistics.general.mostOnlineToday" />
+                            </th>
+                            <td>
+                                {todayStatistics.mostOn}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                <f:translate key="plugin.statistics.statistics.general.mostOnline" />
+                            </th>
+                            <td>
+                                <f:translate key="plugin.statistics.statistics.general.mostOnline.text"
+                                             arguments="{
+                                            0: totalMostOn.mostOn,
+                                            1: '{totalMostOn.date -> f:format.date(format: \'d. F Y\')}'
+                                         }" />
+                            </td>
+
+                            <th>
+                                <f:translate key="plugin.statistics.statistics.general.averageMostOn" />
+                            </th>
+                            <td>
+                                {averages.mostOn}
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-12 col-sm-4">
+                    <h2><f:translate key="plugin.statistics.statistics.topAuthors.headline.label" /></h2>
+                    <table class="table table-striped table-responsive">
+                        <f:for each="{topAuthors}" as="topAuthor">
+                            <tr>
+                                <th>
+                                    <f:link.action action="show" controller="FrontendUser" arguments="{user: topAuthor}" pageUid="{settings.pid.profile}">
+                                        {topAuthor.displayName}
+                                    </f:link.action>
+                                </th>
+                                <td>
+                                    {topAuthor.createdPosts -> f:count()}
+                                </td>
+                            </tr>
+                        </f:for>
+                    </table>
+                </div>
+                <div class="col-xs-12 col-sm-4">
+                    <h2><f:translate key="plugin.statistics.statistics.topTopicStarters.headline.label" /></h2>
+                    <table class="table table-striped table-responsive">
+                        <f:for each="{topTopicStarters}" as="topTopicStarter">
+                            <tr>
+                                <th>
+                                    <f:link.action action="show" controller="FrontendUser" arguments="{user: topTopicStarter}" pageUid="{settings.pid.profile}">
+                                        {topTopicStarter.displayName}
+                                    </f:link.action>
+                                </th>
+                                <td>
+                                    {topTopicStarter.createdTopics -> f:count()}
+                                </td>
+                            </tr>
+                        </f:for>
+                    </table>
+                </div>
+                <div class="col-xs-12 col-sm-4">
+                    <h2><f:translate key="plugin.statistics.statistics.longestTimeOnline.headline.label" /></h2>
+                    <table class="table table-striped table-responsive">
+                        <f:for each="{longestTimeOnlineUsers}" as="longestTimeOnlineUser">
+                            <tr>
+                                <th>
+                                    <f:link.action action="show" controller="FrontendUser" arguments="{user: longestTimeOnlineUser}" pageUid="{settings.pid.profile}">
+                                        {longestTimeOnlineUser.displayName}
+                                    </f:link.action>
+                                </th>
+                                <td>
+                                    {tbb:format.prettifySeconds(seconds: longestTimeOnlineUser.loginTime, shortcut: '1')}
+                                </td>
+                            </tr>
+                        </f:for>
+                    </table>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-12 col-sm-6">
+                    <h2><f:translate key="plugin.statistics.statistics.topTopicsByPosts.headline.label" /></h2>
+                    <table class="table table-striped table-responsive">
+                        <f:for each="{topTopicsByPosts}" as="topTopicByPosts">
+                            <tr>
+                                <th>
+                                    <f:link.action action="show" controller="Topic" arguments="{topic: topTopicByPosts}" pageUid="{settings.pid.forum}">
+                                        {topTopicByPosts.title}
+                                    </f:link.action>
+                                </th>
+                                <td>
+                                    {topTopicByPosts.posts -> f:count()}
+                                </td>
+                            </tr>
+                        </f:for>
+                    </table>
+                </div>
+                <div class="col-xs-12 col-sm-6">
+                    <h2><f:translate key="plugin.statistics.statistics.topTopicsByViews.headline.label" /></h2>
+                    <table class="table table-striped table-responsive">
+                        <f:for each="{topTopicsByViews}" as="topTopicByViews">
+                            <tr>
+                                <th>
+                                    <f:link.action action="show" controller="Topic" arguments="{topic: topTopicByViews}" pageUid="{settings.pid.forum}">
+                                        {topTopicByViews.title}
+                                    </f:link.action>
+                                </th>
+                                <td>
+                                    {topTopicByViews.views}
+                                </td>
+                            </tr>
+                        </f:for>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </f:section>
+</div>

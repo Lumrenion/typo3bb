@@ -1,0 +1,33 @@
+<div xmlns="http://www.w3.org/1999/xhtml" lang="en"
+     xmlns:v="http://typo3.org/ns/FluidTYPO3/Vhs/ViewHelpers"
+     xmlns:f="http://typo3.org/ns/TYPO3/Fluid/ViewHelpers"
+     xmlns:tbb="http://typo3.org/ns/LumIT/Typo3bb/ViewHelpers"
+
+     v:schemaLocation="http://fluidtypo3.org/schemas/vhs-1.8.5.xsd">
+    <f:section name="Content">
+
+        <p>{topic.poll.question}</p>
+        <f:if condition="{topic.poll.resultHidden}">
+            <f:if condition="{now.timestamp} < {topic.poll.endtime}">
+                <v:variable.set name="hideResult" value="true" />
+            </f:if>
+        </f:if>
+        <f:for each="{topic.poll.choices}" as="choice">
+            <div>
+                <f:if condition="{choice.frontendUserVoted}"><f:then><b>{choice.text}</b></f:then><f:else>{choice.text}</f:else></f:if><f:if condition="{hidePollResult}"><f:else> ({choice.voteCount})</f:else></f:if>
+            </div>
+        </f:for>
+
+        <small>
+            <f:if condition="{topic.poll.ended}">
+                <f:then>
+                    <f:translate key="poll.endtime.ended.label" arguments="{0: '{f:format.date(date: topic.poll.endtime, format: \'d.m.Y H:i\')}'}" />
+                </f:then>
+                <f:else>
+                    <f:translate key="poll.endtime.label" arguments="{0: '{f:format.date(date: topic.poll.endtime, format: \'d.m.Y H:i\')}'}" />
+                </f:else>
+            </f:if>
+        </small>
+
+    </f:section>
+</div>

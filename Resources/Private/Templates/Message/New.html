@@ -1,0 +1,69 @@
+<div xmlns="http://www.w3.org/1999/xhtml" lang="en"
+     xmlns:v="http://typo3.org/ns/FluidTYPO3/Vhs/ViewHelpers"
+     xmlns:f="http://typo3.org/ns/TYPO3/Fluid/ViewHelpers"
+     xmlns:tbb="http://typo3.org/ns/LumIT/Typo3bb/ViewHelpers"
+     xmlns:tr="http://typo3.org/ns/Helhum/TyposcriptRendering/ViewHelpers"
+
+     v:schemaLocation="http://fluidtypo3.org/schemas/vhs-1.8.5.xsd">
+
+    <f:layout name="Default" />
+
+    <f:section name="main">
+        <div class="profile-header">
+            <div class="pull-right">
+                <f:link.action action="inbox" class="btn btn-default" title="{f:translate(key: 'messages.header.action.inbox')}" additionalAttributes="{aria-label: '{f:translate(key: \'messages.header.action.inbox\')}'}">
+                    <span class="fa-stack">
+                        <i class="fa fa-inbox fa-stack-2x"></i>
+                        <i class="fa fa-arrow-circle-down fa-stack-1x"></i>
+                    </span>
+                </f:link.action>
+                <f:link.action action="outbox" class="btn btn-default" title="{f:translate(key: 'messages.header.action.outbox')}" additionalAttributes="{aria-label: '{f:translate(key: \'messages.header.action.outbox\')}'}">
+                    <span class="fa-stack">
+                        <i class="fa fa-inbox fa-fw fa-stack-2x"></i>
+                        <i class="fa fa-arrow-circle-up fa-stack-1x"></i>
+                    </span>
+                </f:link.action>
+            </div>
+            <h1><f:translate key="messages.new.headline" /></h1>
+        </div>
+
+        <div class="clearfix"></div>
+
+        <f:form action="send" method="POST" name="message" object="{message}">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="form-group {tbb:form.errorSuccess(for: 'message.receivers')}">
+                        <label for="receivers"><f:translate key="messages.new.form.receivers" /></label>
+                        <f:form.textfield name="receivers" id="new-message-receivers" class="form-control new-message-receivers"
+                                          value="{receiver}" additionalAttributes="{
+                                            data-ajax-action: '{tr:uri.ajaxAction(action: \'getAjaxReceivers\', controller: \'Message\', extensionName: \'typo3bb\', pluginName: \'Messages\')}',
+                                            data-previous-receivers: '{v:format.json.encode(value: receiverArray)}'
+                                          }"/>
+                        <f:render partial="FieldError" section="Main" arguments="{for: 'message', field: 'receivers'}" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="form-group">
+                        <label for="subject"><f:translate key="messages.new.form.subject" /></label>
+                        <f:form.textfield property="subject" value="{subject}" id="subject" class="form-control" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="form-group">
+                        <label for="text"><f:translate key="messages.new.form.text" /></label>
+                        <f:form.textarea property="text" value="{body}" id="text" class="form-control typo3bb-rte-editor" rows="10" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <f:form.submit value="{f:translate(key:'messages.new.form.submit')}" class="btn btn-primary pull-right" />
+                </div>
+            </div>
+        </f:form>
+    </f:section>
+</div>

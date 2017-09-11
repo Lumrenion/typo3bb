@@ -1,0 +1,80 @@
+<div xmlns="http://www.w3.org/1999/xhtml" lang="en"
+     xmlns:v="http://typo3.org/ns/FluidTYPO3/Vhs/ViewHelpers"
+     xmlns:f="http://typo3.org/ns/TYPO3/Fluid/ViewHelpers"
+     xmlns:tbb="http://typo3.org/ns/LumIT/Typo3bb/ViewHelpers"
+
+     v:schemaLocation="http://fluidtypo3.org/schemas/vhs-1.8.5.xsd">
+    <f:section name="Content">
+        <div class="forum-category-boards">
+            <f:for each="{boards}" as="board">
+                <tbb:hasAccess key="Board.show" object="{board}">
+                    <div class="forum-category-board">
+                        <div class="row row-eq-height">
+                            <div class="col-xs-1 board-list-board-new-indicator">
+                                <f:if condition="{board.read}">
+                                    <f:then>
+                                        <i class="fa fa-comments-o fa-fw fa-2x"></i>
+                                    </f:then>
+                                    <f:else>
+                                        <i class="fa fa-comments fa-fw fa-2x"></i>
+                                    </f:else>
+                                </f:if>
+                            </div>
+                            <div class="col-xs-7 col-md-6 board-list-board-title">
+                                <span class="board-list-board-title-title"><f:link.action action="show" controller="Board" arguments="{board: board}"><f:format.raw>{board.title}</f:format.raw></f:link.action></span>
+                                <f:if condition="{board.description}">
+                                    <span class="board-list-board-title-description"><small><f:format.raw>{board.description}</f:format.raw></small></span>
+                                </f:if>
+                                <f:if condition="{board.allowedSubBoardsCount}">
+                                    <div class="board-list-board-subboards">
+                                        <small>
+                                            <f:translate key="board.subboards.label" />
+                                            <f:for each="{board.allowedSubBoards}" as="subBoard" iteration="it">
+                                                <f:link.action action="show" controller="Board" arguments="{board: subBoard}"><f:format.raw>{subBoard.title}</f:format.raw></f:link.action><f:if condition="{it.isLast}"><f:else>,</f:else></f:if>
+                                            </f:for>
+                                        </small>
+                                    </div>
+                                </f:if>
+                            </div>
+                            <div class="hidden-xs hidden-sm col-md-2 board-list-board-counters">
+                                <f:if condition="{board.redirect}">
+                                    <f:then>
+                                        <div class="col-xs-12">
+                                            <span class="board-topics-count-number">{board.redirectCount}</span>
+                                            <span class="board-topics-count-label"><f:translate key="boards.redirectCount.label" /></span>
+                                        </div>
+                                    </f:then>
+                                    <f:else>
+                                        <div class="col-xs-6">
+                                            <span class="board-topics-count-number">{board.topicsCount}</span>
+                                            <span class="board-topics-count-label"><f:translate key="boards.topicsCount.label" /><br></span>
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <span class="board-topics-count-number">{board.postsCount}</span>
+                                            <span class="board-topics-count-label"><f:translate key="boards.postsCount.label" /></span>
+                                        </div>
+                                    </f:else>
+                                </f:if>
+                            </div>
+                            <div class="col-xs-4 board-list-board-latest-post">
+                                <f:if condition="{board.redirect}"><f:else>
+                                    <small>
+                                        <f:if condition="{board.viewableLatestPost}">
+                                            <f:link.action action="show" controller="Topic" arguments="{topic: board.viewableLatestPost.topic, post: board.viewableLatestPost}" section="post-{board.viewableLatestPost.uid}">
+                                                <div>
+                                                    <f:translate key="latestPost.author.label" arguments="{0: board.viewableLatestPost.authorName}" /><br>
+                                                    <f:translate key="latestPost.topic.label" arguments="{0: board.viewableLatestPost.topic.title}" /><br>
+                                                    <f:translate key="latestPost.crdate.label" arguments="{0: '{f:format.date(format: \'d.m.Y, H:i\' date: board.viewableLatestPost.crdate)}'}" />
+                                                </div>
+                                            </f:link.action>
+                                        </f:if>
+                                    </small>
+                                </f:else></f:if>
+                            </div>
+                        </div>
+                    </div>
+                </tbb:hasAccess>
+            </f:for>
+        </div>
+    </f:section>
+</div>
