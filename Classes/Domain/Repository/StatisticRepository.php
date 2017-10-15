@@ -24,13 +24,13 @@ class StatisticRepository extends AbstractRepository {
         $query = $this->createQuery();
         $query->matching($query->equals('date', $date->setTimezone(new \DateTimeZone('UTC'))->format('Y-m-d')));
 
-        if ($query->count() <= 0) {
-            $newStatistic = new Statistic();
-            $this->persistenceManager->add($newStatistic);
+        if (null == $statistic = $query->execute()->getFirst()) {
+            $statistic = new Statistic();
+            $this->persistenceManager->add($statistic);
             $this->persistenceManager->persistAll();
         }
 
-        return $query->execute()->getFirst();
+        return $statistic;
     }
 
     /**

@@ -547,7 +547,6 @@ class Topic extends AbstractEntity
      * @return bool
      */
     public function isRead() {
-        //TODO
         $frontendUser = FrontendUserUtility::getCurrentUser();
         if (is_null($frontendUser))
             return true;
@@ -556,7 +555,8 @@ class Topic extends AbstractEntity
         $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
         /** @var PostRepository $postRepository */
         $postRepository = $objectManager->get(PostRepository::class);
-        return ! $postRepository->countUnread($frontendUser, '', null, $this);
+        $unreadCount = $postRepository->countUnread($frontendUser, null, $this);
+        return $unreadCount == 0;
     }
 
     /**

@@ -1,20 +1,29 @@
+# customsubcategory=template=Template
+# customsubcategory=persistence=Persistence
+# customsubcategory=pages=Pages
+# customsubcategory=mail=Mail
 
 plugin.tx_typo3bb {
     view {
-        # cat=plugin.tx_typo3bb_forum/file; type=string; label=Path to template root (FE)
+        # cat=plugin.tx_typo3bb/template; type=string; label=Path to template root (FE)
         templateRootPath = 
-        # cat=plugin.tx_typo3bb_forum/file; type=string; label=Path to template partials (FE)
+        # cat=plugin.tx_typo3bb/template; type=string; label=Path to template partials (FE)
         partialRootPath = 
-        # cat=plugin.tx_typo3bb_forum/file; type=string; label=Path to template layouts (FE)
+        # cat=plugin.tx_typo3bb/template; type=string; label=Path to template layouts (FE)
         layoutRootPath = 
     }
     persistence {
-        # cat=plugin.tx_typo3bb_forum//a; type=string; label=Default storage PID
-        storagePid = 
+        # cat=plugin.tx_typo3bb/persistence/a; type=int+; label=Default storage PID of all forum records
+        forumStoragePid =
+        # cat=plugin.tx_typo3bb/persistence/b; type=int+; label=Default storage PID of fe_users
+        usersStoragePid =
     }
     settings {
+        # cat=plugin.tx_typo3bb//a; type=string; label=Relative path where emoticons are located
         emoticonPath = uploads/tx_typo3bb
+        # cat=plugin.tx_typo3bb//a; type=string; label=Relative path where posts attachments are located
         attachmentsPath = uploads/tx_typo3bb/attachments
+        # cat=plugin.tx_typo3bb//a; type=int+; label=Threshold when the online time of users will be updated
         onlineInterval = 15
         breadcrumb {
             forumCategoryIconClass = fa fa-list-alt fa-fw
@@ -24,10 +33,24 @@ plugin.tx_typo3bb {
             itemMaxChars = 40
         }
         pid {
-            forum = 
-            profile = 
-            messages = 
-            statistics = 
+            # cat=plugin.tx_typo3bb/pages/a; type=int+; label=Page id where the Forum plugin is located
+            forum =
+            # cat=plugin.tx_typo3bb/pages/b; type=int+; label=Page id where user profiles are displayed
+            profile =
+            # cat=plugin.tx_typo3bb/pages/c; type=int+; label=Page id where the Messages plugin is inserted
+            messages =
+            # cat=plugin.tx_typo3bb/pages/d; type=int+; label=Page id where the Statistics plugin is inserted
+            statistics =
+        }
+        email {
+            # cat=plugin.tx_typo3bb/mail/a; type=string; label=The email address which will send emails sent by the forum
+            fromEmail =
+            # cat=plugin.tx_typo3bb/mail/b; type=string; label=name for from Email
+            fromName =
+            # cat=plugin.tx_typo3bb/mail/c; type=string; label=The replyTo email address for emails sent by the forum
+            replyEmail =
+            # cat=plugin.tx_typo3bb/mail/d; type=string; label=name for replyEmail
+            replyName =
         }
     }
 }

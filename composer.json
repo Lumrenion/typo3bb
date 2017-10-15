@@ -18,8 +18,8 @@
   	  "typo3/cms-core": ">=7.6,<8.0"
   },
   "suggest": {
-      "evoweb/sf-register": "For user registration and additional user fields.",
-      "typo3-ter/community": "For community features like private messaging and friend lists."
+      "typo3-ter/sr-feuser-register": "For user registration, editing of user profiles and deleting own accounts",
+      "evoweb/sf-register": "Alternative to sr-feuser-register. Does not implement deletion of accounts"
   },
   "autoload": {
     "psr-4": {

@@ -32,12 +32,14 @@ class ForumIndexer {
 
     var $startMicrotime = 0;
 
+    public static $indexerType = 'typo3bb_forum';
+
     function registerIndexerConfiguration(&$params, $pObj) {
 
         // add item to "type" field
         $newArray = array(
         'Typo3bb indexer',
-        'typo3bb_forum',
+        self::$indexerType,
         ExtensionManagementUtility::extRelPath('typo3bb') . 'ext_icon.gif'
         );
         $params['items'][] = $newArray;
@@ -51,7 +53,7 @@ class ForumIndexer {
      */
     public function customIndexer(&$indexerConfig, &$indexerObject) {
         $this->startMicrotime = microtime(true);
-        if($indexerConfig['type'] == 'typo3bb_forum') {
+        if($indexerConfig['type'] == self::$indexerType) {
             $content = '';
 
             // get all the entries to index
@@ -93,7 +95,7 @@ class ForumIndexer {
                     $indexerObject->storeInIndex(
                         $indexerConfig['storagepid'], // storage PID
                         $title, // record title
-                        'typo3bb_forum', // content type
+                        self::$indexerType, // content type
                         $indexerConfig['targetpid'], // target PID: where is the single view?
                         $fullContent, // indexed content, includes the title (linebreak after title)
                         $tags, // tags for faceted search

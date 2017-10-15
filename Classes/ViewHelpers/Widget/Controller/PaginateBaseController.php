@@ -27,15 +27,15 @@ use TYPO3\CMS\Fluid\ViewHelpers\Widget\Controller\PaginateController;
  */
 class PaginateBaseController extends PaginateController  {
 
+    protected $currentPage = -1;
     /**
      * @param int $currentPage
      * @return void
      */
     public function indexAction($currentPage = 1) {
-        // set current page
-        $this->currentPage = (int)$currentPage;
+        // set current page if it was not set yet
         if ($this->currentPage < 1) {
-            $this->currentPage = 1;
+            $this->currentPage = $currentPage < 1 ? 1 : $currentPage;
         }
         if ($this->currentPage > $this->numberOfPages) {
             // set $modifiedObjects to NULL if the page does not exist

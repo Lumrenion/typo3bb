@@ -26,7 +26,6 @@ namespace LumIT\Typo3bb\Slot;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use LumIT\Typo3bb\Domain\Model\FrontendUser;
 use LumIT\Typo3bb\Domain\Model\MessageParticipant;
 use LumIT\Typo3bb\Domain\Model\Post;
 use LumIT\Typo3bb\Domain\Model\Topic;
@@ -46,17 +45,7 @@ use TYPO3\CMS\Extbase\Object\ObjectManager;
 class FrontendUserSlot implements \TYPO3\CMS\Core\SingletonInterface {
 
     /**
-     * @param \LumIT\Typo3bb\Domain\Model\FrontendUser $user
-     * @param array $settings
-     */
-    public static function deleted(FrontendUser &$user, $settings) {
-        self::processDeletedForumUser($user);
-
-    }
-
-    /**
      * Sets authorNames and editorNames of topics and posts from the frontendUser to be deleted.
-     * TODO srfeuserregister
      * @param \LumIT\Typo3bb\Domain\Model\FrontendUser $forumUser
      */
     public static function processDeletedForumUser($forumUser) {
@@ -107,7 +96,7 @@ class FrontendUserSlot implements \TYPO3\CMS\Core\SingletonInterface {
      * @param \LumIT\Typo3bb\Domain\Model\FrontendUser $user
      * @param array $settings
      */
-    public static function sanitizeHtmlSignatureBeforeSave(&$user, $settings) {
+    public static function sanitizeHtmlSignatureBeforeSave($user, $settings) {
         $user->setSignature(RteUtility::sanitizeHtml($user->getSignature()));
     }
 }

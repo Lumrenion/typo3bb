@@ -48,32 +48,6 @@ $example['postVarSets'] = [
                 'GETvar' => 'tx_typo3bb_forum[post]',
             ]
         ],
-        'profile' => [
-            [
-                'GETvar' => 'tx_typo3bb_user-profile[action]'
-            ],
-            [
-                'GETvar' => 'tx_typo3bb_user-profile[controller]',
-                'valueMap' => [
-                    'User' => 'FrontendUser',
-                ]
-            ],
-            [
-                'GETvar' => 'tx_typo3bb_user-profile[user]',
-                'lookUpTable' => [
-                    'table' => 'fe_users',
-                    'id_field' => 'uid',
-                    'alias_field' => 'name',
-                    'addWhereClause' => ' AND NOT deleted',
-                    'useUniqueCache' => 1,
-                    'useUniqueCache_conf' => [
-                        'strtolower' => 1,
-                        'spaceCharacter' => '-',
-                    ],
-
-                ]
-            ],
-        ],
         'messages' => [
             [
                 'GETvar' => 'tx_typo3bb_messages[action]'

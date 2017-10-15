@@ -54,7 +54,7 @@ class PaginateMessagesController extends PaginateBaseController {
             /** @var PersistenceManager $persistenceManager */
             $persistenceManager = $this->objectManager->get(PersistenceManager::class);
             $persistenceManager->persistAll();
-            //TODO Check if page is cachable and clear cache if it is.
+            //TODO Cache Check if page is cachable and clear cache if it is.
             //previously not viewed records should be displayed as "not viewed" for first time viewing, so restore changes
             foreach ($changedMessageParticipants as $changedMessageParticipant) {
                 $changedMessageParticipant->setViewed(false);

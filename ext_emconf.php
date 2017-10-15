@@ -29,6 +29,7 @@ $EM_CONF[$_EXTKEY] = [
         'conflicts' => [
         ],
         'suggests' => [
+            "typo3-ter/sr-feuser-register" => "5.0.0-5.0.99",
         ],
     ],
 ];

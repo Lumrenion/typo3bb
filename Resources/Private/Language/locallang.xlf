@@ -496,16 +496,6 @@
                 <source>Please verify your submitted data and then confirm on the bottom right of this page. To change your data, please use the button on the bottom left of this page.</source>
             </trans-unit>
 
-            <trans-unit id="users.profile.delete.headline">
-                <source>Delete my user account</source>
-            </trans-unit>
-            <trans-unit id="users.profile.delete.notice">
-                <source>To permanently delete your account, please enter your password. The account cannot be restored.</source>
-            </trans-unit>
-            <trans-unit id="users.profile.delete.submit_delete">
-                <source>Delete my account!</source>
-            </trans-unit>
-
             <trans-unit id="users.profile.editPassword.backToProfile">
                 <source>Back to my profile</source>
             </trans-unit>

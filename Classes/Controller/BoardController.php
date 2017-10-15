@@ -32,6 +32,7 @@ use LumIT\Typo3bb\Domain\Model\Topic;
 use LumIT\Typo3bb\Exception\ActionNotAllowedException;
 
 use LumIT\Typo3bb\Utility\SecurityUtility;
+use TYPO3\CMS\Extbase\Persistence\Generic\LazyLoadingProxy;
 
 
 /**
@@ -58,6 +59,12 @@ class BoardController extends AbstractController {
      * @inject
      */
     protected $postRepository = NULL;
+
+    /**
+     * @var \LumIT\Typo3bb\Domain\Repository\FrontendUserRepository
+     * @inject
+     */
+    protected $frontendUserRepository = NULL;
     
     /**
      * action show
@@ -86,32 +93,43 @@ class BoardController extends AbstractController {
     public function markAsReadAction(bool $all, Board $board = null) {
         SecurityUtility::assertAccessPermission('Board.markAsRead', $board);
 
-        if ($all) {
+        if ($all && !($board instanceof Board)) {
             $this->readerRepository->removeAllByFrontendUser($this->frontendUser);
             $this->frontendUser->setLastReadPost(
                 $this->postRepository->findLatest($GLOBALS['TSFE']->gr_list, null, 1)->getFirst()
             );
-        } else {
-            /** @var Board $subBoard */
-            foreach ($board->getAllowedSubBoards() as $subBoard) {
-                /** @var Topic $topic */
-                foreach ($subBoard->getTopics() as $topic) {
-                    $reader = new Reader();
-                    $reader->setUser($this->frontendUser);
-                    $reader->setTopic($topic);
-                    $reader->setPost($topic->getLatestPost());
-                    $this->readerRepository->add($reader);
-                    //TODO check if existing User-Topic-Combinations get updated instead
-                }
-            }
+            $this->frontendUserRepository->update($this->frontendUser);
+        } elseif ($board instanceof Board) {
+            $this->markAsReadRecursive($board);
         }
 
         //TODO cache
 
-        if ($all) {
-            $this->redirect('list', 'ForumCategory');
-        } else {
+        if ($board instanceof Board) {
             $this->redirect('show', null, null, ['board' => $board]);
+        } else {
+            $this->redirect('list', 'ForumCategory');
+        }
+    }
+
+    /**
+     * @param \LumIT\Typo3bb\Domain\Model\Board $board
+     */
+    protected function markAsReadRecursive($board) {
+        /** @var Topic $topic */
+        foreach ($board->getTopics() as $topic) {
+            $reader = new Reader();
+            $reader->setUser($this->frontendUser);
+            $reader->setTopic($topic);
+            $latestPost = $topic->getLatestPost();
+            if ($latestPost instanceof LazyLoadingProxy) {
+                $latestPost = $latestPost->_loadRealInstance();
+            }
+            $reader->setPost($latestPost);
+            $this->readerRepository->add($reader);
+        }
+        foreach ($board->getAllowedSubBoards() as $subBoard) {
+            $this->markAsReadRecursive($subBoard);
         }
     }
 

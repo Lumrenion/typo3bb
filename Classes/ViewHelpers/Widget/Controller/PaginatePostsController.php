@@ -50,7 +50,7 @@ class PaginatePostsController extends PaginateBaseController {
         if (!empty($this->configuration['currentPost'])) {
             $itemsPerPage = (int)$this->configuration['itemsPerPage'];
             $positionOfPost = $this->objects->getPosition($this->configuration['currentPost']);
-            $this->currentPage = (floor($positionOfPost / $itemsPerPage)) + 1;
+            $this->currentPage = (int)(floor($positionOfPost / $itemsPerPage)) + 1;
         }
     }
 
@@ -77,7 +77,7 @@ class PaginatePostsController extends PaginateBaseController {
             /** @var ReaderRepository $readerRepository */
             $readerRepository = $this->objectManager->get(ReaderRepository::class);
             $readerRepository->add($reader);
-            //TODO clear cache of board and all its parent boards show-Action and ForumCategory list-Action
+            //TODO cache Clear cache of board and all its parent boards show-Action and ForumCategory list-Action
         }
     }
 }

@@ -113,6 +113,10 @@ class TopicController extends AbstractController {
             $reader = $this->readerRepository->findByTopicAndFrontendUser($topic, $this->frontendUser);
             if (!empty($reader)) {
                 $post = $reader->getPost();
+                $nextPost = $this->postRepository->findNext($post);
+                if ($nextPost instanceof Post) {
+                    $post = $nextPost;
+                }
             }
         }
         if (is_null($post) || $post->getTopic() != $topic) {

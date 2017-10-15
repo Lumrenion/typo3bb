@@ -67,10 +67,10 @@ class StatisticUtility {
         }
         $fieldsToUpdate = [];
         foreach ($fields as $field) {
-            $fieldGetter = 'get' . ucfirst($fields);
+            $fieldGetter = 'get' . ucfirst($field);
             $databaseField = GeneralUtility::camelCaseToLowerCaseUnderscored($field);
 
-            $fieldsToUpdate[$databaseField] = $statistic->$fieldGetter();;
+            $fieldsToUpdate[$databaseField] = $statistic->$fieldGetter();
         }
 
         self::getDatabaseConnection()->exec_UPDATEquery(

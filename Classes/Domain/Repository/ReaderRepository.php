@@ -27,6 +27,7 @@ namespace LumIT\Typo3bb\Domain\Repository;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 use LumIT\Typo3bb\Domain\Model\FrontendUser;
+use LumIT\Typo3bb\Domain\Model\Post;
 use LumIT\Typo3bb\Domain\Model\Reader;
 
 /**
@@ -83,7 +84,10 @@ class ReaderRepository extends AbstractRepository  {
             parent::add($reader);
         } else {
             //update
-            if ($previousReader->getPost()->getUid() < $reader->getPost()->getUid()) {
+            if (
+                !($previousReader->getPost() instanceof Post) ||
+                $previousReader->getPost()->getUid() < $reader->getPost()->getUid()
+            ) {
                 $previousReader->setPost($reader->getPost());
                 parent::update($previousReader);
             }

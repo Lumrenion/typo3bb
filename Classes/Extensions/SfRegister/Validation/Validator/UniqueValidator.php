@@ -1,5 +1,5 @@
 <?php
-namespace LumIT\Typo3bb\Validation\Validator;
+namespace LumIT\Typo3bb\Extensions\SfRegister\Validation\Validator;
 
 
 /***************************************************************
@@ -30,8 +30,7 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
  * UniqueValidator
- * Extends the SfRegister UniqueValidator by adding a check of the username or name property for being unique among each others
- * TODO srfeuserregister?
+ * Extends the SfRegister UniqueValidator by adding a check of the username or display name property for being unique among each others
  */
 class UniqueValidator extends \Evoweb\SfRegister\Validation\Validator\UniqueValidator {
     /**
@@ -44,7 +43,7 @@ class UniqueValidator extends \Evoweb\SfRegister\Validation\Validator\UniqueVali
      * @var array
      */
     protected $supportedOptions = array(
-        'global'    => array(true, 'Whether to check uniqueness globally', 'boolean'),
+        'global'     => array(true, 'Whether to check uniqueness globally', 'boolean'),
         'context'   => array('create', 'create or edit. If edit and if the field was not changed, count = 1 and the validator would fail', 'string')
     );
 
@@ -58,13 +57,13 @@ class UniqueValidator extends \Evoweb\SfRegister\Validation\Validator\UniqueVali
     public function isValid($value) {
         $result = true;
 
-        if ($this->propertyName == 'username' || $this->propertyName == 'name') {
+        if ($this->propertyName == 'username' || $this->propertyName == 'tx_typo3bb_display_name') {
             $propertyToCheck = [$this->propertyName, $this->getOtherField()];
         } else {
             $propertyToCheck = $this->propertyName;
         }
 
-        if ($this->userRepository->countByFieldNotCurrentUser($propertyToCheck, $value, $this->options['global'])) {
+        if ($this->userRepository->countByFieldNotCurrentUser($propertyToCheck, $value, !$this->options['global'])) {
             $this->addError(
                 LocalizationUtility::translate(
                     'validator.unique.notValid',
@@ -84,6 +83,6 @@ class UniqueValidator extends \Evoweb\SfRegister\Validation\Validator\UniqueVali
      * @return string
      */
     protected function getOtherField() {
-        return $this->propertyName == 'username' ? 'name' : 'username';
+        return $this->propertyName == 'username' ? 'tx_typo3bb_display_name' : 'username';
     }
 }

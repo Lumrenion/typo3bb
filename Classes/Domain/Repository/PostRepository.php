@@ -101,47 +101,66 @@ class PostRepository extends AbstractRepository
      * There seems to be a bug in extbase: When calling the count()-Method of a Query that has only the statement set,
      * the statement is not respected.
      * Therefor this method extends the findUnread-Method by wrapping it into a count and returning the result.
+     * @TODO TYPO3 8 Doctrine statements
      *
      * @param $frontendUser
-     * @param string $usergroups
      * @param null $board
      * @param null $topic
-     * @return array|QueryResultInterface
+     * @return integer
      */
-    public function countUnread($frontendUser, $usergroups = '', $board = null, $topic = null) {
-        $unread = $this->findUnread($frontendUser, $usergroups, $board, $topic, true);
+    public function countUnread($frontendUser, $board = null, $topic = null) {
+        $unread = $this->findUnread($frontendUser, $board, $topic, true,true);
         $unreadStatement = $unread->getStatement()->getStatement();
         $unreadStatement = "SELECT COUNT(postCount.uid) as 'count' FROM ($unreadStatement) as postCount";
         $count = $unread->statement($unreadStatement)->execute(true)[0]['count'];
-        return $count;
+        return (int)$count;
     }
 
     /**
      * Returns the first unread post of each readable topic.
      * If $board is specified, only posts in the specified board are returned.
      *
-     * @param FrontendUser|int  $frontendUser
-     * @param string            $usergroups
-     * @param Board|int         $board
-     * @param Topic|int         $topic
+     * @param \LumIT\Typo3bb\Domain\Model\FrontendUser|int  $frontendUser
+     * @param Board|int                                     $board
+     * @param Topic|int                                     $topic
      * @return array|QueryResultInterface|Query
+     * //TODO it might be possible to simplify the resulting query (replace sub queries with joins)
      * //TODO if TYPO3v8 brings a better database abstraction through doctrine, refactor this query.
      */
-    public function findUnread($frontendUser, $usergroups = '', $board = null, $topic = null, $returnQuery = false) {
-        if ($frontendUser instanceof FrontendUser) {
-            $usergroups = $frontendUser->getUsergroup()->toArray();
-            $usergroups = array_map(function($usergroup) {
-                return $usergroup->getUid();
-            }, $usergroups);
-            $usergroups[] = 0;
-            $usergroups[] = -2;
-            $frontendUser = $frontendUser->getUid();
-        } else {
-            $usergroups = explode(',', $usergroups);
+    public function findUnread($frontendUser, $board = null, $topic = null, $all = false, $returnQuery = false) {
+        if (! ($frontendUser instanceof FrontendUser)) {
+            $frontendUser = $this->objectManager->get(FrontendUserRepository::class)->findByUid($frontendUser);
         }
+        $usergroups = $frontendUser->getUsergroup()->toArray();
+        $usergroups = array_map(function($usergroup) {
+            return $usergroup->getUid();
+        }, $usergroups);
+        $usergroups[] = 0;
+        $usergroups[] = -2;
 
         /** @var Query $query */
         $query = $this->createQuery();
+
+        $innerpost = [
+            "select" => "SELECT MIN(innerpost.uid)",
+            "from" => "FROM tx_typo3bb_domain_model_post as innerpost",
+            "where" =>
+                "WHERE innerpost.topic = topic.uid AND (
+                    innerpost.uid > (
+                        SELECT MAX(reader.post) FROM tx_typo3bb_domain_model_reader as reader WHERE reader.user = '" . $frontendUser->getUid() . "' AND reader.topic = topic.uid
+                    ) OR innerpost.topic NOT IN (
+                        SELECT reader.topic FROM tx_typo3bb_domain_model_reader as reader WHERE reader.user = '" . $frontendUser->getUid() . "'
+                    )
+                ) AND innerpost.uid > (
+                    SELECT feuser.last_read_post FROM fe_users as feuser WHERE feuser.uid = '" . $frontendUser->getUid() . "'
+                )"
+        ];
+        if ($all) {
+            $innerpost['select'] = "SELECT innerpost.uid";
+            $joinPostComparator = "IN";
+        } else {
+            $joinPostComparator = "=";
+        }
 
         $sqlQuery = "
 SELECT post.* 
@@ -149,21 +168,19 @@ FROM tx_typo3bb_domain_model_post as post
 RIGHT JOIN tx_typo3bb_domain_model_topic as topic 
 ON (
     topic.uid = post.topic 
-    AND post.uid = (
-        SELECT MIN(innerpost.uid) 
-        FROM tx_typo3bb_domain_model_post as innerpost 
-        WHERE innerpost.topic = topic.uid AND innerpost.uid NOT IN (
-            SELECT reader.post FROM tx_typo3bb_domain_model_reader as reader WHERE reader.user = '$frontendUser'
-        ) AND innerpost.uid > (
-            SELECT feuser.last_read_post FROM fe_users as feuser WHERE feuser.uid = '$frontendUser'
-        )
+    AND post.uid $joinPostComparator (
+    " . implode(" ", $innerpost) . "
     ) 
 )
 LEFT JOIN tx_typo3bb_domain_model_board as board ON (topic.board = board.uid)
         ";
 
+
         //APPEND WHERE CLAUSE
         $sqlQuery .= ' WHERE post.uid IS NOT NULL';
+        if ($frontendUser->getLastReadPost() != null) {
+            $sqlQuery .= ' AND post.uid < "' . $frontendUser->getLastReadPost()->getUid() . '"';
+        }
         if ($board != null) {
             if ($board instanceof Board) {
                 $board = $board->getUid();
@@ -238,5 +255,24 @@ LEFT JOIN tx_typo3bb_domain_model_board as board ON (topic.board = board.uid)
         $query->setOrderings(['crdate' => QueryInterface::ORDER_DESCENDING]);
 
         return $query->execute();
+    }
+
+    /**
+     * @param \LumIT\Typo3bb\Domain\Model\Post $currentPost
+     *
+     * @return \LumIT\Typo3bb\Domain\Model\Post
+     */
+    public function findNext($currentPost) {
+        $query = $this->createQuery();
+        $query->matching(
+            $query->logicalAnd(
+                $query->equals('topic', $currentPost->getTopic()),
+                $query->greaterThan('uid', $currentPost->getUid())
+            )
+        );
+        $query->setOrderings([
+            'uid' => QueryInterface::ORDER_ASCENDING
+        ]);
+        return $query->execute()->getFirst();
     }
 }

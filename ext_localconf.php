@@ -71,39 +71,17 @@ $signalSlotDispatcher->connect(
     \LumIT\Typo3bb\Domain\Model\Message::class, 'afterCreation',
     \LumIT\Typo3bb\Slot\EmailNotificationSlot::class, 'onMessageCreation'
 );
-/**
- * Before a frontendUser is deleted, all its Topics and posts need to have their authorNames and editorNames set.
- * This Slot is also called, when a user is deleted in the backend {@link \LumIT\Typo3bb\Hook\ProcessFrontendUserHook::processCmdmap_deleteAction()}
- * That is why the code is outsourced into a slot instead of writing it right into the delete action.
- * TODO srfeuserregister
- */
-//$signalSlotDispatcher->connect(
-//    \LumIT\Typo3bb\Controller\FrontendUserController::class, 'deleteAction',
-//    \LumIT\Typo3bb\Slot\FrontendUserSlot::class, 'deleted'
-//);
-/** Hook before frontend users are saved (in frontend) to sanitize HTML */
-// TODO srfeuserregister
-//$signalSlotDispatcher->connect(
-//    \Evoweb\SfRegister\Controller\FeuserEditController::class, 'saveAction',
-//    \LumIT\Typo3bb\Slot\FrontendUserSlot::class, 'sanitizeHtmlSignatureBeforeSave'
-//);
-/** Hook when frontend users are added - increase todays registrations by 1 */
-// TODO srfeuserregister
-//$signalSlotDispatcher->connect(
-//    \Evoweb\SfRegister\Controller\FeuserCreateController::class, 'saveAction',
-//    \LumIT\Typo3bb\Utility\StatisticUtility::class, 'addRegister'
-//);
 
 /******************************************
  *
  * HOOKS
  *
  ******************************************/
-// Hook after deletion of FrontendUsers
+// Hook after deletion of FrontendUsers in the backend
 $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processCmdmapClass'][] = \LumIT\Typo3bb\Hook\ProcessFrontendUsersHook::class;
 $GLOBALS ['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processDatamapClass'][] = \LumIT\Typo3bb\Hook\ProcessFrontendUsersHook::class;
 
-// Hook after deletion of Boards */
+// Hook after deletion of Boards in the backend */
 $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processCmdmapClass'][] = \LumIT\Typo3bb\Hook\ProcessBoardsHook::class;
 $GLOBALS ['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processDatamapClass'][] = \LumIT\Typo3bb\Hook\ProcessBoardsHook::class;
 
@@ -113,9 +91,6 @@ $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/class.tslib_fe.php']['checkData
 // Hook for registering ke_search indexer for forum posts
 $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['registerIndexerConfiguration'][] = \LumIT\Typo3bb\Indexer\ForumIndexer::class;
 $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['customIndexer'][] = \LumIT\Typo3bb\Indexer\ForumIndexer::class;
-// Hook for registering ke_search indexer for forum frontend users
-$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['registerIndexerConfiguration'][] = \LumIT\Typo3bb\Indexer\UsersIndexer::class;
-$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['customIndexer'][] = \LumIT\Typo3bb\Indexer\UsersIndexer::class;
 
 /******************************************
  *
@@ -141,4 +116,30 @@ if( !isset($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'][
 
 if( !isset($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['typo3bb']['groups'] ) ) {
     $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['typo3bb']['groups'] = [ 'pages' ];
+}
+
+
+if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('sr_feuser_register')) {
+    // this sr_feuser_register hook implements uniqueness validation of username and tx_typo3bb_display_name among each other
+    $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['sr_feuser_register']['tx_srfeuserregister_pi1']['model'][] =
+        \LumIT\Typo3bb\Extensions\SrFeuserRegister\Hook\EvaluationHook::class;
+
+    // Before a frontendUser is deleted, all their topics and posts need to have their authorNames and editorNames set
+    // When a user profile is edited, the html signature needs to be sanitized
+    // When a new user is registered, the statistics need to be updated for daily registrations
+    $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['sr_feuser_register']['tx_srfeuserregister_pi1']['registrationProcess'][] =
+        \LumIT\Typo3bb\Extensions\SrFeuserRegister\Hook\RegistrationProcessHook::class;
+}
+
+if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('sf_register')) {
+    /** Hook before frontend users are saved (in frontend) to sanitize HTML */
+    $signalSlotDispatcher->connect(
+        \Evoweb\SfRegister\Controller\FeuserEditController::class, 'saveAction',
+        \LumIT\Typo3bb\Slot\FrontendUserSlot::class, 'sanitizeHtmlSignatureBeforeSave'
+    );
+    /** Hook when frontend users are added - increase today's registrations by 1 */
+    $signalSlotDispatcher->connect(
+        \Evoweb\SfRegister\Controller\FeuserCreateController::class, 'saveAction',
+        \LumIT\Typo3bb\Utility\StatisticUtility::class, 'addRegister'
+    );
 }

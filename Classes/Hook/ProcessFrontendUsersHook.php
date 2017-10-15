@@ -25,8 +25,7 @@ namespace LumIT\Typo3bb\Hook;
      ***************************************************************/
 
 
-use LumIT\Typo3bb\Domain\Repository\FrontendUserRepository;
-use LumIT\Typo3bb\Domain\Repository\StatisticRepository;
+use LumIT\Typo3bb\Domain\Model\FrontendUser;
 use LumIT\Typo3bb\Slot\FrontendUserSlot;
 use LumIT\Typo3bb\Utility\FrontendUserUtility;
 use LumIT\Typo3bb\Utility\StatisticUtility;
@@ -49,17 +48,18 @@ class ProcessFrontendUsersHook {
      * @param $recordToDelete
      * @param null $recordWasDeleted
      * @param \TYPO3\CMS\Core\DataHandling\DataHandler $pObj
-     * TODO srfeuserregister
      */
     public function processCmdmap_deleteAction($table, $id, $recordToDelete, $recordWasDeleted=NULL, \TYPO3\CMS\Core\DataHandling\DataHandler &$pObj) {
-//        if ($table == 'fe_users') {
-//            $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-//            $user = FrontendUserUtility::getUser($id);
-//            FrontendUserSlot::processDeletedForumUser($user);
-//            /** @var PersistenceManager $persistenceManager */
-//            $persistenceManager = $objectManager->get(PersistenceManager::class);
-//            $persistenceManager->persistAll();
-//        }
+        if ($table == 'fe_users') {
+            $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
+            $user = FrontendUserUtility::getUser($id);
+            if ($user instanceof FrontendUser) {
+                FrontendUserSlot::processDeletedForumUser($user);
+                /** @var PersistenceManager $persistenceManager */
+                $persistenceManager = $objectManager->get(PersistenceManager::class);
+                $persistenceManager->persistAll();
+            }
+        }
     }
 
     /**

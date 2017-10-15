@@ -656,19 +656,6 @@
                 <target>Bitte überprüfe deine Daten und bestätige sie mit einem Klick auf den Button unten rechts. Um deine Daten zu korrigieren, klicke bitte auf den Button unten links.</target>
             </trans-unit>
 
-            <trans-unit id="users.profile.delete.headline">
-                <source>Delete my user account</source>
-                <target>Meinen Benutzeraccount löschen</target>
-            </trans-unit>
-            <trans-unit id="users.profile.delete.notice">
-                <source>To permanently delete your account, please enter your password. The account cannot be restored.</source>
-                <target>Um deinen Benutzeraccount unwiderruflich zu löschen, gib bitte dein Passwort ein. Der Account kann nicht wiederhergestellt werden.</target>
-            </trans-unit>
-            <trans-unit id="users.profile.delete.submit_delete">
-                <source>Delete my account!</source>
-                <target>Meinen Account löschen!</target>
-            </trans-unit>
-
             <trans-unit id="users.profile.editPassword.backToProfile">
                 <source>Back to my profile</source>
                 <target>Zurück zum Profil</target>

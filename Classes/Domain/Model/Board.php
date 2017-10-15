@@ -839,7 +839,7 @@ class Board extends AbstractEntity
         $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
         /** @var PostRepository $postRepository */
         $postRepository = $objectManager->get(PostRepository::class);
-        if ($postRepository->countUnread($frontendUser, '', $this)) {
+        if ($postRepository->countUnread($frontendUser, $this) > 0) {
             return false;
         }
 

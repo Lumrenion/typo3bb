@@ -1,5 +1,5 @@
 <?php
-namespace LumIT\Typo3bb\Validation\Validator;
+namespace LumIT\Typo3bb\Extensions\SfRegister\Validation\Validator;
 
 
     /***************************************************************

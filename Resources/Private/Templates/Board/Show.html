@@ -26,7 +26,7 @@
                                 <div class="col-xs-8 col-md-7 forum-board-topic-title">
                                     <div class="clearfix">
                                         <f:link.action action="show" controller="Topic" arguments="{topic: topic}">{topic.title}</f:link.action>
-                                        <f:if condition="{topic.read} == 0">&nbsp;<f:link.action action="showNewPost" controller="Topic" arguments="{topic: topic}"><span class="label label-primary"><f:translate key="topic.hasNew" />&nbsp;<i class="fa fa-arrow-circle-right"></i></span></f:link.action></f:if>
+                                        <f:if condition="{topic.read}"><f:else>&nbsp;<f:link.action action="showNewPost" controller="Topic" arguments="{topic: topic}"><span class="label label-primary"><f:translate key="topic.hasNew" />&nbsp;<i class="fa fa-arrow-circle-right"></i></span></f:link.action></f:else></f:if>
                                         <div class="pull-right">
                                             <f:if condition="{topic.sticky}"><span class="glyphicon glyphicon-pushpin"></span></f:if>
                                             <f:if condition="{topic.closed}"><span class="glyphicon glyphicon-lock"></span></f:if>
