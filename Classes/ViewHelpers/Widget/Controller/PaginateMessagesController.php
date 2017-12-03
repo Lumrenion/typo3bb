@@ -43,7 +43,8 @@ class PaginateMessagesController extends PaginateBaseController {
             $changedMessageParticipants = [];
             foreach ($modifiedObjects as $modifiedObject) {
                 if ($modifiedObject instanceof Message) {
-                    $messageParticipant = $modifiedObject->getMessageParticipant($frontendUser);
+                    // Senders do not need to update their 'viewed' status, so we only iterate through receivers
+                    $messageParticipant = $modifiedObject->getMessageReceiver($frontendUser);
                     if (!$messageParticipant->getViewed()) {
                         $messageParticipant->setViewed(true);
                         $changedMessageParticipants[] = $messageParticipant;

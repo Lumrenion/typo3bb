@@ -62,16 +62,12 @@ class EmailUtility {
      * @param \TYPO3\CMS\Extbase\Configuration\ConfigurationManager $configurationManager
      * @return String
      */
-    public static function getEmailBody($templateName, array $variablesToAssign, $controllerContext, $configurationManager = NULL) {
-        if($configurationManager == NULL) {
-            /** @var ConfigurationManager $configurationManager */
-            $configurationManager = GeneralUtility::makeInstance(ConfigurationManager::class);
-        }
+    public static function getEmailBody($templateName, array $variablesToAssign, $controllerContext) {
         /** @var StandaloneView $emailView */
         $emailView = GeneralUtility::makeInstance(StandaloneView::class);
         $emailView->setControllerContext($controllerContext);
         $emailView->setFormat('html');
-        $extbaseFrameworkConfiguration = $configurationManager->getConfiguration(\TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK);
+        $extbaseFrameworkConfiguration = GeneralUtility::makeInstance(ConfigurationManager::class)->getConfiguration(\TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK, 'typo3bb');
         $emailView->setTemplateRootPaths($extbaseFrameworkConfiguration['view']['templateRootPaths']);
         $emailView->setLayoutRootPaths($extbaseFrameworkConfiguration['view']['layoutRootPaths']);
         $emailView->setPartialRootPaths($extbaseFrameworkConfiguration['view']['partialRootPaths']);

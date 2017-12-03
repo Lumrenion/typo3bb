@@ -34,7 +34,7 @@
                                     </div>
                                     <div>
                                         <small>
-                                            <f:translate key="topic.author.label" /> <f:if condition="{topic.author}"><f:then><f:link.action action="show" controller="FrontendUser" pageUid="{settings.pid.profile}" arguments="{user: topic.author}">{topic.authorName}</f:link.action></f:then><f:else>{topic.authorName}</f:else></f:if>
+                                            <f:translate key="topic.author.label" /> <f:if condition="{topic.author}"><f:then><f:link.action action="show" controller="FrontendUser" extensionName="IglarpTemplate" pluginName="User-Profile" pageUid="{settings.pid.profile}" arguments="{user: topic.author}">{topic.authorName}</f:link.action></f:then><f:else>{topic.authorName}</f:else></f:if>
                                         </small>
                                     </div>
                                 </div>
@@ -46,7 +46,7 @@
                                     <small>
                                         <f:format.date format="d.m.Y, H:i">{topic.latestPost.crdate}</f:format.date><br>
                                         <f:translate key="topic.latestPost.author.label" />&nbsp;<f:if condition="{topic.latestPost.author}">
-                                            <f:then><f:link.action action="show" controller="FrontendUser" arguments="{user: topic.latestPost.author}" pageUid="{settings.pid.profile}">{topic.latestPost.authorName}</f:link.action></f:then>
+                                            <f:then><f:link.action action="show" controller="FrontendUser" extensionName="IglarpTemplate" pluginName="User-Profile" arguments="{user: topic.latestPost.author}" pageUid="{settings.pid.profile}">{topic.latestPost.authorName}</f:link.action></f:then>
                                             <f:else>{topic.latestPost.authorName}</f:else>
                                         </f:if>
                                     </small>

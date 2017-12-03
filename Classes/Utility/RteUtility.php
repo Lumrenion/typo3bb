@@ -43,6 +43,7 @@ class RteUtility {
         require_once ExtensionManagementUtility::extPath('typo3bb') . 'Libraries/HTMLPurifier/HTMLPurifier.auto.php';
         $config = \HTMLPurifier_Config::createDefault();
         $config->set('HTML.Allowed', '*[style|class|id|title],a[target|ping|media|href|hreflang|type],blockquote[cite],big,br,code,dd,div,dl,dt,em,i,footer,h1,h2,h3,h4,h5,h6,hr,img[alt|src|ismap|usemap|width|height],li[value],mark,ol[reversed|start],p,pre,q[cite],small,span,strong,b,sub,sup,table,tbody,td[colspan|rowspan|headers],tfoot,th[colspan|rowspan|headers|scope],thead,tr,u,ul');
+        $config->getHTMLDefinition(true)->addElement('footer', 'Block', 'Flow', 'Common');
         $purifier = new \HTMLPurifier($config);
         return $purifier->purify($html);
     }

@@ -25,7 +25,13 @@ return [
         'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, title, description, redirect, sub_boards, read_permissions, write_permissions, moderators, parent_board, forum_category',
     ],
     'types' => [
-        '1' => ['showitem' => 'sys_language_uid;;;;1-1-1, l10n_parent, l10n_diffsource, hidden;;1, title, description, redirect, read_permissions, write_permissions, moderators, parent_board, forum_category, sub_boards, '],
+        '1' => ['showitem' =>
+            'sys_language_uid;;;;1-1-1, l10n_parent, l10n_diffsource, title, description, redirect, moderators, parent_board, forum_category, sub_boards, '
+            . '--div--;LLL:EXT:typo3bb/Resources/Private/Language/locallang_db.xlf:tx_typo3bb_domain_model_board.tabs.access, '
+            . 'hidden;;1, read_permissions, write_permissions, '
+            . '--div--;LLL:EXT:typo3bb/Resources/Private/Language/locallang_db.xlf:tx_typo3bb_domain_model_board.tabs.search, '
+            . 'tx_kesearch_index, '
+        ],
     ],
     'palettes' => [
         '1' => ['showitem' => ''],
@@ -310,6 +316,15 @@ return [
         'latest_post_crdate' => [
             'config' => [
                 'type' => 'passthrough'
+            ]
+        ],
+        'tx_kesearch_index' => [
+            'exclude' => 1,
+            'label' => 'LLL:EXT:typo3bb/Resources/Private/Language/locallang_db.xlf:tx_typo3bb_domain_model_board.tx_kesearch_index',
+            'displayCond' => 'EXT:ke_search:LOADED:TRUE',
+            'config' => [
+                'type' => 'check',
+                'default' => 1
             ]
         ]
     ],

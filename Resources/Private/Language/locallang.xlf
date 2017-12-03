@@ -177,6 +177,9 @@
             <trans-unit id="exception.poll.maxVotesExceeded">
                 <source>You must only select up to %1d choices.</source>
             </trans-unit>
+            <trans-unit id="exception.poll.timeLimit">
+                <source>This poll ended on %1s.</source>
+            </trans-unit>
             <trans-unit id="exception.markAsRead.missingBoard">
                 <source>To mark a board as read, please specify a board.</source>
             </trans-unit>
@@ -705,6 +708,10 @@
             </trans-unit>
             <trans-unit id="viewHelpers.format.prettifySeconds.i.shortcut">
                 <source>%1sM</source>
+            </trans-unit>
+
+            <trans-unit id="errorTemplate.backButton.text">
+                <source>Back</source>
             </trans-unit>
         </body>
     </file>

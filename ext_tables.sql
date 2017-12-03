@@ -52,6 +52,8 @@ CREATE TABLE tx_typo3bb_domain_model_board (
     latest_post_crdate int(11) unsigned DEFAULT NULL,
     subscribers int(11) unsigned DEFAULT '0' NOT NULL,
 
+    tx_kesearch_index tinyint(4) unsigned DEFAULT '1' NOT NULL,
+
     tstamp int(11) unsigned DEFAULT '0' NOT NULL,
     crdate int(11) unsigned DEFAULT '0' NOT NULL,
     cruser_id int(11) unsigned DEFAULT '0' NOT NULL,

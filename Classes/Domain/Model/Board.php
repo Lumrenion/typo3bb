@@ -193,6 +193,11 @@ class Board extends AbstractEntity
      */
     protected $viewableLatestPost = null;
 
+    /**
+     * @var bool
+     */
+    protected $txKesearchIndex = true;
+
 
     /**
      * __construct
@@ -857,5 +862,21 @@ class Board extends AbstractEntity
      */
     public function getRead() {
         return $this->isRead();
+    }
+
+    /**
+     * @return bool
+     */
+    public function isTxKesearchIndex()
+    {
+        return $this->txKesearchIndex;
+    }
+
+    /**
+     * @param bool $txKesearchIndex
+     */
+    public function setTxKesearchIndex($txKesearchIndex)
+    {
+        $this->txKesearchIndex = $txKesearchIndex;
     }
 }

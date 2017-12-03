@@ -29,7 +29,7 @@
             <tbb:widget.paginateMessages objects="{messages}" as="paginatedMessages" configuration="{itemsPerPage: 20, insertAbove: 1, insertBelow: 1, maximumNumberOfLinks: 10}">
                 <f:for each="{paginatedMessages}" as="message">
                     <f:if condition="{message}">
-                        <f:render partial="Message/SingleMessage" section="Content" arguments="{_all}" />
+                        <f:render partial="Message/SingleMessage" section="Content" arguments="{message: message, context: 'outbox'}" />
                     </f:if>
                 </f:for>
             </tbb:widget.paginateMessages>

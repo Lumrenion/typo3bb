@@ -92,8 +92,8 @@ class PollController extends AbstractController {
             throw new AccessValidationException(LocalizationUtility::translate('exception.poll.maxVotesExceeded', $this->extensionName, [0 => $poll->getMaxChoicesSelect()]));
         }
         $now = new \DateTime();
-        if ($poll->getStarttime() > $now || $poll -> getEndtime() < $now) {
-            throw new AccessValidationException(LocalizationUtility::translate('exception.poll.timeLimit', $this->extensionName, [0 => $poll->getStarttime()->format('d.m.Y'), 1 => $poll->getEndtime()->format('d.m.Y')]));
+        if ($poll->getEndtime() < $now) {
+            throw new AccessValidationException(LocalizationUtility::translate('exception.poll.timeLimit', $this->extensionName, [0 => $poll->getEndtime()->format('d.m.Y H:i')]));
         }
 
         if ($poll->hasFrontendUserVoted()) {

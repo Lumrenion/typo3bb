@@ -36,6 +36,7 @@ use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
+use TYPO3\CMS\Extbase\Mvc\View\NotFoundView;
 use TYPO3\CMS\Extbase\Mvc\Web\Response;
 
 
@@ -78,12 +79,16 @@ abstract class AbstractController extends ActionController {
     }
     
     protected function handleError(AbstractException $e) {
+        $this->request->setControllerName('Default');
+        $this->request->setControllerActionName('error');
+        if ($this->view instanceof NotFoundView) {
+            $this->view = $this->resolveView();
+        }
         $controllerContext = $this->buildControllerContext();
-        $controllerContext->getRequest()->setControllerName('Default');
-        $controllerContext->getRequest()->setControllerActionName('error');
         $this->view->setControllerContext($controllerContext);
 
-        $content = $this->view->assign('exception', $e)->render('error');
+        $this->view->assign('exception', $e);
+        $content = $this->view->render('error');
         $this->response->appendContent($content);
     }
     /**

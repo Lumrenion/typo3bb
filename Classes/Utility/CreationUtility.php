@@ -54,22 +54,38 @@ class CreationUtility {
      * @param array $poll The poll from the request
      */
     public static function preparePollForValidation($pollArgument, &$poll) {
-        if (!empty($poll) && !empty($poll['question'])) {
-            CreationUtility::setDateTimePropertyMapperToIsoDate($pollArgument, 'starttime');
-            CreationUtility::setDateTimePropertyMapperToIsoDate($pollArgument, 'endtime');
+        CreationUtility::setDateTimePropertyMapperToIsoDate($pollArgument, 'starttime');
+        CreationUtility::setDateTimePropertyMapperToIsoDate($pollArgument, 'endtime');
 
+        if (empty($poll)) {
+            $poll = null;
+            return;
+        }
+        if (empty($poll['__identity'])) {
+            if (empty($poll['question'])) {
+                $poll = null;
+                return;
+            }
             foreach ($poll['choices'] as $index => $choice) {
                 if(empty($choice['text'])) {
                     unset($poll['choices'][$index]);
                 }
             }
-
-            if(MathUtility::canBeInterpretedAsInteger($poll['endtime'])) {
-                $poll['endtime'] = (new \DateTime())->add(new \DateInterval('P' . (int) $poll['endtime'] . 'D'));
-            }
         } else {
-            $poll = NULL;
+            // if the endtime is not set, it should not be changed automatically
+            if (!MathUtility::canBeInterpretedAsInteger($poll['endtime'])) {
+                unset($poll['endtime']);
+                return;
+            }
         }
+
+        // the fallback for endtime interval is 1 Day
+        if(MathUtility::canBeInterpretedAsInteger($poll['endtime'])) {
+            $poll['endtime'] = (int) $poll['endtime'];
+        } else {
+            $poll['endtime'] = 1;
+        }
+        $poll['endtime'] = (new \DateTime())->add(new \DateInterval('P' . (int) $poll['endtime'] . 'D'));
     }
 
     /**

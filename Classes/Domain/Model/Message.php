@@ -201,31 +201,25 @@ class Message extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     }
 
     /**
+     * Returns if a receiver has already read this message. Senders will always have read their own message.
+     *
      * @return bool
      */
     public function getViewed() {
         if($GLOBALS['TSFE']->loginUser) {
             /** @var FrontendUser $frontendUser */
             $frontendUser = FrontendUserUtility::getCurrentUser();
-            return $this->getMessageParticipant($frontendUser)->isViewed();
+            return $this->getMessageReceiver($frontendUser)->isViewed();
         }
         return true;
     }
 
-    /**
-     * @param FrontendUser $frontendUser
-     * @return MessageParticipant
-     */
-    public function getMessageParticipant(FrontendUser $frontendUser) {
+    public function getMessageReceiver(FrontendUser $frontendUser) {
         $messageParticipant = null;
-        if($this->getSender()->getUser() == $frontendUser) {
-            $messageParticipant = $this->getSender();
-        } else {
-            foreach ($this->getReceivers() as $receiver) {
-                if($receiver->getUser() == $frontendUser) {
-                    $messageParticipant = $receiver;
-                    break;
-                }
+        foreach ($this->getReceivers() as $receiver) {
+            if($receiver->getUser()->getUid() == $frontendUser->getUid()) {
+                $messageParticipant = $receiver;
+                break;
             }
         }
         return $messageParticipant;

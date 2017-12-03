@@ -313,6 +313,6 @@ class Poll extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * @return bool
      */
     public function hasEnded() {
-        return new \DateTime() > $this->getEndtime();
+        return (new \DateTime()) > $this->getEndtime();
     }
 }

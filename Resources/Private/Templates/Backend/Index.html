@@ -1,0 +1,105 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en"
+      xmlns:f="http://typo3.org/ns/TYPO3/Fluid/ViewHelpers"
+      xmlns:v="http://typo3.org/ns/FluidTYPO3/Vhs/ViewHelpers"
+      xmlns:tbb="http://typo3.org/ns/LumIT/Typo3bb/ViewHelpers"
+      xmlns:core="http://typo3.org/ns/TYPO3/CMS/Core/ViewHelpers"
+
+      v:schemaLocation="http://fluidtypo3.org/schemas/vhs-1.8.5.xsd"
+      data-namespace-typo3-fluid="true">
+
+<ol class="sortable">
+    <f:for each="{forumCategories}" as="forumCategory">
+        <li class="t3js-nested-sortable"
+            data-table="tx_typo3bb_domain_model_forum_category" data-uid="{forumCategory.uid}" data-record-type="tx_typo3bb_domain_model_forumcategory"
+            data-parent-field="forum_category" data-page-uid="{pageUid}">
+            <div class="t3-page-ce-header">
+                <div class="pull-left">
+                    <core:icon identifier="forum-category" />&nbsp;
+                </div>
+                <div class="pull-right">
+                    <div class="btn-toolbar">
+                        <div class="btn-group btn-group-sm disclose-wrapper" role="group">
+                            <button class="btn btn-default disclose">
+                                <core:icon identifier="actions-pagetree-expand" />
+                            </button>
+                        </div>
+
+                        <div class="btn-group btn-group-sm" role="group">
+                            <tbb:Backend.EditLink table="tx_typo3bb_domain_model_board" context="new"
+                                                  class="btn btn-default btn-sm button-insert-before" parent="{forumCategory}">
+                                <core:icon identifier="actions-edit-localize-status-high" />
+                            </tbb:Backend.EditLink>
+
+                            <tbb:Backend.EditLink table="tx_typo3bb_domain_model_forumcategory" record="{forumCategory}"
+                                                  class="btn btn-default" onclick="event.stopPropagation();">
+                                <core:icon identifier="actions-document-open" />
+                            </tbb:Backend.EditLink>
+                        </div>
+                    </div>
+                </div>
+                <div class="title">{forumCategory.title -> f:format.htmlentitiesDecode()}</div>
+                <div class="clearfix"></div>
+            </div>
+            <f:if condition="{forumCategory.boards}">
+                <f:render partial="Backend/BoardList" arguments="{boards: forumCategory.boards, pageUid: pageUid}" />
+            </f:if>
+        </li>
+    </f:for>
+</ol>
+
+<f:comment>
+<div class="t3-page-ce-wrapper">
+    <div class="t3-page-ce" data-page="{pageUid}">
+        <div class="t3-page-ce-wrapper-new-ce">
+            <tbb:Backend.EditLink table="tx_typo3bb_domain_model_forumcategory" context="new" class="btn btn-default btn-sm">
+                <core:icon identifier="actions-document-new" /> ###FORUM CATEGORY###
+            </tbb:Backend.EditLink>
+        </div>
+        <div class="t3-page-ce-dropzone-available"></div>
+    </div>
+
+    <f:for each="{forumCategories}" as="forumCategory">
+
+        <div class="t3-page-ce typo3bb-forumcategory" id="element-tx_typo3bb_domain_model_forumcategory-{forumCategory.uid}"
+             data-table="tx_typo3bb_domain_model_forum_category" data-uid="{forumCategory.uid}" data-record-type="tx_typo3bb_domain_model_forumcategory">
+            <div class="t3-page-ce-dragitem" id="{v:system.uniqId()}">
+                <div class="t3-page-ce-header t3-page-ce-header-draggable ui-sortable-handle" data-toggle="collapse" data-target="#category-{forumCategory.uid}">
+                    <div class="t3-page-ce-header-icons-left">
+                        <core:icon identifier="forum-category" />&nbsp;
+                    </div>
+                    <div class="t3-page-ce-header-icons-right">
+                        <div class="btn-toolbar">
+                            <div class="btn-group btn-group-sm" role="group">
+                                <tbb:Backend.EditLink table="tx_typo3bb_domain_model_forumcategory" record="{forumCategory}" class="btn btn-default" onclick="event.stopPropagation();">
+                                    <core:icon identifier="actions-document-open" />
+                                </tbb:Backend.EditLink>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="title">{forumCategory.title -> f:format.htmlentitiesDecode()}</div>
+                </div>
+
+                <div class="t3-page-ce-body collapse" id="category-{forumCategory.uid}">
+                    <div class="t3-page-ce-body-inner">
+                        <div>
+                            <div class="t3-page-ce-wrapper ui-sortable"
+                                 data-parent-field="forum_category" data-parent-uid="{forumCategory.uid}"
+                                 style="max-height:400px; overflow-y: scroll;">
+                                <f:render partial="Backend/BoardList" arguments="{boards: forumCategory.boards, pageUid: pageUid}" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="t3-page-ce-wrapper-new-ce" id="{v:system.uniqId()}">
+                    <tbb:Backend.EditLink table="tx_typo3bb_domain_model_forumcategory" context="new" class="btn btn-default btn-sm">
+                        <core:icon identifier="actions-document-new" /> ###FORUM CATEGORY###
+                    </tbb:Backend.EditLink>
+                </div>
+                <div class="t3-page-ce-dropzone-available"></div>
+            </div>
+        </div>
+    </f:for>
+</div>
+</f:comment>
+</html>

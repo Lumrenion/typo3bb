@@ -8,7 +8,9 @@
     <f:layout name="Default"/>
 
     <f:section name="main">
-        {exception.message}
+        <p>{exception.message}</p>
+
+        <a href="javascript:history.go(-1)" class="btn btn-default"><f:translate key="errorTemplate.backButton.text" /></a>
     </f:section>
 
 </div>

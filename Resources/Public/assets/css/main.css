@@ -127,7 +127,8 @@
           @media screen and (min-width: 992px) {
             .forum-topic-post-wrapper .forum-topic-post .post-author-info-wrapper dl.post-author-info dt.author-avatar-container img {
               margin-bottom: 8px;
-              max-width: 90px; } }
+              max-width: 90px;
+              max-height: none; } }
       .forum-topic-post-wrapper .forum-topic-post .post-author-info-wrapper dl.post-author-info dt.post-author-info-main {
         display: inline-block;
         vertical-align: baseline; }
@@ -225,6 +226,9 @@
   transition: max-height 1.3s; }
   .profile-user-image-wrapper:hover, .profile-user-image-wrapper:focus {
     max-height: 9999px; }
+  @media screen and (min-width: 992px) {
+    .profile-user-image-wrapper {
+      max-height: none; } }
 
 .typo3bb-message-wrapper {
   border: 1px solid #CCCCCC;
@@ -277,7 +281,8 @@
           @media screen and (min-width: 992px) {
             .typo3bb-message-wrapper .typo3bb-message .typo3bb-message-info-wrapper dl.typo3bb-message-sender-info dt.typo3bb-message-sender-avatar-container img {
               margin-bottom: 8px;
-              max-width: 90px; } }
+              max-width: 90px;
+              max-height: none; } }
       .typo3bb-message-wrapper .typo3bb-message .typo3bb-message-info-wrapper dl.typo3bb-message-sender-info dt.typo3bb-message-sender-info-main {
         display: inline-block;
         vertical-align: baseline; }

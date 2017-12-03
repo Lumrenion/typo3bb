@@ -194,13 +194,16 @@ class TopicController extends AbstractController {
     public function initializeUpdateAction() {
         $topic = $this->request->getArgument('topic');
         CreationUtility::prepareTopicForValidation($this->arguments->getArgument('topic'), $topic);
-        $this->request->setArgument('topic', $topic);
 
         if($this->request->hasArgument('poll')) {
             $poll = $this->request->getArgument('poll');
             CreationUtility::preparePollForValidation($this->arguments->getArgument('poll'), $poll);
             $this->request->setArgument('poll', $poll);
+        } else {
+            CreationUtility::preparePollForValidation($this->arguments->getArgument('poll'), $topic['poll']);
         }
+
+        $this->request->setArgument('topic', $topic);
     }
     /**
      * action update

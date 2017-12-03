@@ -239,6 +239,10 @@
                 <source>You must only select up to %1d choices.</source>
                 <target>Du darfst nur maximal %1d Auswahlmöglichkeiten wählen.</target>
             </trans-unit>
+            <trans-unit id="exception.poll.timeLimit">
+                <source>This poll ended on %1s.</source>
+                <target>Diese Umfrage endete am %1s.</target>
+            </trans-unit>
             <trans-unit id="exception.markAsRead.missingBoard">
                 <source>To mark a board as read, please specify a board.</source>
                 <target>Um ein Board als gelesen zu markieren, wähle bitte ein Board.</target>
@@ -452,7 +456,7 @@
             </trans-unit>
             <trans-unit id="poll.maxChoicesSelect.label">
                 <source>Max. %1d choices.</source>
-                <target>Maximal %1d Auswahlen</target>
+                <target>Maximal %1d auswählen.</target>
             </trans-unit>
 
             <trans-unit id="topic.move.destinationBoard.label">
@@ -931,6 +935,11 @@
             <trans-unit id="viewHelpers.format.prettifySeconds.i.shortcut">
                 <source>%1sM</source>
                 <target>%1sM</target>
+            </trans-unit>
+
+            <trans-unit id="errorTemplate.backButton.text">
+                <source>Back</source>
+                <target>Zurück</target>
             </trans-unit>
         </body>
     </file>

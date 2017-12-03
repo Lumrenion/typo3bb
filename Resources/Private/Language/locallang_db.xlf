@@ -60,6 +60,16 @@
             <trans-unit id="tx_typo3bb_domain_model_board.forum_category">
                 <source>Forum Category</source>
             </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_board.tx_kesearch_index">
+                <source>Include in KeSearch Index</source>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_board.tabs.access">
+                <source>Access</source>
+            </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_board.tabs.search">
+                <source>Search</source>
+            </trans-unit>
+
             <trans-unit id="tx_typo3bb_domain_model_topic">
                 <source>Topic</source>
             </trans-unit>

@@ -11,7 +11,7 @@
 
         <h2><f:translate key="plugin.statistics.infoCenter.headline.label" /></h2>
 
-        <h3><i class="fa fa-comments-o" fa-fw></i> <f:translate key="plugin.statistics.infoCenter.latestPosts.headline.label" /></h3>
+        <h3><i class="fa fa-comments-o fa-fw"></i> <f:translate key="plugin.statistics.infoCenter.latestPosts.headline.label" /></h3>
         <f:for each="{latestPosts}" as="latestPost">
             <div class="row">
                 <div class="col-xs-8">
@@ -20,7 +20,7 @@
                         arguments="{
                         0: '{f:uri.action(controller: \'Topic\', action: \'show\', arguments: \'{topic: latestPost.topic, post: latestPost}\')}',
                         1: latestPost.topic.title,
-                        2: '{f:uri.action(controller: \'FrontendUser\', action: \'show\', pageUid: settings.pid.profile, arguments: {user: latestPost.author})}',
+                        2: '{f:uri.action(controller: \'FrontendUser\', action: \'show\', extensionName: \'IglarpTemplate\', pluginName: \'User-Profile\', pageUid: settings.pid.profile, arguments: {user: latestPost.author})}',
                         3: latestPost.authorName
                     }"/>
                 </div>
@@ -36,7 +36,7 @@
             <f:translate
                 key="plugin.statistics.infoCenter.statisticsSummary.newestMember"
                 arguments="{
-                    0: '{f:uri.action(controller: \'FrontendUser\', action: \'show\', pageUid: settings.pid.profile, arguments: \'{user: newestMember}\')}',
+                    0: '{f:uri.action(controller: \'FrontendUser\', action: \'show\', extensionName: \'IglarpTemplate\', pluginName: \'User-Profile\', pageUid: settings.pid.profile, arguments: \'{user: newestMember}\')}',
                     1: newestMember.displayName
                 }"/>
         </p>
@@ -49,7 +49,7 @@
         <h3><i class="fa fa-users fa-fw"></i> <f:translate key="plugin.statistics.infoCenter.onlineUsers.headline.label" /></h3>
         <p>
             <tbb:format.csv subject="{onlineUsers}" as="author">
-                <f:link.action action="show" controller="FrontendUser" arguments="{user: author}" pageUid="{settings.pid.profile}">
+                <f:link.action action="show" controller="FrontendUser" extensionName="IglarpTemplate" pluginName="User-Profile" arguments="{user: author}" pageUid="{settings.pid.profile}">
                     {author.displayName}
                 </f:link.action>
             </tbb:format.csv>

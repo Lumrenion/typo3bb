@@ -21,7 +21,13 @@ config.tx_extbase{
                     }
                 }
             }
-            
+            LumIT\Typo3bb\Domain\Model\Poll {
+                mapping {
+                    columns {
+                        endtime = endtime
+                    }
+                }
+            }
         }
     }
 }

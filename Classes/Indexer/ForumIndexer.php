@@ -56,15 +56,21 @@ class ForumIndexer {
         if($indexerConfig['type'] == self::$indexerType) {
             $content = '';
 
-            // get all the entries to index
-            // don't index hidden or deleted elements, BUT
-            // get the elements with frontend user group access restrictions
-            // or time (start / stop) restrictions.
-            // Copy those restrictions to the index.
-            $fields = 'post.*, topic.title, topic.board, GROUP_CONCAT( post.text SEPARATOR " "), board.read_permissions';
-            $table = 'tx_typo3bb_domain_model_topic topic, tx_typo3bb_domain_model_post post, tx_typo3bb_domain_model_board board';
-            $where  = 'post.pid IN (' . $indexerConfig['sysfolder'] . ') AND post.topic = topic.uid AND post.deleted = 0 AND topic.hidden = 0 AND topic.deleted = 0 AND topic.board = board.uid';
+            // Indexing each post and creating direct links would be the more accurate approach
+            // but indexing every single post can take a lot of time, depending on how active a forum is
+            $fields = 'topic.uid, topic.title, GROUP_CONCAT( post.text SEPARATOR " ") as text, board.read_permissions, board.parent_board, board.tx_kesearch_index';
+            $table = 'tx_typo3bb_domain_model_post post LEFT JOIN tx_typo3bb_domain_model_topic topic ON post.topic = topic.uid LEFT JOIN tx_typo3bb_domain_model_board board ON topic.board = board.uid';
+            $where  = 'post.pid IN (' . $indexerConfig['sysfolder'] . ') AND post.deleted = 0 AND topic.hidden = 0 AND topic.deleted = 0';
             $groupBy = 'topic.uid';
+
+//            $fields = 'post.*, topic.title, board.read_permissions, board.parent_board';
+//            $table = 'tx_typo3bb_domain_model_post as post
+//	LEFT JOIN tx_typo3bb_domain_model_topic as topic
+//	ON post.topic = topic.uid
+//	LEFT JOIN tx_typo3bb_domain_model_board as board
+//	ON topic.board = board.uid';
+//            $where  = 'post.pid IN (' . $indexerConfig['sysfolder'] . ') AND post.deleted = 0 AND topic.hidden = 0 AND topic.deleted = 0';
+//            $groupBy = '';
             $orderBy =  '';
             $limit = '';
             $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery($fields,$table,$where,$groupBy,$orderBy,$limit);
@@ -76,11 +82,29 @@ class ForumIndexer {
                 while ( ($record = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) ) {
                     // compile the information which should go into the index
                     // the field names depend on the table you want to index!
-                    $title = strip_tags($record['title']); //Categorie Title
+                    if (!$record['tx_kesearch_index']) {
+                        continue;
+                    }
+
+                    // We need the read permissions recursively for each parent board
+                    $parentBoardId = $record['parent_board'];
+                    while ($parentBoardId != 0) {
+                        $parentBoard = $GLOBALS['TYPO3_DB']->exec_SELECTgetSingleRow('read_permissions, tx_kesearch_index, parent_board', 'tx_typo3bb_domain_model_board', 'uid = ' . $parentBoardId);
+                        if (empty($parentBoard)) {
+                            break;
+                        }
+                        if (!$parentBoard['tx_kesearch_index']) {
+                            continue 2;
+                        }
+                        $record['read_permissions'] .= ',' . $parentBoard['read_permissions'];
+                        $parentBoardId = $parentBoard['parent_board'];
+                    }
+                    $record['read_permissions'] = implode(',', array_unique(array_filter(explode(',', $record['read_permissions']))));
+                    $title = strip_tags($record['title']); //Category Title
                     $abstract = strip_tags($record['text']);
-                    $content = strip_tags($record['GROUP_CONCAT( post.text SEPARATOR " ")']);
+                    $content = strip_tags($record['text']);
                     $fullContent = $title . "\n" . $content;
-                    $params = '&tx_typo3bb_forum[action]=show&tx_typo3bb_forum[controller]=Topic&tx_typo3bb_forum[topic]='. $record['topic'] . '&tx_typo3bb_forum[post]=' . $record['uid'];
+                    $params = '&tx_typo3bb_forum[action]=show&tx_typo3bb_forum[controller]=Topic&tx_typo3bb_forum[topic]='. $record['uid'];
                     $tags = '#typo3bbForumTag';
                     $additionalFields = array(
                         'sortdate' => $record['crdate'],

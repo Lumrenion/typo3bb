@@ -25,6 +25,8 @@ plugin.tx_typo3bb {
         attachmentsPath = uploads/tx_typo3bb/attachments
         # cat=plugin.tx_typo3bb//a; type=int+; label=Threshold when the online time of users will be updated
         onlineInterval = 15
+        # cat=plugin.tx_typo3bb//a; type=boolean; label=Forum in debug mode?
+        debug = 0
         breadcrumb {
             forumCategoryIconClass = fa fa-list-alt fa-fw
             topicIconClass = fa fa-comments fa-fw

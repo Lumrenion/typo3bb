@@ -142,11 +142,6 @@ plugin.tx_typo3bb {
                 vote < plugin.tx_typo3bb.settings.accessValidation.Topic.show
                 vote.10 = TopicHasPoll
             }
-            FrontendUser {
-                show {
-                    0 = IsLoggedIn
-                }
-            }
             Message {
                 inbox {
                     0 = IsLoggedIn
@@ -164,23 +159,6 @@ plugin.tx_typo3bb {
         }
     }
 }
-
-[globalVar = TSFE:id={$plugin.tx_typo3bb.settings.pid.forum}, TSFE:id={$plugin.tx_typo3bb.settings.pid.profile}, TSFE:id={$plugin.tx_typo3bb.settings.pid.profileEdit}, TSFE:id={$plugin.tx_typo3bb.settings.pid.passwordEdit}, TSFE:id={$plugin.tx_typo3bb.settings.pid.profileDelete}, TSFE:id={$plugin.tx_typo3bb.settings.pid.messages}, TSFE:id={$plugin.tx_typo3bb.settings.pid.statistics}]
-page {
-    includeJSFooterlibs {
-        tinymce = EXT:typo3bb/Resources/Public/tinymce/tinymce.jquery.min.js
-        tinymceTheme = EXT:typo3bb/Resources/Public/tinymce/themes/modern/theme.js
-        select2 = EXT:typo3bb/Resources/Public/select2/dist/js/select2.full.min.js
-    }
-    includeJSFooter {
-        typo3bbscript = EXT:typo3bb/Resources/Public/assets/js/footer.min.js
-    }
-    includeCSS {
-        select2 = EXT:typo3bb/Resources/Public/select2/dist/css/select2.min.css
-        typo3bb = EXT:typo3bb/Resources/Public/assets/css/main.min.css
-    }
-}
-[global]
 
 <INCLUDE_TYPOSCRIPT: source="FILE:EXT:typo3bb/Configuration/TypoScript/Extensions/extbase.ts">
 <INCLUDE_TYPOSCRIPT: source="FILE:EXT:typo3bb/Configuration/TypoScript/Extensions/sf_register.ts">

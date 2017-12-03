@@ -34,7 +34,7 @@
                                 <dt class="typo3bb-message-sender-info-main">
                                     <f:if condition="{message.sender.user}">
                                         <f:then>
-                                            <f:link.action action="show" controller="FrontendUser" arguments="{user: message.sender.user}" pageUid="{settings.pid.profile}">
+                                            <f:link.action action="show" controller="FrontendUser" extensionName="IglarpTemplate" pluginName="User-Profile" arguments="{user: message.sender.user}" pageUid="{settings.pid.profile}">
                                                 {message.sender.userName}
                                             </f:link.action>
                                         </f:then>
@@ -66,14 +66,14 @@
                                     </f:link.action>
                                 </li>
                                 <li>
-                                    <f:link.action action="delete" controller="Message" arguments="{message: message, from: 'outbox'}" class="btn btn-default">
+                                    <f:link.action action="delete" controller="Message" arguments="{message: message, from: context}" class="btn btn-default">
                                         <i class="fa fa-trash"></i>
                                     </f:link.action>
                                 </li>
                             </ul>
 
                             <div class="typo3bb-message-heading">
-                                <h3 class="typo3bb-message-heading-headline">{message.subject}</h3>
+                                <h3 class="typo3bb-message-heading-headline">{message.subject -> f:format.stripTags() -> f:format.html()}</h3>
                                 <f:format.date format="d.m.Y H:i">{message.crdate}</f:format.date><br>
                                 <f:translate key="messages.new.form.receivers" />: <tbb:format.csv subject="{message.receivers}" property="userName" />
                             </div>

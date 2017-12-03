@@ -19,7 +19,7 @@
             <f:if condition="{topic.poll.maxChoicesSelect} > 0">
                 <div><f:translate key="poll.maxChoicesSelect.label" arguments="{0: topic.poll.maxChoicesSelect}" /></div>
             </f:if>
-            <f:form.submit value="{f:translate(key: 'poll.vote.submit.label')}" />
+            <f:form.submit value="{f:translate(key: 'poll.vote.submit.label')}" class="btn btn-success" />
             <small><f:translate key="poll.endtime.label" arguments="{0: '{f:format.date(date: topic.poll.endtime, format: \'d.m.Y H:i\')}'}" /></small>
         </f:form>
     </f:section>

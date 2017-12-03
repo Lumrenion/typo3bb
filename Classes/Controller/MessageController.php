@@ -141,7 +141,14 @@ class MessageController extends AbstractController {
      */
     public function deleteAction(Message $message, $from = 'inbox') {
         SecurityUtility::assertAccessPermission('Message.delete');
-        $messageParticipant = $message->getMessageParticipant($this->frontendUser);
+        if ($from == 'inbox') {
+            $messageParticipant = $message->getMessageReceiver($this->frontendUser);
+        } else {
+            $messageParticipant = $message->getSender();
+            if ($messageParticipant->getUser()->getUid() != $this->frontendUser->getUid()) {
+                $messageParticipant = null;
+            }
+        }
 
         if(!empty($messageParticipant)) {
             $messageParticipant->setDeleted(true);

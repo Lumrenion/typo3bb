@@ -31,7 +31,7 @@
                                         <dt class="post-author-info-main">
                                             <f:if condition="{post.author}">
                                                 <f:then>
-                                                    <f:link.action action="show" controller="FrontendUser" arguments="{user: post.author}" pageUid="{settings.pid.profile}">
+                                                    <f:link.action action="show" controller="FrontendUser" extensionName="IglarpTemplate" pluginName="User-Profile" arguments="{user: post.author}" pageUid="{settings.pid.profile}">
                                                         {post.authorName}
                                                     </f:link.action>
                                                 </f:then>

@@ -78,14 +78,14 @@ class AttachmentController extends AbstractController {
         $attachment->increaseDownloadCount();
         $this->postRepository->update($attachment->getPost());
 
-        ob_start();
-        $file = $attachment->getFile()->getOriginalResource()->getOriginalFile();
-        $file->getStorage()->dumpFileContents($file, true, $attachment->getOriginalFileName());
-
         /** @var PersistenceManager $persistenceManager */
         $persistenceManager = GeneralUtility::makeInstance(PersistenceManager::class);
         $persistenceManager->persistAll();
 
-        exit();
+        ob_start();
+        $file = $attachment->getFile()->getOriginalResource()->getOriginalFile();
+        $file->getStorage()->dumpFileContents($file, true, $attachment->getOriginalFileName());
+
+        exit;
     }
 }

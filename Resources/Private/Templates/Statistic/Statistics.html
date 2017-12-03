@@ -121,7 +121,7 @@
                         <f:for each="{topAuthors}" as="topAuthor">
                             <tr>
                                 <th>
-                                    <f:link.action action="show" controller="FrontendUser" arguments="{user: topAuthor}" pageUid="{settings.pid.profile}">
+                                    <f:link.action action="show" controller="FrontendUser" extensionName="IglarpTemplate" pluginName="User-Profile" arguments="{user: topAuthor}" pageUid="{settings.pid.profile}">
                                         {topAuthor.displayName}
                                     </f:link.action>
                                 </th>
@@ -138,7 +138,7 @@
                         <f:for each="{topTopicStarters}" as="topTopicStarter">
                             <tr>
                                 <th>
-                                    <f:link.action action="show" controller="FrontendUser" arguments="{user: topTopicStarter}" pageUid="{settings.pid.profile}">
+                                    <f:link.action action="show" controller="FrontendUser" extensionName="IglarpTemplate" pluginName="User-Profile" arguments="{user: topTopicStarter}" pageUid="{settings.pid.profile}">
                                         {topTopicStarter.displayName}
                                     </f:link.action>
                                 </th>
@@ -155,7 +155,7 @@
                         <f:for each="{longestTimeOnlineUsers}" as="longestTimeOnlineUser">
                             <tr>
                                 <th>
-                                    <f:link.action action="show" controller="FrontendUser" arguments="{user: longestTimeOnlineUser}" pageUid="{settings.pid.profile}">
+                                    <f:link.action action="show" controller="FrontendUser" extensionName="IglarpTemplate" pluginName="User-Profile" arguments="{user: longestTimeOnlineUser}" pageUid="{settings.pid.profile}">
                                         {longestTimeOnlineUser.displayName}
                                     </f:link.action>
                                 </th>
