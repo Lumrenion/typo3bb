@@ -209,7 +209,8 @@ class Message extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         if($GLOBALS['TSFE']->loginUser) {
             /** @var FrontendUser $frontendUser */
             $frontendUser = FrontendUserUtility::getCurrentUser();
-            return $this->getMessageReceiver($frontendUser)->isViewed();
+            $messageReceiver = $this->getMessageReceiver($frontendUser);
+            return $messageReceiver === null || $messageReceiver->isViewed();
         }
         return true;
     }

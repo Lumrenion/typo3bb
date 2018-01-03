@@ -9,7 +9,7 @@
     <f:section name="main">
         <tbb:breadcrumb rootline="{board.rootline}" />
 
-        <f:if condition="{board.allowedSubBoardsCount}">
+        <f:if condition="{board.allowedSubBoards -> f:count()}">
             <div class="board-sub-boards-wrapper">
                 <f:render partial="Board/List" section="Content" arguments="{boards: board.allowedSubBoards}" />
             </div>
@@ -44,8 +44,11 @@
                                 </div>
                                 <div class="col-xs-4 forum-board-topic-latest-post">
                                     <small>
+                                        <f:link.action action="show" controller="Topic" arguments="{topic: topic, post: topic.latestPost}" section="post-{topic.latestPost.uid}">
+                                            {topic.title}
+                                        </f:link.action><br>
                                         <f:format.date format="d.m.Y, H:i">{topic.latestPost.crdate}</f:format.date><br>
-                                        <f:translate key="topic.latestPost.author.label" />&nbsp;<f:if condition="{topic.latestPost.author}">
+                                        <f:translate key="topic.latestPost.author.label" />&nbsp;<f:if condition="{topic.latestPost.authorName}">
                                             <f:then><f:link.action action="show" controller="FrontendUser" extensionName="IglarpTemplate" pluginName="User-Profile" arguments="{user: topic.latestPost.author}" pageUid="{settings.pid.profile}">{topic.latestPost.authorName}</f:link.action></f:then>
                                             <f:else>{topic.latestPost.authorName}</f:else>
                                         </f:if>

@@ -143,3 +143,8 @@ if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('sf_register'))
         \LumIT\Typo3bb\Utility\StatisticUtility::class, 'addRegister'
     );
 }
+
+// TYPO3 Queries lack the ability of counting queries with a statement set
+$GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][\TYPO3\CMS\Extbase\Persistence\Generic\Storage\Typo3DbBackend::class] = [
+    'className' => \LumIT\Typo3bb\Xclass\Extbase\Persistence\Generic\Storage\Typo3DbBackend::class,
+];

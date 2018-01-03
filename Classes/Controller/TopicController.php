@@ -41,6 +41,7 @@ use LumIT\Typo3bb\Utility\StatisticUtility;
 use LumIT\Typo3bb\Utility\UrlUtility;
 use LumIT\Typo3bb\ViewHelpers\Format\CsvViewHelper;
 
+use TYPO3\CMS\Extbase\Persistence\Generic\LazyLoadingProxy;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**

@@ -1,9 +1,6 @@
 <div xmlns="http://www.w3.org/1999/xhtml" lang="en"
-     xmlns:v="http://typo3.org/ns/FluidTYPO3/Vhs/ViewHelpers"
      xmlns:f="http://typo3.org/ns/TYPO3/Fluid/ViewHelpers"
-     xmlns:tbb="http://typo3.org/ns/LumIT/Typo3bb/ViewHelpers"
-
-     v:schemaLocation="http://fluidtypo3.org/schemas/vhs-1.8.5.xsd">
+     xmlns:tbb="http://typo3.org/ns/LumIT/Typo3bb/ViewHelpers">
     <f:section name="Content">
 
         <div class="forum-topic-post-wrapper">
@@ -18,15 +15,10 @@
                                 <f:if condition="{post.author}">
                                     <f:then>
                                         <dt class="author-avatar-container">
-                                            <v:media.exists file="uploads/pics/{post.author.image}">
-                                                <f:then>
-                                                    <f:image width="90" src="uploads/pics/{post.author.image}" class="image-responsive img-thumbnail profile-user-image"
-                                                             alt="{frontendUser.displayName}" title="{frontendUser.displayName}" />
-                                                </f:then>
-                                                <f:else>
-                                                    <i class="fa fa-user fa-5x" aria-hidden="true"></i>
-                                                </f:else>
-                                            </v:media.exists>
+                                            <tbb:image width="90" src="uploads/pics/{post.author.image}" class="image-responsive img-thumbnail profile-user-image"
+                                                     alt="{frontendUser.displayName}" title="{frontendUser.displayName}">
+                                                <i class="fa fa-user fa-5x" aria-hidden="true"></i>
+                                            </tbb:image>
                                         </dt>
                                         <dt class="post-author-info-main">
                                             <f:if condition="{post.author}">

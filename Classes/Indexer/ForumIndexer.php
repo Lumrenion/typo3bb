@@ -96,6 +96,9 @@ class ForumIndexer {
                         if (!$parentBoard['tx_kesearch_index']) {
                             continue 2;
                         }
+                        // TODO readpermissionsRecursive this approach is wrong.
+                        // Currently it is $board1 || $board2 || $parentBoard1 || $parentBoard2
+                        // But it should be ($board1 || $board2) && ($parentBoard1 || $parentBoard2)
                         $record['read_permissions'] .= ',' . $parentBoard['read_permissions'];
                         $parentBoardId = $parentBoard['parent_board'];
                     }

@@ -555,7 +555,7 @@ class Topic extends AbstractEntity
         $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
         /** @var PostRepository $postRepository */
         $postRepository = $objectManager->get(PostRepository::class);
-        $unreadCount = $postRepository->countUnread($frontendUser, null, $this);
+        $unreadCount = $postRepository->findUnread($frontendUser, null, $this)->count();
         return $unreadCount == 0;
     }
 

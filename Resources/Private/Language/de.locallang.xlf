@@ -611,6 +611,10 @@
                 <source>Subboards:</source>
                 <target>Unter-Boards:</target>
             </trans-unit>
+            <trans-unit id="board.moderators.label">
+                <source>Moderators:</source>
+                <target>Moderatoren:</target>
+            </trans-unit>
             <trans-unit id="boards.topicsCount.label">
                 <source>Topics</source>
                 <target>Themen</target>
@@ -741,8 +745,8 @@
                 <target>Neue Nachricht erhalten</target>
             </trans-unit>
             <trans-unit id="emailNotification.onMessageSent.body">
-                <source><![CDATA[%1s has sent you a personal message with the subject <b>%2s</b>. To read it, please visit your inbox:<br><a href="%3s">%3s</a>]]></source>
-                <target><![CDATA[%1s hat dir eine private Nachricht mit dem Betreff <b>%2s</b> gesendet. Um sie zu lesen, besuche bitte deinen Posteingang im Forum:<br><a href="%3s">%3s</a>]]></target>
+                <source><![CDATA[%1$s has sent you a personal message with the subject <b>%2$s</b>. To read it, please visit your inbox:<br><a href="%3$s">%3$s</a>]]></source>
+                <target><![CDATA[%1$s hat dir eine private Nachricht mit dem Betreff <b>%2$s</b> gesendet. Um sie zu lesen, besuche bitte deinen Posteingang im Forum:<br><a href="%3$s">%3$s</a>]]></target>
             </trans-unit>
 
             <trans-unit id="emailNotification.onPostCreated.subject">
@@ -750,9 +754,9 @@
                 <target>Neuer Beitrag</target>
             </trans-unit>
             <trans-unit id="emailNotification.onPostCreated.body">
-                <source><![CDATA[%1s has created a new post in topic <b>%2s</b>. To see it, please visit<br><a href="%3s">%3s</a><br><br>
+                <source><![CDATA[%1$s has created a new post in topic <b>%2$s</b>. To see it, please visit<br><a href="%3$s">%3$s</a><br><br>
                 You have received this notification, because you are subscribed to the posts topic or it's parent board. If you do not want to receive this notifications, please visit the topic or board and click the button "unsubscribe".]]></source>
-                <target><![CDATA[%1s hat einen neuen Beitrag im Thema <b>%2s</b> erstellt. Um ihn anzusehen, besuche bitte<br><a href="%3s">%3s</a><br><br>
+                <target><![CDATA[%1$s hat einen neuen Beitrag im Thema <b>%2$s</b> erstellt. Um ihn anzusehen, besuche bitte<br><a href="%3$s">%3$s</a><br><br>
                 Du erhältst diese Benachrichtigung, da du dieses Thema oder sein übergeordnetes Board abonniert hast. Wenn du diese Benachrichtigungen nicht mehr erhalten möchtest, besuche bitte das Thema oder das Board und klicke auf den Button "abbestellen".]]></target>
             </trans-unit>
 
@@ -761,9 +765,9 @@
                 <target>Neues Thema</target>
             </trans-unit>
             <trans-unit id="emailNotification.onTopicCreated.body">
-                <source><![CDATA[%1s has created the new topic <b>%2s</b> in board <b>%3s</b>. To see it, please visit<br><a href="%4s">%4s</a><br><br>
+                <source><![CDATA[%1$s has created the new topic <b>%2$s</b> in board <b>%3$s</b>. To see it, please visit<br><a href="%4$s">%4$s</a><br><br>
                 You have received this notification, because you are subscribed to the topics parent board. If you do not want to receive this notifications, please visit the board and click the button "unsubscribe".]]></source>
-                <target><![CDATA[%1s hat ein neues Thema <b>%2s</b> im Board <b>%3s</b> erstellt. Um es anzusehen, besuche bitte<br><a href="%4s">%4s</a><br><br>
+                <target><![CDATA[%1$s hat ein neues Thema <b>%2$s</b> im Board <b>%3$s</b> erstellt. Um es anzusehen, besuche bitte<br><a href="%4$s">%4$s</a><br><br>
                 Du erhältst diese Benachrichtigung, da du das übergeordnete Board des Themas abonniert hast. Wenn du diese Benachrichtigungen nicht mehr erhalten möchtest, besuche bitte das Board und klicke auf den Button "abbestellen".]]></target>
             </trans-unit>
 
@@ -778,6 +782,10 @@
             <trans-unit id="plugin.statistics.infoCenter.latestPosts.post">
                 <source><![CDATA[In <a href="%1s"><i>%2s</i></a> by <a href="%3s"><i>%4s</i></a>]]></source>
                 <target><![CDATA[In <a href="%1s"><i>%2s</i></a> von <a href="%3s"><i>%4s</i></a>]]></target>
+            </trans-unit>
+            <trans-unit id="plugin.statistics.infoCenter.latestPosts.postByGuest">
+                <source><![CDATA[In <a href="%1s"><i>%2s</i></a> by <a href="%3s"><i>%4s</i></a>]]></source>
+                <target><![CDATA[In <a href="%1s"><i>%2s</i></a> von <i>%4s</i>]]></target>
             </trans-unit>
             <trans-unit id="plugin.statistics.infoCenter.statisticsSummary.headline.label">
                 <source>Forum statistics</source>

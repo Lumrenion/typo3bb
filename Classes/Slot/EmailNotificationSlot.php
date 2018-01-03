@@ -35,6 +35,35 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
  */
 class EmailNotificationSlot implements \TYPO3\CMS\Core\SingletonInterface {
 
+
+    /**
+     * Sends email notifications to receivers of the sent message.
+     * @param \TYPO3\CMS\Extbase\Mvc\Controller\ControllerContext $controllerContext
+     *
+     * @param \LumIT\Typo3bb\Domain\Model\Message $message
+     */
+    public function onMessageCreation($message, $controllerContext) {
+        $mailMessage = EmailUtility::getMailMessage();
+
+        /** @var \LumIT\Typo3bb\Domain\Model\MessageParticipant $messageReceiver */
+        foreach ($message->getReceivers() as $messageReceiver) {
+            $receiverUser = $messageReceiver->getUser();
+            $mailMessage->addBcc($receiverUser->getEmail(), $receiverUser->getDisplayName());
+        }
+        $mailMessage->setSubject(LocalizationUtility::translate('emailNotification.onMessageSent.subject', 'typo3bb'));
+        $mailMessage->setBody(
+            EmailUtility::getEmailBody(
+                'OnMessageSent',
+                ['message' => $message],
+                $controllerContext
+            ), 'text/html'
+        );
+
+        if (false === (bool)PluginUtility::_getPluginSettings()['debug']) {
+            $mailMessage->send();
+        }
+    }
+
     /**
      * Sends email notifications to users that subscribed the parent board of the newly created topic.
      *
@@ -58,7 +87,7 @@ class EmailNotificationSlot implements \TYPO3\CMS\Core\SingletonInterface {
                 'OnTopicCreated',
                 ['topic' => $topic],
                 $controllerContext
-            )
+            ), 'text/html'
         );
 
         if (false === (bool)PluginUtility::_getPluginSettings()['debug']) {
@@ -93,7 +122,7 @@ class EmailNotificationSlot implements \TYPO3\CMS\Core\SingletonInterface {
                 'OnPostCreated',
                 ['post' => $post],
                 $controllerContext
-            )
+            ), 'text/html'
         );
 
         if (false === (bool)PluginUtility::_getPluginSettings()['debug']) {
@@ -114,33 +143,5 @@ class EmailNotificationSlot implements \TYPO3\CMS\Core\SingletonInterface {
             $subscribers = array_merge($subscribers, $this->getBoardSubscribers($board->getParentBoard()));
         }
         return array_unique(array_merge($subscribers, $board->getSubscribers()->toArray()));
-    }
-
-    /**
-     * Sends email notifications to receivers of the sent message.
-     * @param \TYPO3\CMS\Extbase\Mvc\Controller\ControllerContext $controllerContext
-     *
-     * @param \LumIT\Typo3bb\Domain\Model\Message $message
-     */
-    public function onMessageCreation($message, $controllerContext) {
-        $mailMessage = EmailUtility::getMailMessage();
-
-        /** @var \LumIT\Typo3bb\Domain\Model\MessageParticipant $messageReceiver */
-        foreach ($message->getReceivers() as $messageReceiver) {
-            $receiverUser = $messageReceiver->getUser();
-            $mailMessage->addBcc($receiverUser->getEmail(), $receiverUser->getDisplayName());
-        }
-        $mailMessage->setSubject(LocalizationUtility::translate('emailNotification.onMessageSent.subject', 'typo3bb'));
-        $mailMessage->setBody(
-            EmailUtility::getEmailBody(
-                'OnMessageSent',
-                ['message' => $message],
-                $controllerContext
-            )
-        );
-
-        if (false === (bool)PluginUtility::_getPluginSettings()['debug']) {
-            $mailMessage->send();
-        }
     }
 }

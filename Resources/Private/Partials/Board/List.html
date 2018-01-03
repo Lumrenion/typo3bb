@@ -1,9 +1,6 @@
 <div xmlns="http://www.w3.org/1999/xhtml" lang="en"
-     xmlns:v="http://typo3.org/ns/FluidTYPO3/Vhs/ViewHelpers"
      xmlns:f="http://typo3.org/ns/TYPO3/Fluid/ViewHelpers"
      xmlns:tbb="http://typo3.org/ns/LumIT/Typo3bb/ViewHelpers"
-
-     v:schemaLocation="http://fluidtypo3.org/schemas/vhs-1.8.5.xsd">
     <f:section name="Content">
         <div class="forum-category-boards">
             <f:for each="{boards}" as="board">
@@ -25,7 +22,19 @@
                                 <f:if condition="{board.description}">
                                     <span class="board-list-board-title-description"><small><f:format.raw>{board.description}</f:format.raw></small></span>
                                 </f:if>
-                                <f:if condition="{board.allowedSubBoardsCount}">
+                                <f:if condition="{board.moderators}">
+                                    <div class="board-list-board-moderators">
+                                        <small>
+                                            <f:translate key="board.moderators.label" />
+                                            <f:for each="{board.moderatorsArray}" as="moderator">
+                                                <f:link.action action="show" controller="FrontendUser" extensionName="IglarpTemplate" pluginName="User-Profile" arguments="{user: moderator}" pageUid="{settings.pid.profile}">
+                                                    {moderator.displayName}
+                                                </f:link.action>
+                                            </f:for>
+                                        </small>
+                                    </div>
+                                </f:if>
+                                <f:if condition="{board.allowedSubBoards -> f:count()}">
                                     <div class="board-list-board-subboards">
                                         <small>
                                             <f:translate key="board.subboards.label" />

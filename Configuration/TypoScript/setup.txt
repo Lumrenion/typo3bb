@@ -78,9 +78,9 @@ plugin.tx_typo3bb {
         accessValidation {
             Board {
                 show {
-                    0 = HasReadPermission
-#                    1 = IsAdmin
-                    2 = IsBoardModerator
+                    5 = IsGlobalModerator
+                    10 = HasReadPermission
+                    20 = IsBoardModerator
                 }
                 markAsRead {
                     0 = IsLoggedIn
@@ -92,28 +92,33 @@ plugin.tx_typo3bb {
             Topic {
                 show < plugin.tx_typo3bb.settings.accessValidation.Board.show
                 create {
-                    0 = HasWritePermission
-#                    1 = IsAdmin
-                    2 = IsBoardModerator
+                    5 = IsGlobalModerator
+                    10 = HasWritePermission
+                    20 = IsBoardModerator
                 }
                 edit {
-                    0 = IsAuthor
-                    1 = IsBoardModerator
+                    5 = IsGlobalModerator
+                    10 = IsAuthor
+                    20 = IsBoardModerator
                 }
                 delete < plugin.tx_typo3bb.settings.accessValidation.Topic.edit
                 close < plugin.tx_typo3bb.settings.accessValidation.Topic.edit
                 reopen < plugin.tx_typo3bb.settings.accessValidation.Topic.close
                 move {
-                    0 = IsBoardModerator
+                    5 = IsGlobalModerator
+                    10 = IsBoardModerator
                 }
                 split {
-                    0 = IsBoardModerator
+                    5 = IsGlobalModerator
+                    10 = IsBoardModerator
                 }
                 join {
-                    0 = IsBoardModerator
+                    5 = IsGlobalModerator
+                    10 = IsBoardModerator
                 }
                 pin {
                     0 = IsBoardModerator
+                    1 = IsGlobalModerator
                 }
                 subscribe {
                     0 = IsLoggedIn
@@ -130,17 +135,20 @@ plugin.tx_typo3bb {
                 # create < plugin.tx_typo3bb.settings.accessValidation.Topic.create
                 # create.10 = IsClosed
                 edit {
-                    0 = IsAuthor
-                    1 = IsBoardModerator
+                    5 = IsGlobalModerator
+                    10 = IsAuthor
+                    20 = IsBoardModerator
                 }
                 delete < plugin.tx_typo3bb.settings.accessValidation.Post.edit
                 move {
-                    1 = IsBoardModerator
+                    5 = IsGlobalModerator
+                    10 = IsBoardModerator
                 }
             }
             Poll {
                 vote < plugin.tx_typo3bb.settings.accessValidation.Topic.show
-                vote.10 = TopicHasPoll
+                vote.100 = TopicHasPoll
+                vote.110 = IsLoggedIn
             }
             Message {
                 inbox {

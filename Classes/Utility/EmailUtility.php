@@ -71,6 +71,7 @@ class EmailUtility {
         $emailView->setTemplateRootPaths($extbaseFrameworkConfiguration['view']['templateRootPaths']);
         $emailView->setLayoutRootPaths($extbaseFrameworkConfiguration['view']['layoutRootPaths']);
         $emailView->setPartialRootPaths($extbaseFrameworkConfiguration['view']['partialRootPaths']);
+        $variablesToAssign['settings'] = $extbaseFrameworkConfiguration['settings'];
         $emailView->setTemplate('Email/' . $templateName);
 
         return $emailView->assignMultiple($variablesToAssign)->render();

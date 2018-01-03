@@ -13,6 +13,7 @@ $(function() {
         //forced_root_block: false,
         content_css : '/typo3conf/ext/iglarp_template/Resources/Public/assets/css/main.min.css',
         auto_convert_smileys: true,
+        relative_urls: false,
         plugins: 'link, autolink, image, table, smileys, hr, code',
         fontsize_formats: '8px 10px 12px 14px 18px 24px 30px 36px',
         toolbar1: 'undo redo | styleselect fontsizeselect | bold italic | link image | alignleft aligncenter alignright alignjustify | bullist numlist hr | outdent indent | blockquote | smileys | code',
@@ -317,12 +318,25 @@ $(function() {
                     title: 'Badge',
                     inline: 'span',
                     classes: 'badge'
-                },
+                }
             ]}
         ]
     });
 
     LumIT.MessageReceiver.init();
+});
+
+$(function() {
+    var $pollForm = $('#poll-form');
+    var $pollToggle = $('[data-target="#poll-form"]');
+    $pollForm.on('show.bs.collapse', function() {
+        $pollToggle.addClass('active');
+    });
+    $pollForm.on('hide.bs.collapse', function() {
+        $pollForm.find('input[type=text], input[type=number]').val('');
+        $pollForm.find('input[type=checkbox]').prop('checked', false);
+        $pollToggle.removeClass('active');
+    });
 });
 (function (window, $, undefined) {
     if($ === undefined) {

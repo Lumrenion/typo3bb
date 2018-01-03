@@ -27,6 +27,7 @@ namespace LumIT\Typo3bb\Domain\Model;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 use LumIT\Typo3bb\Domain\Repository\BoardRepository;
+use LumIT\Typo3bb\Domain\Repository\FrontendUserRepository;
 use LumIT\Typo3bb\Domain\Repository\PostRepository;
 use LumIT\Typo3bb\Utility\FrontendUserUtility;
 use LumIT\Typo3bb\Utility\SecurityUtility;
@@ -93,11 +94,6 @@ class Board extends AbstractEntity
      * @var \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
      */
     protected $allowedSubBoards = null;
-
-    /**
-     * @var integer
-     */
-    protected $allowedSubBoardsCount = null;
 
     /**
      * @var string
@@ -197,6 +193,11 @@ class Board extends AbstractEntity
      * @var bool
      */
     protected $txKesearchIndex = true;
+
+    /**
+     * @var array
+     */
+    protected $moderatorsArray = null;
 
 
     /**
@@ -416,19 +417,6 @@ class Board extends AbstractEntity
     }
 
     /**
-     * @return int
-     */
-    public function getAllowedSubBoardsCount() {
-        if (is_null($this->allowedSubBoardsCount)) {
-            $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-            /** @var BoardRepository $boardRepository */
-            $boardRepository = $objectManager->get(BoardRepository::class);
-            $this->allowedSubBoardsCount = $boardRepository->countAllowedBoards($this);
-        }
-        return $this->allowedSubBoardsCount;
-    }
-
-    /**
      * Returns an array containing subboards and their subboards recursively
      *
      * @return Board[]
@@ -502,6 +490,21 @@ class Board extends AbstractEntity
      */
     public function setModerators(string $moderators) {
         $this->moderators = $moderators;
+        $this->moderatorsArray = null;
+    }
+
+    public function getModeratorsArray() {
+        if ($this->moderatorsArray === null) {
+            $moderators = explode(',', $this->moderators);
+            if (empty($moderators)) {
+                $this->moderatorsArray = [];
+            } else {
+                /** @var FrontendUserRepository $frontendUserRepository */
+                $frontendUserRepository = GeneralUtility::makeInstance(ObjectManager::class)->get(FrontendUserRepository::class);
+                $this->moderatorsArray = $frontendUserRepository->findByUids($moderators)->toArray();
+            }
+        }
+        return $this->moderatorsArray;
     }
 
     /**
@@ -844,7 +847,7 @@ class Board extends AbstractEntity
         $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
         /** @var PostRepository $postRepository */
         $postRepository = $objectManager->get(PostRepository::class);
-        if ($postRepository->countUnread($frontendUser, $this) > 0) {
+        if ($postRepository->findUnread($frontendUser, $this)->count() > 0) {
             return false;
         }
 

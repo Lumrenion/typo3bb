@@ -18,6 +18,7 @@ config.tx_extbase{
                     tableName = fe_users
                     columns {
                         tx_typo3bb_display_name.mapOnProperty = displayName
+                        tx_typo3bb_global_moderator.mapOnProperty = globalModerator
                     }
                 }
             }

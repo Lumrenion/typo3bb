@@ -37,7 +37,13 @@ class ForumCategoryController extends AbstractController {
      * @var \LumIT\Typo3bb\Domain\Repository\ForumCategoryRepository
      * @inject
      */
-    protected $forumCategoryRepository = NULL;
+    protected $forumCategoryRepository = null;
+
+    /**
+     * @var \LumIT\Typo3bb\Domain\Repository\BoardRepository
+     * @inject
+     */
+    protected $boardController = null;
     
     /**
      * action list
@@ -45,8 +51,15 @@ class ForumCategoryController extends AbstractController {
      * @return void
      */
     public function listAction() {
-        $forumCategories = $this->forumCategoryRepository->findAll();
-        $this->view->assign('forumCategories', $forumCategories);
+        $boards = $this->boardController->getAllowedBoards();
+
+        foreach ($boards as $board) {
+            $test = 1;
+        }
+        $this->view->assign('allBoards', $boards);
+
+//        $forumCategories = $this->forumCategoryRepository->findAll();
+//        $this->view->assign('forumCategories', $forumCategories);
     }
 
 }

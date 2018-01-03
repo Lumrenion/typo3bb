@@ -45,6 +45,11 @@ class FrontendUserRepository extends \TYPO3\CMS\Extbase\Domain\Repository\Fronte
         return $query->matching($query->in('username', $usernames))->execute();
     }
 
+    public function findByUids(array $uids) {
+        $query = $this->createQuery();
+        return $query->matching($query->in('uid', $uids))->execute();
+    }
+
     /**
      * @param $search
      * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface

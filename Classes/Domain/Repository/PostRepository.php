@@ -98,25 +98,6 @@ class PostRepository extends AbstractRepository
     }
 
     /**
-     * There seems to be a bug in extbase: When calling the count()-Method of a Query that has only the statement set,
-     * the statement is not respected.
-     * Therefor this method extends the findUnread-Method by wrapping it into a count and returning the result.
-     * @TODO TYPO3 8 Doctrine statements
-     *
-     * @param $frontendUser
-     * @param null $board
-     * @param null $topic
-     * @return integer
-     */
-    public function countUnread($frontendUser, $board = null, $topic = null) {
-        $unread = $this->findUnread($frontendUser, $board, $topic, true,true);
-        $unreadStatement = $unread->getStatement()->getStatement();
-        $unreadStatement = "SELECT COUNT(postCount.uid) as 'count' FROM ($unreadStatement) as postCount";
-        $count = $unread->statement($unreadStatement)->execute(true)[0]['count'];
-        return (int)$count;
-    }
-
-    /**
      * Returns the first unread post of each readable topic.
      * If $board is specified, only posts in the specified board are returned.
      *
@@ -163,7 +144,7 @@ class PostRepository extends AbstractRepository
         }
 
         $sqlQuery = "
-SELECT post.* 
+SELECT post.*
 FROM tx_typo3bb_domain_model_post as post 
 RIGHT JOIN tx_typo3bb_domain_model_topic as topic 
 ON (
@@ -197,11 +178,8 @@ LEFT JOIN tx_typo3bb_domain_model_board as board ON (topic.board = board.uid)
         $sqlQuery .= ' AND post.pid IN (' . implode(',', $query->getQuerySettings()->getStoragePageIds()) . ')';
         //APPEND READ PERMISSION CONSTRAINT
         $sqlQuery .= ' AND (';
-        $usergroupQueries = [];
-        foreach ($usergroups as $usergroup) {
-            $usergroupQueries[] = 'FIND_IN_SET(\'' . intval($usergroup) . '\', board.read_permissions)';
-        }
-        $sqlQuery .= implode(' OR ', $usergroupQueries);
+        $usergroups = implode(',', $usergroups);
+        $sqlQuery .= 'hasAccess(board.uid, \'' . $usergroups . '\') = TRUE';
         $sqlQuery .= ')';
 
         $query->statement($sqlQuery);

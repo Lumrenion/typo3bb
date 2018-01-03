@@ -20,7 +20,7 @@ plugin.tx_typo3bb {
     }
     settings {
         # cat=plugin.tx_typo3bb//a; type=string; label=Relative path where emoticons are located
-        emoticonPath = uploads/tx_typo3bb
+        emoticonPath = uploads/tx_typo3bb/emoticons
         # cat=plugin.tx_typo3bb//a; type=string; label=Relative path where posts attachments are located
         attachmentsPath = uploads/tx_typo3bb/attachments
         # cat=plugin.tx_typo3bb//a; type=int+; label=Threshold when the online time of users will be updated

@@ -158,6 +158,11 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser
     protected $readTopics = null;
 
     /**
+     * @var bool
+     */
+    protected $globalModerator = false;
+
+    /**
      * __construct
      * @param string $username
      * @param string $password
@@ -731,5 +736,19 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser
      */
     public function removeReadTopic($reader) {
         $this->readTopics->detach($reader);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isGlobalModerator() {
+        return $this->globalModerator;
+    }
+
+    /**
+     * @param bool $globalModerator
+     */
+    public function setGlobalModerator($globalModerator) {
+        $this->globalModerator = $globalModerator;
     }
 }

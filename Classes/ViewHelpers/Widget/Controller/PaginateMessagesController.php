@@ -45,7 +45,7 @@ class PaginateMessagesController extends PaginateBaseController {
                 if ($modifiedObject instanceof Message) {
                     // Senders do not need to update their 'viewed' status, so we only iterate through receivers
                     $messageParticipant = $modifiedObject->getMessageReceiver($frontendUser);
-                    if (!$messageParticipant->getViewed()) {
+                    if ($messageParticipant !== null && !$messageParticipant->getViewed()) {
                         $messageParticipant->setViewed(true);
                         $changedMessageParticipants[] = $messageParticipant;
                         $messageRepository->update($modifiedObject);

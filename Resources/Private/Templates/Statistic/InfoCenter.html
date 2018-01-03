@@ -1,9 +1,6 @@
 <div xmlns="http://www.w3.org/1999/xhtml" lang="en"
-     xmlns:v="http://typo3.org/ns/FluidTYPO3/Vhs/ViewHelpers"
      xmlns:f="http://typo3.org/ns/TYPO3/Fluid/ViewHelpers"
-     xmlns:tbb="http://typo3.org/ns/LumIT/Typo3bb/ViewHelpers"
-
-     v:schemaLocation="http://fluidtypo3.org/schemas/vhs-1.8.5.xsd">
+     xmlns:tbb="http://typo3.org/ns/LumIT/Typo3bb/ViewHelpers">
 
     <f:layout name="Default" />
 
@@ -15,14 +12,27 @@
         <f:for each="{latestPosts}" as="latestPost">
             <div class="row">
                 <div class="col-xs-8">
-                    <f:translate
-                        key="plugin.statistics.infoCenter.latestPosts.post"
-                        arguments="{
-                        0: '{f:uri.action(controller: \'Topic\', action: \'show\', arguments: \'{topic: latestPost.topic, post: latestPost}\')}',
-                        1: latestPost.topic.title,
-                        2: '{f:uri.action(controller: \'FrontendUser\', action: \'show\', extensionName: \'IglarpTemplate\', pluginName: \'User-Profile\', pageUid: settings.pid.profile, arguments: {user: latestPost.author})}',
-                        3: latestPost.authorName
-                    }"/>
+                    <f:if condition="{latestPost.author}">
+                        <f:then>
+                            <f:translate
+                                    key="plugin.statistics.infoCenter.latestPosts.post"
+                                    arguments="{
+                                        0: '{f:uri.action(controller: \'Topic\', action: \'show\', arguments: \'{topic: latestPost.topic, post: latestPost}\')}',
+                                        1: latestPost.topic.title,
+                                        2: '{f:uri.action(controller: \'FrontendUser\', action: \'show\', extensionName: \'IglarpTemplate\', pluginName: \'User-Profile\', pageUid: settings.pid.profile, arguments: \'{user: latestPost.author.uid}\')}',
+                                        3: latestPost.authorName
+                                    }"/>
+                        </f:then>
+                        <f:else>
+                            <f:translate
+                                    key="plugin.statistics.infoCenter.latestPosts.postByGuest"
+                                    arguments="{
+                                        0: '{f:uri.action(controller: \'Topic\', action: \'show\', arguments: \'{topic: latestPost.topic, post: latestPost}\')}',
+                                        1: latestPost.topic.title,
+                                        2: latestPost.authorName
+                                    }"/>
+                        </f:else>
+                    </f:if>
                 </div>
                 <div class="col-xs-4">
                     {latestPost.crdate -> f:format.date(format: 'd.m.Y H:i')}

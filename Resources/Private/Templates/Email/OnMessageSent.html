@@ -1,15 +1,16 @@
 <div xmlns="http://www.w3.org/1999/xhtml" lang="en"
-     xmlns:v="http://typo3.org/ns/FluidTYPO3/Vhs/ViewHelpers"
-     xmlns:f="http://typo3.org/ns/TYPO3/Fluid/ViewHelpers"
-
-     v:schemaLocation="http://fluidtypo3.org/schemas/vhs-1.8.5.xsd">
+     xmlns:f="http://typo3.org/ns/TYPO3/Fluid/ViewHelpers">
 
     <f:layout name="Email" />
     <f:section name="main">
         <f:translate key="emailNotification.salutation" /><br><br>
 
         <f:translate key="emailNotification.onMessageSent.body"
-                     arguments="{0: message.sender.user.displayName, 1: message.title, 2: '{f:uri.action(action: \'inbox\', controller: \'Message\', pageUid: settings.pid.messages, noCacheHash: 1)}'}" /><br><br>
+                     arguments="{
+                        1: message.sender.user.displayName,
+                        2: message.subject,
+                        3: '{f:uri.action(action: \'inbox\', controller: \'Message\', pageUid: settings.pid.messages, noCacheHash: 1)}'
+                    }" /><br><br>
 
         <f:translate key="emailNotification.farwell" arguments="{0: settings.email.fromName}" /><br><br>
 

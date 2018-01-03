@@ -207,6 +207,20 @@
   margin-top: 10px;
   margin-bottom: 10px; }
 
+.poll-form-toggle {
+  cursor: pointer;
+  margin-top: -19px;
+  margin-bottom: 0;
+  padding-top: 39px;
+  padding-bottom: 10px; }
+  .poll-form-toggle .caret {
+    transition: transform .5s;
+    border-left-width: 8px;
+    border-right-width: 8px;
+    border-top-width: 8px; }
+  .poll-form-toggle.active .caret {
+    transform: rotate(180deg); }
+
 .table-user-information {
   background-color: #fef8ea; }
   .table-user-information td:last-child {

@@ -36,6 +36,7 @@ use LumIT\Typo3bb\Domain\Model\ForumCategory;
 class BoardRepository extends AbstractRepository
 {
 
+    protected $tableName = 'tx_typo3bb_domain_model_board';
     /**
      * @var array
      */
@@ -45,44 +46,36 @@ class BoardRepository extends AbstractRepository
 
     /**
      * @param ForumCategory|Board $parent
-     * @return int
-     */
-    public function countAllowedBoards($parent) {
-        $query = $this->getAllowedBoardsQuery($parent);
-        return $query->count();
-    }
-    /**
-     * @param ForumCategory|Board $parent
      * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
      */
-    public function getAllowedBoards($parent) {
-        $query = $this->getAllowedBoardsQuery($parent);
-        return $query->execute();
-    }
+    public function getAllowedBoards($parent = null) {
+        $usergroups = $GLOBALS['TSFE']->gr_list;
+        if ($parent === NULL) {
+            $parentField = 'parent_board';
+            $uid = 0;
+        } elseif ($parent instanceof ForumCategory) {
+            $parentField = 'forum_category';
+            $uid = $parent->getUid();
+        } else {
+            $parentField = 'parent_board';
+            $uid = $parent->getUid();
+        }
 
-    /**
-     * @param ForumCategory|Board $parent
-     * @return \TYPO3\CMS\Extbase\Persistence\QueryInterface
-     */
-    protected function getAllowedBoardsQuery($parent) {
         $query = $this->createQuery();
 
-        $groupConstraints = [];
-        foreach (explode(',', $GLOBALS["TSFE"]->gr_list) as $group) {
-            $groupConstraints [] = $query->contains('readPermissions', $group);
+        $sql = 'SELECT tx_typo3bb_domain_model_board.* FROM tx_typo3bb_domain_model_board';
+        $sql .= ' WHERE 1 = 1 ' . $GLOBALS['TSFE']->sys_page->enableFields($this->tableName);
+        $sql .= ' AND hasAccess(tx_typo3bb_domain_model_board.uid, \'' . $usergroups . '\') = TRUE';
+        $sql .= ' AND ' . $parentField . ' = '. $uid;
+
+        // ordering
+        $sql .= ' ORDER BY ';
+        foreach ($query->getOrderings() as $orderField => $ordering) {
+            $sql .= ' ' . $orderField . ' ' . $ordering;
         }
 
-        if ($parent instanceof ForumCategory) {
-            $parentField = 'forumCategory';
-        } else {
-            $parentField = 'parentBoard';
-        }
+        $query->statement($sql);
 
-        $query->matching($query->logicalAnd(
-            $query->equals($parentField, $parent->getUid()),
-            $query->logicalOr($groupConstraints)
-        ));
-
-        return $query;
+        return $query->execute();
     }
 }

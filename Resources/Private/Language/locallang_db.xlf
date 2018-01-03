@@ -178,6 +178,9 @@
             <trans-unit id="tx_typo3bb_domain_model_frontenduser.display_name">
                 <source>Display name</source>
             </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_frontenduser.global_moderator">
+                <source>Global Moderator</source>
+            </trans-unit>
             <trans-unit id="tx_typo3bb_domain_model_frontenduser.signature">
                 <source>Signature</source>
             </trans-unit>

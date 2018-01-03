@@ -58,11 +58,6 @@ class ForumCategory extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * @var \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
      */
     protected $allowedBoards = null;
-
-    /**
-     * @var integer
-     */
-    protected $allowedBoardsCount = null;
     
     /**
      * __construct
@@ -162,18 +157,5 @@ class ForumCategory extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
             $this->allowedBoards = $boardRepository->getAllowedBoards($this);
         }
         return $this->allowedBoards;
-    }
-
-    /**
-     * @return int
-     */
-    public function getAllowedBoardsCount() {
-        if (is_null($this->allowedBoardsCount)) {
-            $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-            /** @var BoardRepository $boardRepository */
-            $boardRepository = $objectManager->get(BoardRepository::class);
-            $this->allowedBoardsCount = $boardRepository->countAllowedBoards($this);
-        }
-        return $this->allowedBoardsCount;
     }
 }
