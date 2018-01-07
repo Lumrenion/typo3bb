@@ -9,7 +9,7 @@
                      arguments="{
                          1: post.author.displayName,
                          2: post.topic.title,
-                         3: '{f:uri.action(action: \'show\', controller: \'Topic\', pageUid: settings.pid.forum, noCacheHash: 1, arguments: \'{topic: post.topic, post: post}\')}'
+                         3: '{f:uri.action(action: \'show\', controller: \'Topic\', pageUid: settings.pid.forum, noCacheHash: 1, arguments: \'{topic: post.topic, post: post}\', absolute: \'1\')}'
                      }" /><br><br>
 
         <f:translate key="emailNotification.farwell" arguments="{0: settings.email.fromName}" /><br><br>

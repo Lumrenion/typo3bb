@@ -47,6 +47,17 @@ if (!defined('TYPO3_MODE')) {
         'Statistic' => 'infoCenter, statistics',
     ]
 );
+\TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
+    'LumIT.' . $_EXTKEY,
+    'Unread',
+    [
+        'Post' => 'listUnread',
+    ],
+    //non-cacheable actions
+    [
+        'Post' => 'listUnread',
+    ]
+);
 
 
 /**********************************

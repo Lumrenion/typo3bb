@@ -8,7 +8,10 @@
 
         <h2><f:translate key="plugin.statistics.infoCenter.headline.label" /></h2>
 
-        <h3><i class="fa fa-comments-o fa-fw"></i> <f:translate key="plugin.statistics.infoCenter.latestPosts.headline.label" /></h3>
+        <h3>
+            <i class="fa fa-comments-o fa-fw"></i> <f:translate key="plugin.statistics.infoCenter.latestPosts.headline.label" />
+            (<f:link.page pageUid="{settings.pid.unreadPosts}"><f:translate key="plugin.statistics.infoCenter.latestPosts.unreadPostsLink" /></f:link.page>)
+        </h3>
         <f:for each="{latestPosts}" as="latestPost">
             <div class="row">
                 <div class="col-xs-8">

@@ -62,6 +62,7 @@ plugin.tx_typo3bb {
         pid {
             forum = {$plugin.tx_typo3bb.settings.pid.forum}
             profile = {$plugin.tx_typo3bb.settings.pid.profile}
+            unreadPosts = {$plugin.tx_typo3bb.settings.pid.unreadPosts}
 
             messages = {$plugin.tx_typo3bb.settings.pid.messages}
             statistics = {$plugin.tx_typo3bb.settings.pid.statistics}

@@ -18,6 +18,11 @@ if (!defined('TYPO3_MODE')) {
     'Statistics',
     'Statistics (Typo3BB)'
 );
+\TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerPlugin(
+    'LumIT.' . $_EXTKEY,
+    'Unread',
+    'List unread posts (Typo3BB)'
+);
 $pluginSignature = 'typo3bb_statistics';
 $TCA['tt_content']['types']['list']['subtypes_excludelist'][$pluginSignature] = 'layout,select_key,pages,recursive';
 $TCA['tt_content']['types']['list']['subtypes_addlist'][$pluginSignature] = 'pi_flexform';

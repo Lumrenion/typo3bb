@@ -3,7 +3,11 @@ $(function() {
     if (typeof typo3bb_emoticons === 'undefined') {
         typo3bb_emoticons = {};
     }
+    if (typeof typo3bb_tinymce_langKey === 'undefined') {
+        typo3bb_tinymce_langKey = 'en_GB';
+    }
     tinymce.init({
+        language: typo3bb_tinymce_langKey,
         selector: '.typo3bb-rte-editor',
         setup: function (editor) {
             editor.on('change', function () {

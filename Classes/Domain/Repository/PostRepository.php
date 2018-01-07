@@ -160,7 +160,7 @@ LEFT JOIN tx_typo3bb_domain_model_board as board ON (topic.board = board.uid)
         //APPEND WHERE CLAUSE
         $sqlQuery .= ' WHERE post.uid IS NOT NULL';
         if ($frontendUser->getLastReadPost() != null) {
-            $sqlQuery .= ' AND post.uid < "' . $frontendUser->getLastReadPost()->getUid() . '"';
+            $sqlQuery .= ' AND post.uid > "' . $frontendUser->getLastReadPost()->getUid() . '"';
         }
         if ($board != null) {
             if ($board instanceof Board) {

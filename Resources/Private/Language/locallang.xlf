@@ -265,6 +265,15 @@
                 <source>Read all</source>
             </trans-unit>
 
+            <trans-unit id="topic.list.head.topic">
+                <source>Title</source>
+            </trans-unit>
+            <trans-unit id="topic.list.head.counters">
+                <source>Info</source>
+            </trans-unit>
+            <trans-unit id="topic.list.head.latestPost">
+                <source>Latest post</source>
+            </trans-unit>
             <trans-unit id="topic.hasNew">
                 <source>New</source>
             </trans-unit>
@@ -457,6 +466,13 @@
                 <source>Move</source>
             </trans-unit>
 
+            <trans-unit id="post.listUnread.headline.label">
+                <source>Unread posts</source>
+            </trans-unit>
+            <trans-unit id="post.listUnread.none">
+                <source>There are currently no unread posts.</source>
+            </trans-unit>
+
             <trans-unit id="board.subboards.label">
                 <source>Subboards:</source>
             </trans-unit>
@@ -588,6 +604,9 @@
             </trans-unit>
             <trans-unit id="plugin.statistics.infoCenter.latestPosts.headline.label">
                 <source>Latest posts</source>
+            </trans-unit>
+            <trans-unit id="plugin.statistics.infoCenter.latestPosts.unreadPostsLink">
+                <source>show unread</source>
             </trans-unit>
             <trans-unit id="plugin.statistics.infoCenter.latestPosts.post">
                 <source><![CDATA[In <a href="%1s"><i>%2s</i></a> by <a href="%3s"><i>%4s</i></a>]]></source>

@@ -354,6 +354,18 @@
                 <target>Alles gelesen</target>
             </trans-unit>
 
+            <trans-unit id="topic.list.head.topic">
+                <source>Title</source>
+                <target>Titel</target>
+            </trans-unit>
+            <trans-unit id="topic.list.head.counters">
+                <source>Info</source>
+                <target>Info</target>
+            </trans-unit>
+            <trans-unit id="topic.list.head.latestPost">
+                <source>Latest post</source>
+                <target>Jüngster Beitrag</target>
+            </trans-unit>
             <trans-unit id="topic.hasNew">
                 <source>New</source>
                 <target>Neu</target>
@@ -607,6 +619,15 @@
                 <target>Verschieben</target>
             </trans-unit>
 
+            <trans-unit id="post.listUnread.headline.label">
+                <source>Unread posts</source>
+                <target>Ungelesene Beiträge</target>
+            </trans-unit>
+            <trans-unit id="post.listUnread.none">
+                <source>There are currently no unread posts.</source>
+                <target>Derzeit sind keine ungelesenen Beiträge vorhanden.</target>
+            </trans-unit>
+
             <trans-unit id="board.subboards.label">
                 <source>Subboards:</source>
                 <target>Unter-Boards:</target>
@@ -778,6 +799,10 @@
             <trans-unit id="plugin.statistics.infoCenter.latestPosts.headline.label">
                 <source>Latest posts</source>
                 <target>Jüngste Beiträge</target>
+            </trans-unit>
+            <trans-unit id="plugin.statistics.infoCenter.latestPosts.unreadPostsLink">
+                <source>show unread</source>
+                <target>zeige ungelesene</target>
             </trans-unit>
             <trans-unit id="plugin.statistics.infoCenter.latestPosts.post">
                 <source><![CDATA[In <a href="%1s"><i>%2s</i></a> by <a href="%3s"><i>%4s</i></a>]]></source>

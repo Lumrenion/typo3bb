@@ -57,6 +57,11 @@
 
 .forum-board-topic {
   border-bottom: 1px solid #CCCCCC; }
+  .forum-board-topic.forum-board-topic-head {
+    text-align: center;
+    font-weight: bold; }
+    .forum-board-topic.forum-board-topic-head .forum-board-topic-title, .forum-board-topic.forum-board-topic-head .forum-board-topic-counters, .forum-board-topic.forum-board-topic-head .forum-board-topic-latest-post {
+      padding-bottom: 10px; }
   .forum-board-topic:last-child {
     border-bottom: none; }
   .forum-board-topic .forum-board-topic-title {

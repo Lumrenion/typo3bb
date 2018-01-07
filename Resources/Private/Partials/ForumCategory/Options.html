@@ -5,7 +5,7 @@
         <div class="clearfix"></div>
         <div class="pull-right">
             <tbb:hasAccess key="Board.markAsRead" object="{forumCategory}">
-                <f:link.action action="markAsRead" controller="Board" arguments="{all: 1}" class="btn btn-default">
+                <f:link.action pageUid="{settings.pid.forum}" action="markAsRead" controller="Board" arguments="{all: 1}" class="btn btn-default">
                     <f:translate key="forumCategory.options.markAsRead" />
                 </f:link.action>
             </tbb:hasAccess>

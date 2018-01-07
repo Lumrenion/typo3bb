@@ -35,6 +35,7 @@ use TYPO3\CMS\Core\Cache\CacheManager;
 
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
+use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Mvc\View\NotFoundView;
 use TYPO3\CMS\Extbase\Mvc\Web\Response;
@@ -74,7 +75,15 @@ abstract class AbstractController extends ActionController {
         $this->frontendUser = FrontendUserUtility::getCurrentUser();
 
         if ($this->response instanceof Response) {
-            $this->response->addAdditionalHeaderData('<script>var typo3bb_emoticons = ' . json_encode(RteUtility::prepareSmilies($this->settings['emoticonPath'])) . '</script>');
+            $tinymceLangKey = $this->configurationManager->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT)['config.']['tinymceLangKey'];
+            if (empty($tinymceLangKey)) {
+                $tinymceLangKey = 'en_GB';
+            }
+
+            $this->response->addAdditionalHeaderData('<script>'
+                . 'var typo3bb_emoticons = ' . json_encode(RteUtility::prepareSmilies($this->settings['emoticonPath'])) . ';'
+                . 'var typo3bb_tinymce_langKey = "' . $tinymceLangKey . '";'
+                . '</script>');
         }
     }
     

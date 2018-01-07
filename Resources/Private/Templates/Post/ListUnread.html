@@ -1,0 +1,89 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en"
+      xmlns:f="http://typo3.org/ns/TYPO3/Fluid/ViewHelpers"
+      xmlns:tbb="http://typo3.org/ns/LumIT/Typo3bb/ViewHelpers"
+     data-namespace-typo3-fluid="true">
+
+<f:layout name="Default" />
+
+<f:section name="main">
+
+    <h1><f:translate key="post.listUnread.headline.label" /></h1>
+
+        <f:if condition="{posts -> f:count()}">
+            <f:then>
+                <f:widget.paginate objects="{posts}" as="paginatedPosts" configuration="{itemsPerPage: 20, insertAbove: 1, insertBelow: 1, maximumNumberOfLinks: 10}">
+                    <div class="forum-board-topics">
+                        <div class="forum-board-topic forum-board-topic-head">
+                            <div class="row row-eq-height">
+                                <div class="col-xs-8 col-md-7 forum-board-topic-title">
+                                    <f:translate key="topic.list.head.topic" />
+                                </div>
+                                <div class="hidden-xs hidden-sm col-md-2 forum-board-topic-counters">
+                                    <f:translate key="topic.list.head.counters" />
+                                </div>
+                                <div class="col-xs-4 forum-board-topic-latest-post">
+                                    <f:translate key="topic.list.head.latestPost" />
+                                </div>
+                            </div>
+                        </div>
+                        <f:for each="{paginatedPosts}" as="post">
+                            <f:if condition="{post}">
+
+                                <div class="forum-board-topic">
+                                    <div class="row row-eq-height">
+                                        <div class="col-xs-8 col-md-7 forum-board-topic-title">
+                                            <div class="clearfix">
+                                                <f:link.action pageUid="{settings.pid.forum}" action="show" controller="Topic" arguments="{topic: post.topic}">{post.topic.title}</f:link.action>
+                                                <f:link.action pageUid="{settings.pid.forum}" action="showNewPost" controller="Topic" arguments="{topic: post.topic}"><span class="label label-primary"><f:translate key="topic.hasNew" />&nbsp;<i class="fa fa-arrow-circle-right"></i></span></f:link.action>
+                                                <div class="pull-right">
+                                                    <f:if condition="{post.topic.sticky}"><span class="glyphicon glyphicon-pushpin"></span></f:if>
+                                                    <f:if condition="{post.topic.closed}"><span class="glyphicon glyphicon-lock"></span></f:if>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <small>
+                                                    <f:translate key="topic.author.label" /> <f:if condition="{post.topic.author}"><f:then><f:link.action action="show" controller="FrontendUser" extensionName="IglarpTemplate" pluginName="User-Profile" pageUid="{settings.pid.profile}" arguments="{user: post.topic.author}">{post.topic.authorName}</f:link.action></f:then><f:else>{post.topic.authorName}</f:else></f:if>
+                                                </small>
+                                            </div>
+                                        </div>
+                                        <div class="hidden-xs hidden-sm col-md-2 forum-board-topic-counters">
+                                            <span class="topic-posts-count-number">{post.topic.postsCount}</span>
+                                            <span class="topic-posts-count-label"><f:translate key="topic.postsCount.label" /></span>
+                                        </div>
+                                        <div class="col-xs-4 forum-board-topic-latest-post">
+                                            <small>
+                                                <f:format.date format="d.m.Y, H:i">{post.topic.latestPost.crdate}</f:format.date><br>
+                                                <f:translate key="topic.latestPost.author.label" />&nbsp;<f:if condition="{post.topic.latestPost.authorName}">
+                                                <f:then><f:link.action action="show" controller="FrontendUser" extensionName="IglarpTemplate" pluginName="User-Profile" arguments="{user: post.topic.latestPost.author}" pageUid="{settings.pid.profile}">{post.topic.latestPost.authorName}</f:link.action></f:then>
+                                                <f:else>{post.topic.latestPost.authorName}</f:else>
+                                            </f:if>
+                                            </small>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </f:if>
+
+                        </f:for>
+                    </div>
+                </f:widget.paginate>
+
+                <div class="clearfix"></div>
+                <div class="pull-right">
+                    <tbb:hasAccess key="Board.markAsRead" object="{forumCategory}">
+                        <f:link.action pageUid="{settings.pid.forum}" action="markAsRead" controller="Board" arguments="{all: 1}" class="btn btn-default">
+                            <f:translate key="forumCategory.options.markAsRead" />
+                        </f:link.action>
+                    </tbb:hasAccess>
+                </div>
+                <div class="clearfix"></div>
+            </f:then>
+            <f:else>
+                <p>
+                    <f:translate key="post.listUnread.none" />
+                </p>
+            </f:else>
+        </f:if>
+    </div>
+</f:section>
+</html>

@@ -43,6 +43,8 @@ plugin.tx_typo3bb {
             messages =
             # cat=plugin.tx_typo3bb/pages/d; type=int+; label=Page id where the Statistics plugin is inserted
             statistics =
+            # cat=plugin.tx_typo3bb/pages/e; type=int+; label=Page id where the unread posts plugin is inserted
+            unreadPosts =
         }
         email {
             # cat=plugin.tx_typo3bb/mail/a; type=string; label=The email address which will send emails sent by the forum

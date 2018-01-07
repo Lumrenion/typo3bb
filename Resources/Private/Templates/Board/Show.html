@@ -15,9 +15,22 @@
             </div>
         </f:if>
 
-        <div class="forum-board-topics">
-            <f:widget.paginate objects="{v:iterator.sort(subject: '{v:iterator.sort(subject: board.topics, sortBy: \'latestPostCrdate\', order: \'ASC\', sortFlags: \'SORT_REGULAR\')}', sortBy: 'sticky', order: 'DESC', sortFlags: 'SORT_REGULAR')}"
-                               as="paginatedTopics" configuration="{itemsPerPage: 20, insertAbove: 1, insertBelow: 1, maximumNumberOfLinks: 10}">
+        <f:widget.paginate objects="{v:iterator.sort(subject: '{v:iterator.sort(subject: board.topics, sortBy: \'latestPostCrdate\', order: \'ASC\', sortFlags: \'SORT_REGULAR\')}', sortBy: 'sticky', order: 'DESC', sortFlags: 'SORT_REGULAR')}"
+                           as="paginatedTopics" configuration="{itemsPerPage: 20, insertAbove: 1, insertBelow: 1, maximumNumberOfLinks: 10}">
+            <div class="forum-board-topics">
+                <div class="forum-board-topic forum-board-topic-head">
+                    <div class="row row-eq-height">
+                        <div class="col-xs-8 col-md-7 forum-board-topic-title">
+                            <f:translate key="topic.list.head.topic" />
+                        </div>
+                        <div class="hidden-xs hidden-sm col-md-2 forum-board-topic-counters">
+                            <f:translate key="topic.list.head.counters" />
+                        </div>
+                        <div class="col-xs-4 forum-board-topic-latest-post">
+                            <f:translate key="topic.list.head.latestPost" />
+                        </div>
+                    </div>
+                </div>
                 <f:for each="{paginatedTopics}" as="topic">
                     <f:if condition="{topic}">
 
@@ -44,9 +57,6 @@
                                 </div>
                                 <div class="col-xs-4 forum-board-topic-latest-post">
                                     <small>
-                                        <f:link.action action="show" controller="Topic" arguments="{topic: topic, post: topic.latestPost}" section="post-{topic.latestPost.uid}">
-                                            {topic.title}
-                                        </f:link.action><br>
                                         <f:format.date format="d.m.Y, H:i">{topic.latestPost.crdate}</f:format.date><br>
                                         <f:translate key="topic.latestPost.author.label" />&nbsp;<f:if condition="{topic.latestPost.authorName}">
                                             <f:then><f:link.action action="show" controller="FrontendUser" extensionName="IglarpTemplate" pluginName="User-Profile" arguments="{user: topic.latestPost.author}" pageUid="{settings.pid.profile}">{topic.latestPost.authorName}</f:link.action></f:then>
@@ -59,11 +69,11 @@
 
                     </f:if>
                 </f:for>
-            </f:widget.paginate>
-
-            <div class="forum-board-actions">
-                <f:render partial="Board/Options" section="Content" arguments="{_all}" />
             </div>
+        </f:widget.paginate>
+
+        <div class="forum-board-actions">
+            <f:render partial="Board/Options" section="Content" arguments="{_all}" />
         </div>
     </f:section>
 </div>

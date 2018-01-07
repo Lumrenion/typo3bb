@@ -30,6 +30,7 @@ use LumIT\Typo3bb\Domain\Factory\PostFactory;
 
 use LumIT\Typo3bb\Domain\Model\Post;
 use LumIT\Typo3bb\Domain\Model\Topic;
+use LumIT\Typo3bb\Exception\AccessValidationException;
 use LumIT\Typo3bb\Exception\ActionNotAllowedException;
 use LumIT\Typo3bb\Utility\CreationUtility;
 use LumIT\Typo3bb\Utility\RteUtility;
@@ -211,5 +212,18 @@ class PostController extends AbstractController
 
         //TODO cache
         $this->redirect('show', 'Topic', null, ['topic' => $destination]);
+    }
+
+    /**
+     * Lists unread posts.
+     */
+    public function listUnreadAction() {
+        if ($this->frontendUser === null) {
+            throw new AccessValidationException(LocalizationUtility::translate('exception.accessValidation', 'typo3bb'));
+        }
+        $unreadPosts = $this->postRepository->findUnread($this->frontendUser);
+        $this->view->assignMultiple([
+            'posts' => $unreadPosts
+        ]);
     }
 }
