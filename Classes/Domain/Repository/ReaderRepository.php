@@ -63,18 +63,6 @@ class ReaderRepository extends AbstractRepository  {
     }
 
     /**
-     * @param \LumIT\Typo3bb\Domain\Model\Board         $board
-     * @param \LumIT\Typo3bb\Domain\Model\FrontendUser  $frontendUser
-     */
-    public function getBoardUnread($board, $frontendUser) {
-        //TODO this should return the MIN(uid) among all topics where the uid > $frontendUser->getLastSeenPost() and uid nicht in Readers-Tabelle, nur für das gewähle Board
-    }
-
-    public function getUnread($frontendUser) {
-        //TODO this should return the MIN(uid) among all topics where the uid > $frontendUser->getLastSeenPost() and uid nicht in Readers-Tabelle
-    }
-
-    /**
      * @param \LumIT\Typo3bb\Domain\Model\Reader $reader
      */
     public function add($reader) {

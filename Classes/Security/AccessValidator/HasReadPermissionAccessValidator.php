@@ -5,6 +5,7 @@ use LumIT\Typo3bb\Domain\Model\Post;
 use LumIT\Typo3bb\Domain\Model\Topic;
 
 use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
+use TYPO3\CMS\Extbase\Persistence\Generic\LazyLoadingProxy;
 
 /***************************************************************
  *
@@ -39,6 +40,9 @@ class HasReadPermissionAccessValidator extends AbstractAccessValidator{
      * @throws IllegalObjectTypeException
      */
     public function validate($objectToValidate) {
+        if ($objectToValidate instanceof LazyLoadingProxy) {
+            $objectToValidate = $objectToValidate->_loadRealInstance();
+        }
         if($objectToValidate instanceof Board) {
             return $this->validateBoard($objectToValidate);
         } elseif($objectToValidate instanceof Topic) {

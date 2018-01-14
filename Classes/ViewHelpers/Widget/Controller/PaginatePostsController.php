@@ -50,7 +50,7 @@ class PaginatePostsController extends PaginateBaseController {
         if (!empty($this->configuration['currentPost'])) {
             $itemsPerPage = (int)$this->configuration['itemsPerPage'];
             $positionOfPost = $this->objects->getPosition($this->configuration['currentPost']);
-            $this->currentPage = (int)(floor($positionOfPost / $itemsPerPage)) + 1;
+            $this->currentPage = (int)(ceil($positionOfPost / $itemsPerPage));
         }
     }
 
@@ -58,6 +58,9 @@ class PaginatePostsController extends PaginateBaseController {
      * @param $modifiedObjects
      */
     public function processModifiedObjects($modifiedObjects) {
+        if (empty($modifiedObjects)) {
+            return;
+        }
         if($GLOBALS['TSFE']->loginUser) {
             $lastNotNullIndex = 0;
             foreach ($modifiedObjects as $index => $modifiedObject) {

@@ -34,7 +34,7 @@ $(function() {
         ],
         smileys: typo3bb_emoticons,
 
-        valid_elements : "@[style|class|id|title],a[target|ping|media|href|hreflang|type|rel],blockquote[cite],big,br,code,dd,div,dl,dt,-em/i,footer,-h1,-h2,-h3,-h4,-h5,-h6,hr,img[alt=|src|ismap|usemap|width|height],li[value],mark,ol[reversed|start],-p,-pre,q[cite],small,-span,-strong/b,-sub,-sup,table,tbody,td[colspan|rowspan|headers],tfoot,th[colspan|rowspan|headers|scope],thead,tr,u,ul,",
+        valid_elements : "@[style|class|id|title],a[target|ping|media|href|hreflang|type|rel],blockquote[cite],big,br,code,dd,div,dl,dt,-em/i,footer,-h1,-h2,-h3,-h4,-h5,-h6,hr,img[alt=|src|ismap|usemap|width|height],li[value],mark,ol[reversed|start],-p,-pre,q[cite],small,-span,-strong/b,-sub,-sup,table,tbody,td[colspan|rowspan|headers],tfoot,th[colspan|rowspan|headers|scope],thead,tr,u,ul,s,",
         formats: {
             h1: {block: 'span', classes: 'h1'},
             h2: {block: 'span', classes: 'h2'},

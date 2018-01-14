@@ -147,7 +147,6 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser
 
     /**
      * @var \LumIT\Typo3bb\Domain\Model\Post
-     * @lazy
      */
     protected $lastReadPost = null;
 

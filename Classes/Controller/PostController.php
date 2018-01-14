@@ -106,7 +106,7 @@ class PostController extends AbstractController
         $this->signalSlotDispatcher->dispatch(Post::class, 'afterCreation', ['post' => $newPost, 'controllerContext' => $this->controllerContext]);
 
         //TODO cache
-        $this->redirect('show', 'Topic', null, ['topic' => $newPost->getTopic()]);
+        $this->redirect('showNewPost', 'Topic', null, ['topic' => $newPost->getTopic()]);
     }
     
     /**

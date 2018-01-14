@@ -159,3 +159,8 @@ if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('sf_register'))
 $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][\TYPO3\CMS\Extbase\Persistence\Generic\Storage\Typo3DbBackend::class] = [
     'className' => \LumIT\Typo3bb\Xclass\Extbase\Persistence\Generic\Storage\Typo3DbBackend::class,
 ];
+
+// extend ke_search for supporting andStacks in gr_list
+$GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][\tx_kesearch_db::class] = [
+    'className' => \LumIT\Typo3bb\Xclass\KeSearch\DbLib::class
+];

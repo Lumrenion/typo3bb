@@ -3,6 +3,7 @@ namespace LumIT\Typo3bb\Security\AccessValidator;
 
 use LumIT\Typo3bb\Domain\Model\Topic;
 use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
+use TYPO3\CMS\Extbase\Persistence\Generic\LazyLoadingProxy;
 
 /***************************************************************
  *
@@ -37,6 +38,9 @@ class TopicHasPollAccessValidator extends AbstractAccessValidator {
      * @throws IllegalObjectTypeException
      */
     public function validate($objectToValidate) {
+        if ($objectToValidate instanceof LazyLoadingProxy) {
+            $objectToValidate = $objectToValidate->_loadRealInstance();
+        }
         if($objectToValidate instanceof Topic) {
             return $objectToValidate->getPoll() != null;
         } else {

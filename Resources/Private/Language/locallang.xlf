@@ -567,7 +567,7 @@
             </trans-unit>
 
             <trans-unit id="emailNotification.salutation">
-                <source>Dear forum user,</source>
+                <source>Dear ###receiver.displayName###,</source>
             </trans-unit>
             <trans-unit id="emailNotification.farwell">
                 <source><![CDATA[Sincerely,<br>%1s]]></source>

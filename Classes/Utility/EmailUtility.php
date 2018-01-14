@@ -30,24 +30,28 @@ use TYPO3\CMS\Core\Mail\MailMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
+use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 
 
 /**
  * EmailUtility
  */
-class EmailUtility {
+class EmailUtility
+{
 
     /**
+     * Returns a MailMessage with the sender set from typoscript settings.
+     *
      * @return MailMessage
      */
-    public static function getMailMessage() {
+    public static function getMailMessage()
+    {
         $settings = PluginUtility::_getPluginSettings();
         /** @var MailMessage $mailMessage */
         $mailMessage = self::_getObjectManager()->get(MailMessage::class);
 
-        $mailMessage->addTo($settings['email']['fromEmail'], $settings['email']['fromName']);
-        $mailMessage->addFrom(
+        $mailMessage->setFrom(
             $settings['email']['fromEmail'],
             $settings['email']['fromName']
         );
@@ -56,13 +60,16 @@ class EmailUtility {
     }
 
     /**
+     * Returns the rendered email body by template name. The Template must be located in templateRootPath/Email/$templateName
+     *
      * @param String $templateName
      * @param array $variablesToAssign
      * @param \TYPO3\CMS\Extbase\Mvc\Controller\ControllerContext $controllerContext
      * @param \TYPO3\CMS\Extbase\Configuration\ConfigurationManager $configurationManager
      * @return String
      */
-    public static function getEmailBody($templateName, array $variablesToAssign, $controllerContext) {
+    public static function getEmailBody($templateName, array $variablesToAssign, $controllerContext)
+    {
         /** @var StandaloneView $emailView */
         $emailView = GeneralUtility::makeInstance(StandaloneView::class);
         $emailView->setControllerContext($controllerContext);
@@ -78,9 +85,29 @@ class EmailUtility {
     }
 
     /**
+     * The same email template is expected to differ in only some variables for each receiver.
+     * The more complex a fluid template is, the more cost intensive it is to render it for each user anew.
+     * Therefor this method replaces standard markers.
+     * In your template, use markers just like you would use fluid variables, e.g. ###receiver.displayName###
+     * The correct property will be inserted by the property path, so $variables = ['receiver' => FrontendUser]
+     *
+     * @param string $emailBody
+     * @param mixed $variables
+     *
+     * @return string
+     */
+    public static function substituteMarkers($emailBody, $variables)
+    {
+        return preg_replace_callback('/###([A-Z0-9_\.]*)###/is', function($match) use ($variables) {
+            return ObjectAccess::getPropertyPath($variables, $match[1]);
+        }, $emailBody);
+    }
+
+    /**
      * @return ObjectManager
      */
-    protected static function _getObjectManager() {
+    protected static function _getObjectManager()
+    {
         return GeneralUtility::makeInstance(ObjectManager::class);
     }
 }

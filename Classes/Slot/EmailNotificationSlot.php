@@ -27,6 +27,7 @@ namespace LumIT\Typo3bb\Slot;
      ***************************************************************/
 use LumIT\Typo3bb\Utility\EmailUtility;
 use LumIT\Typo3bb\Utility\PluginUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
@@ -43,24 +44,23 @@ class EmailNotificationSlot implements \TYPO3\CMS\Core\SingletonInterface {
      * @param \LumIT\Typo3bb\Domain\Model\Message $message
      */
     public function onMessageCreation($message, $controllerContext) {
-        $mailMessage = EmailUtility::getMailMessage();
+        $rawEmailBody = EmailUtility::getEmailBody(
+            'OnMessageSent',
+            ['message' => $message],
+            $controllerContext
+        );
 
         /** @var \LumIT\Typo3bb\Domain\Model\MessageParticipant $messageReceiver */
         foreach ($message->getReceivers() as $messageReceiver) {
+            $mailMessage = EmailUtility::getMailMessage();
+            $mailMessage->setSubject(LocalizationUtility::translate('emailNotification.onMessageSent.subject', 'typo3bb'));
             $receiverUser = $messageReceiver->getUser();
-            $mailMessage->addBcc($receiverUser->getEmail(), $receiverUser->getDisplayName());
-        }
-        $mailMessage->setSubject(LocalizationUtility::translate('emailNotification.onMessageSent.subject', 'typo3bb'));
-        $mailMessage->setBody(
-            EmailUtility::getEmailBody(
-                'OnMessageSent',
-                ['message' => $message],
-                $controllerContext
-            ), 'text/html'
-        );
-
-        if (false === (bool)PluginUtility::_getPluginSettings()['debug']) {
-            $mailMessage->send();
+            $mailMessage->setTo($receiverUser->getEmail(), $receiverUser->getDisplayName());
+            $emailBody = EmailUtility::substituteMarkers($rawEmailBody, ['receiver' => $receiverUser]);
+            $mailMessage->setBody($emailBody, 'text/html');
+            if (false === (bool)PluginUtility::_getPluginSettings()['debug']) {
+                $mailMessage->send();
+            }
         }
     }
 
@@ -71,27 +71,25 @@ class EmailNotificationSlot implements \TYPO3\CMS\Core\SingletonInterface {
      * @param \TYPO3\CMS\Extbase\Mvc\Controller\ControllerContext $controllerContext
      */
     public function onTopicCreated($topic, $controllerContext) {
-        $mailMessage = EmailUtility::getMailMessage();
-        /** @var \LumIT\Typo3bb\Domain\Model\FrontendUser $boardSubscriber */
-        foreach ($this->getBoardSubscribers($topic->getBoard()) as $boardSubscriber) {
-            if ($boardSubscriber != $topic->getAuthor()) {
-                $mailMessage->addBcc($boardSubscriber->getEmail(), $boardSubscriber->getDisplayName());
-            }
-        }
-        if(!count($mailMessage->getBcc())) {
-            return;
-        }
-        $mailMessage->setSubject(LocalizationUtility::translate('emailNotification.onTopicCreated.subject', 'typo3bb'));
-        $mailMessage->setBody(
-            EmailUtility::getEmailBody(
-                'OnTopicCreated',
-                ['topic' => $topic],
-                $controllerContext
-            ), 'text/html'
+        $rawEmailBody = EmailUtility::getEmailBody(
+            'OnTopicCreated',
+            ['topic' => $topic],
+            $controllerContext
         );
 
-        if (false === (bool)PluginUtility::_getPluginSettings()['debug']) {
-            $mailMessage->send();
+        /** @var \LumIT\Typo3bb\Domain\Model\FrontendUser $boardSubscriber */
+        foreach ($this->getBoardSubscribers($topic->getBoard()) as $boardSubscriber) {
+            // TODO check read permissions
+            if ($boardSubscriber !== $topic->getAuthor() && GeneralUtility::validEmail($boardSubscriber->getEmail())) {
+                $mailMessage = EmailUtility::getMailMessage();
+                $mailMessage->setSubject(LocalizationUtility::translate('emailNotification.onTopicCreated.subject', 'typo3bb'));
+                $mailMessage->setTo($boardSubscriber->getEmail(), $boardSubscriber->getDisplayName());
+                $emailBody = EmailUtility::substituteMarkers($rawEmailBody, ['receiver' => $boardSubscriber]);
+                $mailMessage->setBody($emailBody, 'text/html');
+                if (false === (bool)PluginUtility::_getPluginSettings()['debug']) {
+                    $mailMessage->send();
+                }
+            }
         }
     }
 
@@ -102,31 +100,28 @@ class EmailNotificationSlot implements \TYPO3\CMS\Core\SingletonInterface {
      * @param \TYPO3\CMS\Extbase\Mvc\Controller\ControllerContext $controllerContext
      */
     public function onPostCreated($post, $controllerContext) {
-        $mailMessage = EmailUtility::getMailMessage();
+        $rawEmailBody = EmailUtility::getEmailBody(
+            'OnPostCreated',
+            ['post' => $post],
+            $controllerContext
+        );
+
         $subscribers = $this->getBoardSubscribers($post->getTopic()->getBoard());
-        $subscribers = array_unique(array_merge($subscribers, $post->getTopic()->getSubscribers()));
+        $subscribers = array_unique(array_merge($subscribers, $post->getTopic()->getSubscribers()->toArray()));
 
         /** @var \LumIT\Typo3bb\Domain\Model\FrontendUser $topicSubscriber */
         foreach ($subscribers as $topicSubscriber) {
-            if ($topicSubscriber->isMessageNotification() && $topicSubscriber != $post->getAuthor()) {
-                $mailMessage->addBcc($topicSubscriber->getEmail(), $topicSubscriber->getDisplayName());
+            // TODO check read permissions
+            if ($topicSubscriber !== $post->getAuthor() && GeneralUtility::validEmail($topicSubscriber->getEmail())) {
+                $mailMessage = EmailUtility::getMailMessage();
+                $mailMessage->setSubject(LocalizationUtility::translate('emailNotification.onPostCreated.subject', 'typo3bb'));
+                $mailMessage->setTo($topicSubscriber->getEmail(), $topicSubscriber->getDisplayName());
+                $emailBody = EmailUtility::substituteMarkers($rawEmailBody, ['receiver' => $topicSubscriber]);
+                $mailMessage->setBody($emailBody, 'text/html');
+                if (false === (bool)PluginUtility::_getPluginSettings()['debug']) {
+                    $mailMessage->send();
+                }
             }
-        }
-        if (!count($mailMessage->getBcc())) {
-            return;
-        }
-
-        $mailMessage->setSubject(LocalizationUtility::translate('emailNotification.onPostCreated.subject', 'typo3bb'));
-        $mailMessage->setBody(
-            EmailUtility::getEmailBody(
-                'OnPostCreated',
-                ['post' => $post],
-                $controllerContext
-            ), 'text/html'
-        );
-
-        if (false === (bool)PluginUtility::_getPluginSettings()['debug']) {
-            $mailMessage->send();
         }
     }
 

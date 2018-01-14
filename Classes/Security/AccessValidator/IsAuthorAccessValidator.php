@@ -4,6 +4,7 @@ namespace LumIT\Typo3bb\Security\AccessValidator;
 use LumIT\Typo3bb\Domain\Model\Post;
 use LumIT\Typo3bb\Domain\Model\Topic;
 use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
+use TYPO3\CMS\Extbase\Persistence\Generic\LazyLoadingProxy;
 
 /***************************************************************
  *
@@ -38,6 +39,9 @@ class IsAuthorAccessValidator extends AbstractAccessValidator{
      * @throws IllegalObjectTypeException
      */
     public function validate($objectToValidate) {
+        if ($objectToValidate instanceof LazyLoadingProxy) {
+            $objectToValidate = $objectToValidate->_loadRealInstance();
+        }
         if(!$objectToValidate instanceof Topic && !$objectToValidate instanceof Post) {
             throw new IllegalObjectTypeException('Object to validate must be of type ' . Topic::class . ' or ' . Post::class . '!');
         }

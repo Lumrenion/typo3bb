@@ -20,13 +20,13 @@
             <div class="forum-board-topics">
                 <div class="forum-board-topic forum-board-topic-head">
                     <div class="row row-eq-height">
-                        <div class="col-xs-8 col-md-7 forum-board-topic-title">
+                        <div class="col-xs-7 forum-board-topic-title">
                             <f:translate key="topic.list.head.topic" />
                         </div>
                         <div class="hidden-xs hidden-sm col-md-2 forum-board-topic-counters">
                             <f:translate key="topic.list.head.counters" />
                         </div>
-                        <div class="col-xs-4 forum-board-topic-latest-post">
+                        <div class="col-xs-5 col-md-3 forum-board-topic-latest-post">
                             <f:translate key="topic.list.head.latestPost" />
                         </div>
                     </div>
@@ -36,14 +36,14 @@
 
                         <div class="forum-board-topic">
                             <div class="row row-eq-height">
-                                <div class="col-xs-8 col-md-7 forum-board-topic-title">
+                                <div class="col-xs-7 forum-board-topic-title">
                                     <div class="clearfix">
-                                        <f:link.action action="show" controller="Topic" arguments="{topic: topic}">{topic.title}</f:link.action>
-                                        <f:if condition="{topic.read}"><f:else>&nbsp;<f:link.action action="showNewPost" controller="Topic" arguments="{topic: topic}"><span class="label label-primary"><f:translate key="topic.hasNew" />&nbsp;<i class="fa fa-arrow-circle-right"></i></span></f:link.action></f:else></f:if>
                                         <div class="pull-right">
                                             <f:if condition="{topic.sticky}"><span class="glyphicon glyphicon-pushpin"></span></f:if>
                                             <f:if condition="{topic.closed}"><span class="glyphicon glyphicon-lock"></span></f:if>
                                         </div>
+                                        <f:link.action action="show" controller="Topic" arguments="{topic: topic}">{topic.title}</f:link.action>
+                                        <f:if condition="{topic.read}"><f:else>&nbsp;<f:link.action action="showNewPost" controller="Topic" arguments="{topic: topic}"><span class="label label-primary"><f:translate key="topic.hasNew" />&nbsp;<i class="fa fa-arrow-circle-right"></i></span></f:link.action></f:else></f:if>
                                     </div>
                                     <div>
                                         <small>
@@ -55,7 +55,7 @@
                                     <span class="topic-posts-count-number">{topic.postsCount}</span>
                                     <span class="topic-posts-count-label"><f:translate key="topic.postsCount.label" /></span>
                                 </div>
-                                <div class="col-xs-4 forum-board-topic-latest-post">
+                                <div class="col-xs-5 col-md-3 forum-board-topic-latest-post">
                                     <small>
                                         <f:format.date format="d.m.Y, H:i">{topic.latestPost.crdate}</f:format.date><br>
                                         <f:translate key="topic.latestPost.author.label" />&nbsp;<f:if condition="{topic.latestPost.authorName}">

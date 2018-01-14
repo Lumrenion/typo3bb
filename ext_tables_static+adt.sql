@@ -1,5 +1,6 @@
 DELIMITER //
 -- Method checks if a csv has any value in another csv. With | as separator in andHaystack, multiple csv can be AND stacked
+-- 1,2|3,4 == (1 OR 2) AND (3 OR 4)
 DROP FUNCTION IF EXISTS `findMultipleInAndSet` //
 CREATE FUNCTION `findMultipleInAndSet` (needles TEXT, andHaystack TEXT) RETURNS BOOLEAN
 DETERMINISTIC
@@ -7,6 +8,7 @@ DETERMINISTIC
     DECLARE singleStack TEXT DEFAULT NULL;
     DECLARE singleStackLen INT DEFAULT NULL;
     DECLARE result INT DEFAULT 0;
+    SET needles = REPLACE(needles, ',', '|');
     iterator:
     LOOP
       IF LENGTH(TRIM(andHaystack)) = 0 OR andHaystack IS NULL THEN LEAVE iterator; END IF;
@@ -22,7 +24,7 @@ DETERMINISTIC
 
     RETURN TRUE;
   END //
--- determines read permissions of a board recursively, separating each board by | and makes the string compatible with findMultipleInAndStack-Function
+-- determines read permissions of a board recursively, separating each board by | and makes the string compatible with findMultipleInAndSet-Function
 -- This is a procedure because functions don't allow recursion
 DROP PROCEDURE IF EXISTS getReadpermissionsRecursive //
 CREATE PROCEDURE getReadpermissionsRecursive(
@@ -59,7 +61,6 @@ DETERMINISTIC
   BEGIN
     DECLARE readPermissions TEXT DEFAULT NULL;
     SET readPermissions = getReadpermissionsRecursive(board);
-    SET usergroups = REPLACE(usergroups, ',', '|');
     RETURN findMultipleInAndSet(usergroups, readPermissions);
   END //
 DELIMITER ;

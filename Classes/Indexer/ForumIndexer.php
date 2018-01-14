@@ -58,7 +58,7 @@ class ForumIndexer {
 
             // Indexing each post and creating direct links would be the more accurate approach
             // but indexing every single post can take a lot of time, depending on how active a forum is
-            $fields = 'topic.uid, topic.title, GROUP_CONCAT( post.text SEPARATOR " ") as text, board.read_permissions, board.parent_board, board.tx_kesearch_index';
+            $fields = 'topic.uid, topic.title, GROUP_CONCAT( post.text SEPARATOR " ") as text, getReadpermissionsRecursive(board.uid) as recursiveReadPermissions, board.parent_board, board.tx_kesearch_index';
             $table = 'tx_typo3bb_domain_model_post post LEFT JOIN tx_typo3bb_domain_model_topic topic ON post.topic = topic.uid LEFT JOIN tx_typo3bb_domain_model_board board ON topic.board = board.uid';
             $where  = 'post.pid IN (' . $indexerConfig['sysfolder'] . ') AND post.deleted = 0 AND topic.hidden = 0 AND topic.deleted = 0';
             $groupBy = 'topic.uid';
@@ -89,20 +89,15 @@ class ForumIndexer {
                     // We need the read permissions recursively for each parent board
                     $parentBoardId = $record['parent_board'];
                     while ($parentBoardId != 0) {
-                        $parentBoard = $GLOBALS['TYPO3_DB']->exec_SELECTgetSingleRow('read_permissions, tx_kesearch_index, parent_board', 'tx_typo3bb_domain_model_board', 'uid = ' . $parentBoardId);
+                        $parentBoard = $GLOBALS['TYPO3_DB']->exec_SELECTgetSingleRow('tx_kesearch_index, parent_board', 'tx_typo3bb_domain_model_board', 'uid = ' . $parentBoardId);
                         if (empty($parentBoard)) {
                             break;
                         }
                         if (!$parentBoard['tx_kesearch_index']) {
                             continue 2;
                         }
-                        // TODO readpermissionsRecursive this approach is wrong.
-                        // Currently it is $board1 || $board2 || $parentBoard1 || $parentBoard2
-                        // But it should be ($board1 || $board2) && ($parentBoard1 || $parentBoard2)
-                        $record['read_permissions'] .= ',' . $parentBoard['read_permissions'];
                         $parentBoardId = $parentBoard['parent_board'];
                     }
-                    $record['read_permissions'] = implode(',', array_unique(array_filter(explode(',', $record['read_permissions']))));
                     $title = strip_tags($record['title']); //Category Title
                     $abstract = strip_tags($record['text']);
                     $content = strip_tags($record['text']);
@@ -114,9 +109,7 @@ class ForumIndexer {
                         'orig_uid' => $record['uid'],
                         'orig_pid' => $record['pid'],
                     );
-
-                    // add something to the title, just to identify the entries
-                    // in the frontend
+                    $readPermissionsAndStack = $record['recursiveReadPermissions'];
 
                     // ... and store the information in the index
                     $indexerObject->storeInIndex(
@@ -131,7 +124,7 @@ class ForumIndexer {
                         0, // language uid
                         0, // starttime
                         0, // endtime
-                        $record['read_permissions'], // fe_group
+                        $readPermissionsAndStack, // fe_group
                         false, // debug only?
                         $additionalFields // additionalFields
                     );

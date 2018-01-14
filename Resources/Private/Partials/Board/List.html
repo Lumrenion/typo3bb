@@ -17,7 +17,7 @@
                                     </f:else>
                                 </f:if>
                             </div>
-                            <div class="col-xs-7 col-md-6 board-list-board-title">
+                            <div class="col-xs-6 board-list-board-title">
                                 <span class="board-list-board-title-title"><f:link.action action="show" controller="Board" arguments="{board: board}"><f:format.raw>{board.title}</f:format.raw></f:link.action></span>
                                 <f:if condition="{board.description}">
                                     <span class="board-list-board-title-description"><small><f:format.raw>{board.description}</f:format.raw></small></span>
@@ -67,7 +67,7 @@
                                     </f:else>
                                 </f:if>
                             </div>
-                            <div class="col-xs-4 board-list-board-latest-post">
+                            <div class="col-xs-5 col-md-3 board-list-board-latest-post">
                                 <f:if condition="{board.redirect}"><f:else>
                                     <small>
                                         <f:if condition="{board.viewableLatestPost}">
