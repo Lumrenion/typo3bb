@@ -1,4 +1,5 @@
 <?php
+
 namespace LumIT\Typo3bb\Domain\Model;
 
 
@@ -27,10 +28,12 @@ namespace LumIT\Typo3bb\Domain\Model;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
+
 /**
  * Message
  */
-class MessageParticipant extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
+class MessageParticipant extends AbstractEntity
 {
 
     /**
@@ -69,7 +72,8 @@ class MessageParticipant extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * __construct
      */
-    public function __construct() {
+    public function __construct()
+    {
         //Do not remove the next line: It would break the functionality
         $this->initStorageObjects();
     }
@@ -82,56 +86,48 @@ class MessageParticipant extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @return void
      */
-    protected function initStorageObjects() {
+    protected function initStorageObjects()
+    {
 
     }
 
     /**
      * @return Message
      */
-    public function getSentMessage() {
+    public function getSentMessage()
+    {
         return $this->sentMessage;
     }
 
     /**
      * @param Message $sentMessage
      */
-    public function setSentMessage(Message $sentMessage) {
+    public function setSentMessage(Message $sentMessage)
+    {
         $this->sentMessage = $sentMessage;
     }
 
     /**
      * @return Message
      */
-    public function getReceivedMessage() {
+    public function getReceivedMessage()
+    {
         return $this->receivedMessage;
     }
 
     /**
      * @param Message $receivedMessage
      */
-    public function setReceivedMessage(Message $receivedMessage) {
+    public function setReceivedMessage(Message $receivedMessage)
+    {
         $this->receivedMessage = $receivedMessage;
-    }
-
-    /**
-     * @return \LumIT\Typo3bb\Domain\Model\FrontendUser
-     */
-    public function getUser() {
-        return $this->user;
-    }
-
-    /**
-     * @param \LumIT\Typo3bb\Domain\Model\FrontendUser $user
-     */
-    public function setUser(FrontendUser $user) {
-        $this->user = $user;
     }
 
     /**
      * @return string
      */
-    public function getUserName() {
+    public function getUserName()
+    {
         if (!is_null($this->getUser())) {
             return $this->getUser()->getDisplayName();
         }
@@ -141,43 +137,64 @@ class MessageParticipant extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * @param string $userName
      */
-    public function setUserName(string $userName) {
+    public function setUserName(string $userName)
+    {
         $this->userName = $userName;
     }
 
+    /**
+     * @return \LumIT\Typo3bb\Domain\Model\FrontendUser
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
+     * @param \LumIT\Typo3bb\Domain\Model\FrontendUser $user
+     */
+    public function setUser(FrontendUser $user)
+    {
+        $this->user = $user;
+    }
 
     /**
      * @return bool
      */
-    public function getViewed() {
+    public function getViewed()
+    {
         return $this->viewed;
     }
 
     /**
      * @return boolean
      */
-    public function isViewed() {
+    public function isViewed()
+    {
         return $this->viewed;
     }
 
     /**
      * @param boolean $viewed
      */
-    public function setViewed(bool $viewed) {
+    public function setViewed(bool $viewed)
+    {
         $this->viewed = $viewed;
     }
 
     /**
      * @return boolean
      */
-    public function isDeleted() {
+    public function isDeleted()
+    {
         return $this->deleted;
     }
 
     /**
      * @param boolean $deleted
      */
-    public function setDeleted(bool $deleted) {
+    public function setDeleted(bool $deleted)
+    {
         $this->deleted = $deleted;
     }
 

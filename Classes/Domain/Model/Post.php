@@ -1,4 +1,5 @@
 <?php
+
 namespace LumIT\Typo3bb\Domain\Model;
 
 
@@ -26,12 +27,13 @@ namespace LumIT\Typo3bb\Domain\Model;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
 /**
  * A post is always inside a topic and is user created.
  */
-class Post extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
+class Post extends AbstractEntity
 {
 
     /**
@@ -41,36 +43,36 @@ class Post extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * @validate NotEmpty
      */
     protected $text = '';
-    
+
     /**
      * The name of the author. Needed for anonymous posts
      *
      * @var string
      */
     protected $authorName = '';
-    
+
     /**
      * Creation date
      *
      * @var \DateTime
      */
     protected $crdate = null;
-    
+
     /**
      * Date of the last edit.
      *
      * @var \DateTime
      */
     protected $tstamp = null;
-    
+
     /**
      * Single Attachment to the post
      *
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\LumIT\Typo3bb\Domain\Model\Attachment>
-     * @cascade remove
+     * @TYPO3\CMS\Extbase\Annotation\ORM\Cascade("remove")
      */
     protected $attachments = null;
-    
+
     /**
      * The author of the post
      *
@@ -82,7 +84,6 @@ class Post extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * The parent topic
      * @var \LumIT\Typo3bb\Domain\Model\Topic
-     * @lazy
      */
     protected $topic = null;
 
@@ -106,7 +107,8 @@ class Post extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     protected $editorName = '';
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->initStorageObjects();
         $this->crdate = new \DateTime();
     }
@@ -119,10 +121,11 @@ class Post extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @return void
      */
-    protected function initStorageObjects() {
+    protected function initStorageObjects()
+    {
         $this->attachments = new ObjectStorage();
     }
-    
+
     /**
      * Returns the text
      *
@@ -132,7 +135,7 @@ class Post extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     {
         return $this->text;
     }
-    
+
     /**
      * Sets the text
      *
@@ -143,19 +146,20 @@ class Post extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     {
         $this->text = $text;
     }
-    
+
     /**
      * Returns the authorName
      *
      * @return string $authorName
      */
-    public function getAuthorName() {
+    public function getAuthorName()
+    {
         if (!is_null($this->getAuthor())) {
             return $this->getAuthor()->getDisplayName();
         }
         return $this->authorName;
     }
-    
+
     /**
      * Sets the authorName
      *
@@ -166,7 +170,38 @@ class Post extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     {
         $this->authorName = $authorName;
     }
-    
+
+    /**
+     * Returns the author
+     *
+     * @return \LumIT\Typo3bb\Domain\Model\FrontendUser $author
+     */
+    public function getAuthor()
+    {
+        return $this->author;
+    }
+
+    /**
+     * Sets the author
+     *
+     * @param \LumIT\Typo3bb\Domain\Model\FrontendUser $author
+     * @return void
+     */
+    public function setAuthor($author)
+    {
+        $this->author = $author;
+    }
+
+    /**
+     * Returns the true author name instead of the displayName, if it's available
+     *
+     * @return string
+     */
+    public function getTrueAuthorName()
+    {
+        return $this->authorName;
+    }
+
     /**
      * Returns the crdate
      *
@@ -176,7 +211,7 @@ class Post extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     {
         return $this->crdate;
     }
-    
+
     /**
      * Sets the crdate
      *
@@ -187,7 +222,7 @@ class Post extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     {
         $this->crdate = $crdate;
     }
-    
+
     /**
      * Returns the tstamp
      *
@@ -197,7 +232,7 @@ class Post extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     {
         return $this->tstamp;
     }
-    
+
     /**
      * Sets the tstamp
      *
@@ -208,7 +243,7 @@ class Post extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     {
         $this->tstamp = $tstamp;
     }
-    
+
     /**
      * Returns the attachments
      *
@@ -218,7 +253,7 @@ class Post extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     {
         return $this->attachments;
     }
-    
+
     /**
      * Sets the attachments
      *
@@ -233,50 +268,61 @@ class Post extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * @param \LumIT\Typo3bb\Domain\Model\Attachment $attachment
      */
-    public function addAttachment(Attachment $attachment) {
+    public function addAttachment(Attachment $attachment)
+    {
         $this->attachments->attach($attachment);
     }
 
     /**
      * @param \LumIT\Typo3bb\Domain\Model\Attachment $attachment
      */
-    public function removeAttachment(Attachment $attachment) {
+    public function removeAttachment(Attachment $attachment)
+    {
         $this->attachments->detach($attachment);
-    }
-    
-    /**
-     * Returns the author
-     *
-     * @return \LumIT\Typo3bb\Domain\Model\FrontendUser $author
-     */
-    public function getAuthor()
-    {
-        return $this->author;
-    }
-    
-    /**
-     * Sets the author
-     *
-     * @param \LumIT\Typo3bb\Domain\Model\FrontendUser $author
-     * @return void
-     */
-    public function setAuthor($author)
-    {
-        $this->author = $author;
     }
 
     /**
      * @return \LumIT\Typo3bb\Domain\Model\Topic
      */
-    public function getTopic() {
+    public function getTopic()
+    {
         return $this->topic;
     }
 
     /**
      * @param \LumIT\Typo3bb\Domain\Model\Topic $topic
      */
-    public function setTopic($topic) {
+    public function setTopic($topic)
+    {
         $this->topic = $topic;
+    }
+
+    /**
+     * @return array
+     */
+    public function getRootline()
+    {
+        $rootline = $this->topic->getRootline();
+        return $rootline;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEditorName()
+    {
+        if (!is_null($this->getEditor())) {
+            return $this->getEditor()->getDisplayName();
+        }
+        return $this->editorName;
+    }
+
+    /**
+     * @param string $editorName
+     */
+    public function setEditorName(string $editorName)
+    {
+        $this->editorName = $editorName;
     }
 
     /**
@@ -301,41 +347,18 @@ class Post extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     }
 
     /**
-     * @return array
-     */
-    public function getRootline() {
-        $rootline = $this->topic->getRootline();
-        return $rootline;
-    }
-
-    /**
-     * @return string
-     */
-    public function getEditorName() {
-        if (!is_null($this->getEditor())) {
-            return $this->getEditor()->getDisplayName();
-        }
-        return $this->editorName;
-    }
-
-    /**
-     * @param string $editorName
-     */
-    public function setEditorName(string $editorName) {
-        $this->editorName = $editorName;
-    }
-
-    /**
      * @return boolean
      */
-    public function isEdited() {
+    public function isEdited()
+    {
         return $this->edited;
     }
 
     /**
      * @param boolean $edited
      */
-    public function setEdited(bool $edited) {
+    public function setEdited(bool $edited)
+    {
         $this->edited = $edited;
     }
 }

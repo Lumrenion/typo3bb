@@ -1,20 +1,21 @@
 <?php
+
 namespace LumIT\Typo3bb\Controller;
 
 use TYPO3\CMS\Backend\Clipboard\Clipboard;
-use TYPO3\CMS\Core\FormProtection\FormProtectionFactory;
-use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
-use TYPO3\CMS\Core\Utility\HttpUtility;
-use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
 use TYPO3\CMS\Backend\Template\Components\ButtonBar;
+use TYPO3\CMS\Backend\Utility\BackendUtility as BackendUtilityCore;
 use TYPO3\CMS\Backend\View\BackendTemplateView;
+use TYPO3\CMS\Core\FormProtection\FormProtectionFactory;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Utility\HttpUtility;
 use TYPO3\CMS\Core\Utility\VersionNumberUtility;
-use \TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
+use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
-use TYPO3\CMS\Backend\Utility\BackendUtility as BackendUtilityCore;
+use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
 use TYPO3\CMS\Lang\LanguageService;
 
 class BackendController extends ActionController
@@ -60,7 +61,7 @@ class BackendController extends ActionController
      */
     public function initializeAction()
     {
-        $this->pageUid = (int)\TYPO3\CMS\Core\Utility\GeneralUtility::_GET('id');
+        $this->pageUid = (int)GeneralUtility::_GET('id');
         $this->pageInformation = BackendUtilityCore::readPageAccess($this->pageUid, '');
         parent::initializeAction();
     }
@@ -78,6 +79,39 @@ class BackendController extends ActionController
     public function newForumCategoryAction()
     {
         $this->redirectToCreateNewRecord('tx_typo3bb_domain_model_forumcategory');
+    }
+
+    /**
+     * Redirect to tceform creating a new record
+     *
+     * @param string $table table name
+     */
+    private function redirectToCreateNewRecord($table)
+    {
+        $pid = $this->pageUid;
+
+        $returnUrl = 'index.php?M=web_Typo3bbTxTypo3bbM1&id=' . $this->pageUid . $this->getToken();
+        $url = BackendUtilityCore::getModuleUrl('record_edit', [
+            'edit[' . $table . '][' . $pid . ']' => 'new',
+            'returnUrl' => $returnUrl
+        ]);
+        HttpUtility::redirect($url);
+    }
+
+    /**
+     * Get a CSRF token
+     *
+     * @param bool $tokenOnly Set it to TRUE to get only the token, otherwise including the &moduleToken= as prefix
+     * @return string
+     */
+    protected function getToken($tokenOnly = false)
+    {
+        $token = FormProtectionFactory::get()->generateToken('moduleCall', 'web_Typo3bbTxTypo3bbM1');
+        if ($tokenOnly) {
+            return $token;
+        } else {
+            return '&moduleToken=' . $token;
+        }
     }
 
     public function newBoardAction()
@@ -99,13 +133,16 @@ class BackendController extends ActionController
 
         $pageRenderer = $this->view->getModuleTemplate()->getPageRenderer();
         $pageRenderer->loadRequireJsModule('TYPO3/CMS/Backend/DateTimePicker');
-        if (\TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionNumberToInteger(TYPO3_version) >= 8006000) {
+        if (VersionNumberUtility::convertVersionNumberToInteger(TYPO3_version) >= 8006000) {
             $pageRenderer->loadRequireJsModule('TYPO3/CMS/Backend/ContextMenu');
         } else {
             $pageRenderer->loadRequireJsModule('TYPO3/CMS/Backend/ClickMenu');
         }
 //        $pageRenderer->loadRequireJsModule('TYPO3/CMS/Typo3bb/BackendModule');
-        $dateFormat = ($GLOBALS['TYPO3_CONF_VARS']['SYS']['USdateFormat'] ? ['MM-DD-YYYY', 'HH:mm MM-DD-YYYY'] : ['DD-MM-YYYY', 'HH:mm DD-MM-YYYY']);
+        $dateFormat = ($GLOBALS['TYPO3_CONF_VARS']['SYS']['USdateFormat'] ? [
+            'MM-DD-YYYY',
+            'HH:mm MM-DD-YYYY'
+        ] : ['DD-MM-YYYY', 'HH:mm DD-MM-YYYY']);
         $pageRenderer->addInlineSetting('DateTimePicker', 'DateFormat', $dateFormat);
         $pageRenderer->addCssFile(ExtensionManagementUtility::extRelPath('typo3bb') . 'Resources/Public/Css/backend.css');
         $pageRenderer->loadRequireJsModule('TYPO3/CMS/Typo3bb/Backend/NestedSortable');
@@ -145,6 +182,16 @@ class BackendController extends ActionController
     }
 
     /**
+     * Returns the LanguageService
+     *
+     * @return LanguageService
+     */
+    protected function getLanguageService()
+    {
+        return $GLOBALS['LANG'];
+    }
+
+    /**
      * Create the panel of buttons
      *
      */
@@ -174,9 +221,11 @@ class BackendController extends ActionController
                     ->setDataAttributes([
                         'toggle' => 'tooltip',
                         'placement' => 'bottom',
-                        'title' => $title])
+                        'title' => $title
+                    ])
                     ->setTitle($title)
-                    ->setIcon($this->iconFactory->getIcon($tableConfiguration['icon'], Icon::SIZE_SMALL, 'overlay-new'));
+                    ->setIcon($this->iconFactory->getIcon($tableConfiguration['icon'], Icon::SIZE_SMALL,
+                        'overlay-new'));
                 $buttonBar->addButton($viewButton, ButtonBar::BUTTON_POSITION_LEFT, 2);
             }
         }
@@ -203,50 +252,6 @@ class BackendController extends ActionController
             ->setIcon($this->iconFactory->getIcon('actions-refresh', Icon::SIZE_SMALL));
         $buttonBar->addButton($refreshButton, ButtonBar::BUTTON_POSITION_RIGHT);
     }
-
-    /**
-     * Redirect to tceform creating a new record
-     *
-     * @param string $table table name
-     */
-    private function redirectToCreateNewRecord($table)
-    {
-        $pid = $this->pageUid;
-
-        $returnUrl = 'index.php?M=web_Typo3bbTxTypo3bbM1&id=' . $this->pageUid . $this->getToken();
-        $url = BackendUtilityCore::getModuleUrl('record_edit', [
-            'edit[' . $table . '][' . $pid . ']' => 'new',
-            'returnUrl' => $returnUrl
-        ]);
-        HttpUtility::redirect($url);
-    }
-
-    /**
-     * Get a CSRF token
-     *
-     * @param bool $tokenOnly Set it to TRUE to get only the token, otherwise including the &moduleToken= as prefix
-     * @return string
-     */
-    protected function getToken($tokenOnly = false)
-    {
-        $token = FormProtectionFactory::get()->generateToken('moduleCall', 'web_Typo3bbTxTypo3bbM1');
-        if ($tokenOnly) {
-            return $token;
-        } else {
-            return '&moduleToken=' . $token;
-        }
-    }
-
-    /**
-     * Returns the LanguageService
-     *
-     * @return LanguageService
-     */
-    protected function getLanguageService()
-    {
-        return $GLOBALS['LANG'];
-    }
-
 
     /**
      * Get backend user

@@ -1,4 +1,5 @@
 <?php
+
 namespace LumIT\Typo3bb\Security\AccessValidator;
 
 use LumIT\Typo3bb\Domain\Model\Topic;
@@ -29,19 +30,20 @@ use TYPO3\CMS\Extbase\Persistence\Generic\LazyLoadingProxy;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-
-class TopicHasPollAccessValidator extends AbstractAccessValidator {
+class TopicHasPollAccessValidator extends AbstractAccessValidator
+{
 
     /**
      * @param \LumIT\Typo3bb\Domain\Model\Topic|\LumIT\Typo3bb\Domain\Model\Post $objectToValidate
      * @return bool
      * @throws IllegalObjectTypeException
      */
-    public function validate($objectToValidate) {
+    public function validate($objectToValidate)
+    {
         if ($objectToValidate instanceof LazyLoadingProxy) {
             $objectToValidate = $objectToValidate->_loadRealInstance();
         }
-        if($objectToValidate instanceof Topic) {
+        if ($objectToValidate instanceof Topic) {
             return $objectToValidate->getPoll() != null;
         } else {
             throw new IllegalObjectTypeException('Object to validate must be of type ' . Topic::class . '!');

@@ -1,4 +1,5 @@
 <?php
+
 namespace LumIT\Typo3bb\Security\AccessValidator;
 
 /***************************************************************
@@ -26,7 +27,8 @@ namespace LumIT\Typo3bb\Security\AccessValidator;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-interface AccessValidator {
+interface AccessValidator
+{
     /**
      * @param $objectToValidate
      * @return bool

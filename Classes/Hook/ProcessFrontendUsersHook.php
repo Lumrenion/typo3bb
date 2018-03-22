@@ -1,28 +1,29 @@
 <?php
+
 namespace LumIT\Typo3bb\Hook;
 
-    /***************************************************************
-     * Copyright notice
-     *
-     * (c) 2016 Philipp Seßner <philipp.sessner@gmail.com>
-     * All rights reserved
-     *
-     * This script is part of the TYPO3 project. The TYPO3 project is
-     * free software; you can redistribute it and/or modify
-     * it under the terms of the GNU General Public License as published by
-     * the Free Software Foundation; either version 2 of the License, or
-     * (at your option) any later version.
-     *
-     * The GNU General Public License can be found at
-     * http://www.gnu.org/copyleft/gpl.html.
-     *
-     * This script is distributed in the hope that it will be useful,
-     * but WITHOUT ANY WARRANTY; without even the implied warranty of
-     * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-     * GNU General Public License for more details.
-     *
-     * This copyright notice MUST APPEAR in all copies of the script!
-     ***************************************************************/
+/***************************************************************
+ * Copyright notice
+ *
+ * (c) 2016 Philipp Seßner <philipp.sessner@gmail.com>
+ * All rights reserved
+ *
+ * This script is part of the TYPO3 project. The TYPO3 project is
+ * free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * The GNU General Public License can be found at
+ * http://www.gnu.org/copyleft/gpl.html.
+ *
+ * This script is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * This copyright notice MUST APPEAR in all copies of the script!
+ ***************************************************************/
 
 
 use LumIT\Typo3bb\Domain\Model\FrontendUser;
@@ -30,6 +31,7 @@ use LumIT\Typo3bb\Slot\FrontendUserSlot;
 use LumIT\Typo3bb\Utility\FrontendUserUtility;
 use LumIT\Typo3bb\Utility\StatisticUtility;
 use TYPO3\CMS\Core\Database\DatabaseConnection;
+use TYPO3\CMS\Core\DataHandling\DataHandler;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
@@ -38,7 +40,8 @@ use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 /**
  *
  */
-class ProcessFrontendUsersHook {
+class ProcessFrontendUsersHook
+{
     /**
      * Called before deletion, with complete record-info ($recordToDelete)
      * Sets authorNames and editorNames of topics and posts from the frontendUser to be deleted.
@@ -49,7 +52,13 @@ class ProcessFrontendUsersHook {
      * @param null $recordWasDeleted
      * @param \TYPO3\CMS\Core\DataHandling\DataHandler $pObj
      */
-    public function processCmdmap_deleteAction($table, $id, $recordToDelete, $recordWasDeleted=NULL, \TYPO3\CMS\Core\DataHandling\DataHandler &$pObj) {
+    public function processCmdmap_deleteAction(
+        $table,
+        $id,
+        $recordToDelete,
+        $recordWasDeleted = null,
+        DataHandler &$pObj
+    ) {
         if ($table == 'fe_users') {
             $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
             $user = FrontendUserUtility::getUser($id);
@@ -68,7 +77,8 @@ class ProcessFrontendUsersHook {
      *
      * @param TypoScriptFrontendController $tsfe
      */
-    public function checkDataSubmission(TypoScriptFrontendController $tsfe) {
+    public function checkDataSubmission(TypoScriptFrontendController $tsfe)
+    {
         if ($tsfe->loginUser) {
             $this->processLoginTime($tsfe);
             StatisticUtility::updateOnlineUsers();
@@ -82,17 +92,20 @@ class ProcessFrontendUsersHook {
      *
      * @param TypoScriptFrontendController $tsfe
      */
-    protected function processLoginTime(TypoScriptFrontendController $tsfe) {
+    protected function processLoginTime(TypoScriptFrontendController $tsfe)
+    {
         $loginSessionData = $GLOBALS['TSFE']->fe_user->getKey('ses', 'tx_typo3bb_logintime');
         $loginSessionData['log_time'] = time();
 
-        if(empty($loginSessionData['timeOnlineUpdated']))
+        if (empty($loginSessionData['timeOnlineUpdated'])) {
             $loginSessionData['timeOnlineUpdated'] = time();
+        }
 
-        if(!empty($tsfe->fe_user->user['is_online']) && $tsfe->fe_user->user['is_online'] < time()-60) {
+        if (!empty($tsfe->fe_user->user['is_online']) && $tsfe->fe_user->user['is_online'] < time() - 60) {
             //Don't count longer than 15 minutes
-            if (time()-$loginSessionData['timeOnlineUpdated'] > 60*15)
+            if (time() - $loginSessionData['timeOnlineUpdated'] > 60 * 15) {
                 $loginSessionData['timeOnlineUpdated'] = time();
+            }
 
             $previousLoginTime = $tsfe->fe_user->user['login_time'];
             $tsfe->fe_user->user['login_time'] += time() - $loginSessionData['timeOnlineUpdated'];

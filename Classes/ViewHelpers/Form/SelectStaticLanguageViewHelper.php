@@ -1,4 +1,5 @@
 <?php
+
 namespace LumIT\Typo3bb\ViewHelpers\Form;
 
 
@@ -33,10 +34,13 @@ namespace LumIT\Typo3bb\ViewHelpers\Form;
  * <register:form.SelectStaticLanguage name="language" allowedLanguages="{0: 'de_DE', 1: 'fr_FR'}"/>
  * </code>
  */
-class SelectStaticLanguageViewHelper extends \Evoweb\SfRegister\ViewHelpers\Form\SelectStaticLanguageViewHelper {
-    public function initialize() {
+class SelectStaticLanguageViewHelper extends \Evoweb\SfRegister\ViewHelpers\Form\SelectStaticLanguageViewHelper
+{
+    public function initialize()
+    {
         parent::initialize();
         $this->arguments['options'] = $this->arguments['options']->toArray();
-        array_unshift($this->arguments['options'], [$this->arguments['optionValueField'] => '', $this->arguments['optionLabelField'] => '']);
+        array_unshift($this->arguments['options'],
+            [$this->arguments['optionValueField'] => '', $this->arguments['optionLabelField'] => '']);
     }
 }

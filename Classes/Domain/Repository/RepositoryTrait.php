@@ -1,13 +1,16 @@
 <?php
+
 namespace LumIT\Typo3bb\Domain\Repository;
 
 use LumIT\Typo3bb\Utility\PluginUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\StringUtility;
+use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
 use TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 
-trait RepositoryTrait {
+trait RepositoryTrait
+{
 
     /**
      * This is a workaround
@@ -20,7 +23,7 @@ trait RepositoryTrait {
      * AbstractRepository constructor.
      * @param \TYPO3\CMS\Extbase\Object\ObjectManagerInterface $objectManager
      */
-    public function __construct(\TYPO3\CMS\Extbase\Object\ObjectManagerInterface $objectManager)
+    public function __construct(ObjectManagerInterface $objectManager)
     {
         parent::__construct($objectManager);
         $this->setStoragePageIdsFromPluginSettings();
@@ -29,15 +32,17 @@ trait RepositoryTrait {
     /**
      * @param Typo3QuerySettings $defaultQuerySettings
      */
-    public function setStoragePageIdsFromPluginSettings($defaultQuerySettings = null) {
-        if($this->defaultQuerySettings == null) {
-            if($defaultQuerySettings instanceof  Typo3QuerySettings) {
+    public function setStoragePageIdsFromPluginSettings($defaultQuerySettings = null)
+    {
+        if ($this->defaultQuerySettings == null) {
+            if ($defaultQuerySettings instanceof Typo3QuerySettings) {
                 $this->setDefaultQuerySettings($defaultQuerySettings);
             } else {
                 $this->setDefaultQuerySettings($this->objectManager->get(Typo3QuerySettings::class));
             }
         }
-        $this->defaultQuerySettings->setStoragePageIds(GeneralUtility::intExplode(',', PluginUtility::_getPluginConfiguration()['persistence']['storagePid']));
+        $this->defaultQuerySettings->setStoragePageIds(GeneralUtility::intExplode(',',
+            PluginUtility::_getPluginConfiguration()['persistence']['storagePid']));
     }
 
     /**
@@ -47,14 +52,15 @@ trait RepositoryTrait {
      * @param string $arguments
      * @return array|mixed|\TYPO3\CMS\Extbase\Persistence\QueryResultInterface
      */
-    public function __call($methodName, $arguments) {
+    public function __call($methodName, $arguments)
+    {
         if (substr($methodName, 0, 13) === 'findOrderedBy' && strlen($methodName) > 14) {
             $propertyName = lcfirst(substr($methodName, 13));
             if (StringUtility::endsWith($propertyName, 'ASC')) {
                 $propertyName = substr($propertyName, 0, -3);
                 $ordering = QueryInterface::ORDER_ASCENDING;
             } elseif (StringUtility::endsWith($propertyName, 'DESC')) {
-                $propertyName = substr($propertyName, 0,  -4);
+                $propertyName = substr($propertyName, 0, -4);
                 $ordering = QueryInterface::ORDER_DESCENDING;
             } else {
                 $ordering = null;

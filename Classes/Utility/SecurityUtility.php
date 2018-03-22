@@ -1,12 +1,14 @@
 <?php
+
 namespace LumIT\Typo3bb\Utility;
+
+use LumIT\Typo3bb\Domain\Model\FrontendUser;
 use LumIT\Typo3bb\Exception\AccessValidationException;
 use LumIT\Typo3bb\Security\AccessValidator\AccessValidator;
 use TYPO3\CMS\Core\Resource\Exception\InvalidConfigurationException;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\StringUtility;
-
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
 use TYPO3\CMS\Extbase\Utility\ArrayUtility;
@@ -36,20 +38,23 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+class SecurityUtility implements SingletonInterface
+{
 
-class SecurityUtility implements SingletonInterface {
-    
     protected static $settings = [];
 
     /**
-     * @param string $permissionKey
-     * @param $objectToValidate
+     * @param string $permissionKey The key of the permission stack. Might be "Board.view.XYZ"
+     * @param object $objectToValidate The object to validate
+     * @param FrontendUser $frontendUser The frontendUser to validate against (defaults to current login user in AccessValidator)
      * @throws AccessValidationException
      * @throws InvalidConfigurationException
      */
-    public static function assertAccessPermission(string $permissionKey, $objectToValidate = null) {
-        if (!self::checkAccessPermission($permissionKey, $objectToValidate)) {
-            throw new AccessValidationException(LocalizationUtility::translate('exception.accessValidation', 'typo3bb'));
+    public static function assertAccessPermission(string $permissionKey, $objectToValidate = null, $frontendUser = null)
+    {
+        if (!self::checkAccessPermission($permissionKey, $objectToValidate, $frontendUser)) {
+            throw new AccessValidationException(LocalizationUtility::translate('exception.accessValidation',
+                'typo3bb'));
         }
     }
 
@@ -58,48 +63,55 @@ class SecurityUtility implements SingletonInterface {
      *
      * @param string $permissionKey The key of the permission stack. Might be "Board.view.XYZ"
      * @param object $objectToValidate The object to validate
+     * @param FrontendUser $frontendUser The frontendUser to validate against (defaults to current login user in AccessValidator)
      * @return bool
      * @throws InvalidConfigurationException
      */
-    public static function checkAccessPermission(string $permissionKey, $objectToValidate = null) {
+    public static function checkAccessPermission(string $permissionKey, $objectToValidate = null, $frontendUser = null)
+    {
         $settings = PluginUtility::_getPluginSettings()['accessValidation'];
         $permissionValidators = ArrayUtility::getValueByPath($settings, $permissionKey);
 
-        if(empty($permissionValidators)) {
-            return true;
+        if (empty($permissionValidators)) {
             throw new InvalidConfigurationException('No access validation rules exist for key ' . $permissionKey . '!');
         }
 
-        return self::_evaluateStack($permissionValidators, $objectToValidate);
+        return self::_evaluateStack($permissionValidators, $objectToValidate, $frontendUser);
     }
 
 
     /**
      * @param array $permissionValidators The stack of validators that evaluate the object
      * @param object $objectToValidate The object to evaluate
+     * @param FrontendUser $frontendUser The frontendUser to validate against (defaults to current login user in AccessValidator)
      * @param bool $meetAllConditions If all validators in stack must be true (default: single true is enough)
      * @return bool
      * @throws IllegalObjectTypeException
      * @throws InvalidConfigurationException
      */
-    public static function _evaluateStack($permissionValidators, $objectToValidate = null, $meetAllConditions = FALSE) {
+    public static function _evaluateStack(
+        $permissionValidators,
+        $objectToValidate = null,
+        $frontendUser = null,
+        $meetAllConditions = false
+    ) {
         foreach ($permissionValidators as $permissionValidatorKey => $permissionValidator) {
-            if(StringUtility::beginsWith($permissionValidatorKey, 'AND')) {
-                if(!is_array($permissionValidator)) {
+            if (StringUtility::beginsWith($permissionValidatorKey, 'AND')) {
+                if (!is_array($permissionValidator)) {
                     throw new InvalidConfigurationException('An AND-Stack must always contain an array!');
                 }
-                $result = self::_evaluateStack($permissionValidator, $objectToValidate, TRUE);
-            } elseif(StringUtility::beginsWith($permissionValidatorKey, 'OR')) {
-                if(!is_array($permissionValidator)) {
+                $result = self::_evaluateStack($permissionValidator, $objectToValidate, $frontendUser, true);
+            } elseif (StringUtility::beginsWith($permissionValidatorKey, 'OR')) {
+                if (!is_array($permissionValidator)) {
                     throw new InvalidConfigurationException('An OR-Stack must always contain an array!');
                 }
-                $result = self::_evaluateStack($permissionValidator, $objectToValidate);
+                $result = self::_evaluateStack($permissionValidator, $objectToValidate, $frontendUser);
             } else {
-                $accessValidatorObject = self::_getValidatorObject($permissionValidator);
+                $accessValidatorObject = self::_getValidatorObject($permissionValidator, $frontendUser);
                 $result = $accessValidatorObject->validate($objectToValidate);
             }
 
-            if(!$meetAllConditions && $result) {
+            if (!$meetAllConditions && $result) {
                 return true;
             } elseif ($meetAllConditions && !$result) {
                 return false;
@@ -110,16 +122,18 @@ class SecurityUtility implements SingletonInterface {
     }
 
     /**
-     * @param string $validatorString
+     * @param string $validatorString The definer of an AccessValidator. Can be a fully qualified domain name, or $classNamePart of '\LumIT\Typo3bb\Security\AccessValidator\' . $classNamePart . 'AccessValidator'
+     * @param FrontendUser $frontendUser The frontendUser to validate against (defaults to current login user in AccessValidator)
      * @return AccessValidator
      * @throws IllegalObjectTypeException
      */
-    public static function _getValidatorObject(string $validatorString) {
-        if(!StringUtility::beginsWith($validatorString, '\\')) {
+    public static function _getValidatorObject(string $validatorString, $frontendUser = null)
+    {
+        if (!StringUtility::beginsWith($validatorString, '\\')) {
             //we assume a validator from this extension
             $validatorString = '\LumIT\Typo3bb\Security\AccessValidator\\' . $validatorString . 'AccessValidator';
         }
-        $accessValidatorObject = self::_getObjectManagerInstance()->get(ltrim($validatorString, '\\'));
+        $accessValidatorObject = self::_getObjectManagerInstance()->get(ltrim($validatorString, '\\'), $frontendUser);
         if (!$accessValidatorObject instanceof AccessValidator) {
             throw new IllegalObjectTypeException('Access Validation classes must always implement interface \LumIT\Typo3bb\Security\AccessValidator\AccessValidator');
         }
@@ -129,7 +143,8 @@ class SecurityUtility implements SingletonInterface {
     /**
      * @return ObjectManager
      */
-    protected static function _getObjectManagerInstance() {
+    protected static function _getObjectManagerInstance()
+    {
         return GeneralUtility::makeInstance(ObjectManager::class);
     }
 }

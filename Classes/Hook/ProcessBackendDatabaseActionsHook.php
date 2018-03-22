@@ -1,4 +1,5 @@
 <?php
+
 namespace LumIT\Typo3bb\Hook;
 
 /***************************************************************
@@ -24,10 +25,13 @@ namespace LumIT\Typo3bb\Hook;
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use TYPO3\CMS\Core\DataHandling\DataHandler;
+
 /**
  *
  */
-class ProcessBackendDatabaseActionsHook {
+class ProcessBackendDatabaseActionsHook
+{
 
     /**
      * Called before deletion
@@ -38,7 +42,8 @@ class ProcessBackendDatabaseActionsHook {
      * @param $value
      * @param \TYPO3\CMS\Core\DataHandling\DataHandler $pObj
      */
-    public function processCmdmap_preProcess($command, $table, $id, $value, \TYPO3\CMS\Core\DataHandling\DataHandler &$pObj) {
+    public function processCmdmap_preProcess($command, $table, $id, $value, DataHandler &$pObj)
+    {
 
     }
 
@@ -50,7 +55,13 @@ class ProcessBackendDatabaseActionsHook {
      * @param null $recordWasDeleted
      * @param \TYPO3\CMS\Core\DataHandling\DataHandler $pObj
      */
-    public function processCmdmap_deleteAction($table, $id, $recordToDelete, $recordWasDeleted=NULL, \TYPO3\CMS\Core\DataHandling\DataHandler &$pObj) {
+    public function processCmdmap_deleteAction(
+        $table,
+        $id,
+        $recordToDelete,
+        $recordWasDeleted = null,
+        DataHandler &$pObj
+    ) {
 
     }
 
@@ -63,7 +74,8 @@ class ProcessBackendDatabaseActionsHook {
      * @param $value
      * @param \TYPO3\CMS\Core\DataHandling\DataHandler $pObj
      */
-    public function processCmdmap_postProcess($command, $table, $uid, $value, \TYPO3\CMS\Core\DataHandling\DataHandler &$pObj) {
+    public function processCmdmap_postProcess($command, $table, $uid, $value, DataHandler &$pObj)
+    {
 
     }
 
@@ -75,7 +87,8 @@ class ProcessBackendDatabaseActionsHook {
      * @param $id
      * @param \TYPO3\CMS\Core\DataHandling\DataHandler $pObj
      */
-    public function processDatamap_preProcessFieldArray(array &$fieldArray, $table, $id, \TYPO3\CMS\Core\DataHandling\DataHandler &$pObj) {
+    public function processDatamap_preProcessFieldArray(array &$fieldArray, $table, $id, DataHandler &$pObj)
+    {
 
     }
 
@@ -88,14 +101,16 @@ class ProcessBackendDatabaseActionsHook {
      * @param array $fieldArray
      * @param \TYPO3\CMS\Core\DataHandling\DataHandler $pObj
      */
-    public function processDatamap_postProcessFieldArray($status, $table, $id, array $fieldArray, \TYPO3\CMS\Core\DataHandling\DataHandler &$pObj) {
+    public function processDatamap_postProcessFieldArray($status, $table, $id, array $fieldArray, DataHandler &$pObj)
+    {
 
     }
 
     /**
      * @param \TYPO3\CMS\Core\DataHandling\DataHandler $pObj
      */
-    public function processDatamap_afterAllOperations(\TYPO3\CMS\Core\DataHandling\DataHandler &$pObj) {
+    public function processDatamap_afterAllOperations(DataHandler &$pObj)
+    {
 
     }
 
@@ -106,7 +121,8 @@ class ProcessBackendDatabaseActionsHook {
      * @param array $fieldArray
      * @param \TYPO3\CMS\Core\DataHandling\DataHandler $pObj
      */
-    public function processDatamap_afterDatabaseOperations($status, $table, $id, array $fieldArray, \TYPO3\CMS\Core\DataHandling\DataHandler &$pObj) {
+    public function processDatamap_afterDatabaseOperations($status, $table, $id, array $fieldArray, DataHandler &$pObj)
+    {
 
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace LumIT\Typo3bb\Domain\Repository;
 
 
@@ -26,7 +27,6 @@ namespace LumIT\Typo3bb\Domain\Repository;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-use TYPO3\CMS\Core\Utility\StringUtility;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 
 /**
@@ -40,12 +40,14 @@ class FrontendUserRepository extends \TYPO3\CMS\Extbase\Domain\Repository\Fronte
      * @param array $usernames
      * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
      */
-    public function findByUsernames(array $usernames) {
+    public function findByUsernames(array $usernames)
+    {
         $query = $this->createQuery();
         return $query->matching($query->in('username', $usernames))->execute();
     }
 
-    public function findByUids(array $uids) {
+    public function findByUids(array $uids)
+    {
         $query = $this->createQuery();
         return $query->matching($query->in('uid', $uids))->execute();
     }
@@ -54,7 +56,8 @@ class FrontendUserRepository extends \TYPO3\CMS\Extbase\Domain\Repository\Fronte
      * @param $search
      * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
      */
-    public function findByNameOrUsername($search) {
+    public function findByNameOrUsername($search)
+    {
         $query = $this->createQuery();
         return $query->matching($query->logicalOr(
             $query->like('username', '%' . $search . '%'),
@@ -63,45 +66,18 @@ class FrontendUserRepository extends \TYPO3\CMS\Extbase\Domain\Repository\Fronte
     }
 
     /**
-     * Count users in storagefolder which have a field that contains the value
-     *
-     * @param string|array  $field
-     * @param string  $value
-     * @param boolean       $respectStoragePage
-     *
-     * @return integer
-     */
-    public function countByField($field, $value, $respectStoragePage = true) {
-        if (is_string($field)) {
-            $field = [$field];
-        }
-
-        $query = $this->createQuery();
-
-        $querySettings = $query->getQuerySettings();
-        $querySettings->setRespectStoragePage($respectStoragePage);
-        $querySettings->setIgnoreEnableFields(true);
-
-        $constraints = [];
-        foreach ($field as $singleField) {
-            $constraints[] = $query->equals($singleField, $value);
-        }
-
-        return $query->matching($query->logicalOr($constraints))->setLimit(1)->count();
-    }
-
-    /**
      * Count users in storagefolder which have a field that contains the value.
      * If a the user is logged in, the user is excluded from count.
      * If multiple fields are specified, the value should be $field1 OR [..] OR $fieldN
      *
-     * @param string|array  $field
-     * @param string  $value
-     * @param boolean       $respectStoragePage
+     * @param string|array $field
+     * @param string $value
+     * @param boolean $respectStoragePage
      *
      * @return integer
      */
-    public function countByFieldNotCurrentUser($field, $value, $respectStoragePage = true) {
+    public function countByFieldNotCurrentUser($field, $value, $respectStoragePage = true)
+    {
         if (!$GLOBALS['TSFE']->loginUser) {
             return $this->countByField($field, $value, $respectStoragePage);
         }
@@ -126,11 +102,40 @@ class FrontendUserRepository extends \TYPO3\CMS\Extbase\Domain\Repository\Fronte
         ))->setLimit(1)->count();
     }
 
+    /**
+     * Count users in storagefolder which have a field that contains the value
+     *
+     * @param string|array $field
+     * @param string $value
+     * @param boolean $respectStoragePage
+     *
+     * @return integer
+     */
+    public function countByField($field, $value, $respectStoragePage = true)
+    {
+        if (is_string($field)) {
+            $field = [$field];
+        }
+
+        $query = $this->createQuery();
+
+        $querySettings = $query->getQuerySettings();
+        $querySettings->setRespectStoragePage($respectStoragePage);
+        $querySettings->setIgnoreEnableFields(true);
+
+        $constraints = [];
+        foreach ($field as $singleField) {
+            $constraints[] = $query->equals($singleField, $value);
+        }
+
+        return $query->matching($query->logicalOr($constraints))->setLimit(1)->count();
+    }
 
     /**
      * @return object|\LumIT\Typo3bb\Domain\Model\FrontendUser
      */
-    public function findSingleLatest() {
+    public function findSingleLatest()
+    {
         $query = $this->createQuery();
         $query->setOrderings(['crdate' => QueryInterface::ORDER_DESCENDING]);
         return $query->execute()->getFirst();
@@ -139,9 +144,26 @@ class FrontendUserRepository extends \TYPO3\CMS\Extbase\Domain\Repository\Fronte
     /**
      * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
      */
-    public function findOnlineUsers() {
+    public function findOnlineUsers()
+    {
         $query = $this->createQuery();
         $query->matching($query->greaterThanOrEqual('isOnline', strtotime('-15 minutes')));
+        return $query->execute();
+    }
+
+    /**
+     * @param array $usergroups
+     * @return array|\TYPO3\CMS\Extbase\Persistence\QueryResultInterface
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
+     */
+    public function findAllByUsergroups($usergroups)
+    {
+        $query = $this->createQuery();
+        $constraints = [];
+        foreach ($usergroups as $usergroup) {
+            $constraints[] = $query->contains('usergroup', $usergroup);
+        }
+        $query->matching($query->logicalOr($constraints));
         return $query->execute();
     }
 }

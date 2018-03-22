@@ -5,7 +5,7 @@ return [
         'label' => 'file',
         'dividers2tabs' => true,
         'searchFields' => '',
-        'iconfile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath('typo3bb') . 'Resources/Public/Icons/tx_typo3bb_domain_model_attachment.gif',
+        'iconfile' => 'EXT:typo3bb/Resources/Public/Icons/tx_typo3bb_domain_model_attachment.gif',
         'hideTable' => 1,
     ],
     'interface' => [
@@ -39,37 +39,39 @@ return [
                     'appearance' => [
                         'createNewRelationLinkTitle' => 'LLL:EXT:cms/locallang_ttc.xlf:media.addFileReference'
                     ],
-                    'foreign_types' => [
-                        '0' => [
-                            'showitem' => '
+                    'overrideChildTca' => [
+                        'types' => [
+                            '0' => [
+                                'showitem' => '
                             --palette--;LLL:EXT:lang/locallang_tca.xlf:sys_file_reference.imageoverlayPalette;imageoverlayPalette,
 							--palette--;;filePalette'
+                            ],
+                            \TYPO3\CMS\Core\Resource\File::FILETYPE_TEXT => array(
+                                'showitem' => '
+							--palette--;LLL:EXT:lang/locallang_tca.xlf:sys_file_reference.imageoverlayPalette;imageoverlayPalette,
+							--palette--;;filePalette'
+                            ),
+                            \TYPO3\CMS\Core\Resource\File::FILETYPE_IMAGE => array(
+                                'showitem' => '
+							--palette--;LLL:EXT:lang/locallang_tca.xlf:sys_file_reference.imageoverlayPalette;imageoverlayPalette,
+							--palette--;;filePalette'
+                            ),
+                            \TYPO3\CMS\Core\Resource\File::FILETYPE_AUDIO => array(
+                                'showitem' => '
+							--palette--;LLL:EXT:lang/locallang_tca.xlf:sys_file_reference.imageoverlayPalette;imageoverlayPalette,
+							--palette--;;filePalette'
+                            ),
+                            \TYPO3\CMS\Core\Resource\File::FILETYPE_VIDEO => array(
+                                'showitem' => '
+							--palette--;LLL:EXT:lang/locallang_tca.xlf:sys_file_reference.imageoverlayPalette;imageoverlayPalette,
+							--palette--;;filePalette'
+                            ),
+                            \TYPO3\CMS\Core\Resource\File::FILETYPE_APPLICATION => array(
+                                'showitem' => '
+							--palette--;LLL:EXT:lang/locallang_tca.xlf:sys_file_reference.imageoverlayPalette;imageoverlayPalette,
+							--palette--;;filePalette'
+                            )
                         ],
-                        \TYPO3\CMS\Core\Resource\File::FILETYPE_TEXT => array(
-                            'showitem' => '
-							--palette--;LLL:EXT:lang/locallang_tca.xlf:sys_file_reference.imageoverlayPalette;imageoverlayPalette,
-							--palette--;;filePalette'
-                        ),
-                        \TYPO3\CMS\Core\Resource\File::FILETYPE_IMAGE => array(
-                            'showitem' => '
-							--palette--;LLL:EXT:lang/locallang_tca.xlf:sys_file_reference.imageoverlayPalette;imageoverlayPalette,
-							--palette--;;filePalette'
-                        ),
-                        \TYPO3\CMS\Core\Resource\File::FILETYPE_AUDIO => array(
-                            'showitem' => '
-							--palette--;LLL:EXT:lang/locallang_tca.xlf:sys_file_reference.imageoverlayPalette;imageoverlayPalette,
-							--palette--;;filePalette'
-                        ),
-                        \TYPO3\CMS\Core\Resource\File::FILETYPE_VIDEO => array(
-                            'showitem' => '
-							--palette--;LLL:EXT:lang/locallang_tca.xlf:sys_file_reference.imageoverlayPalette;imageoverlayPalette,
-							--palette--;;filePalette'
-                        ),
-                        \TYPO3\CMS\Core\Resource\File::FILETYPE_APPLICATION => array(
-                            'showitem' => '
-							--palette--;LLL:EXT:lang/locallang_tca.xlf:sys_file_reference.imageoverlayPalette;imageoverlayPalette,
-							--palette--;;filePalette'
-                        )
                     ],
                     'maxitems' => 1,
                     'foreign_match_fields' => [

@@ -1,4 +1,5 @@
 <?php
+
 namespace LumIT\Typo3bb\Domain\Repository;
 
 
@@ -27,15 +28,14 @@ namespace LumIT\Typo3bb\Domain\Repository;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 use LumIT\Typo3bb\Domain\Model\Post;
-
-
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 
 
 /**
  * The repository for Posts
  */
-class TopicRepository extends AbstractRepository {
+class TopicRepository extends AbstractRepository
+{
 
     protected $defaultOrderings = [
         'sticky' => QueryInterface::ORDER_ASCENDING,
@@ -46,18 +46,19 @@ class TopicRepository extends AbstractRepository {
      * @var \LumIT\Typo3bb\Domain\Repository\PostRepository
      * @inject
      */
-    protected $postRepository = NULL;
+    protected $postRepository = null;
 
     /**
      * @var \LumIT\Typo3bb\Domain\Repository\BoardRepository
      * @inject
      */
-    protected $boardRepository = NULL;
+    protected $boardRepository = null;
 
     /**
      * @param \LumIT\Typo3bb\Domain\Model\Topic $topic
      */
-    public function remove($topic) {
+    public function remove($topic)
+    {
         parent::remove($topic);
         /** @var Post $post */
         foreach ($topic->getPosts() as $post) {

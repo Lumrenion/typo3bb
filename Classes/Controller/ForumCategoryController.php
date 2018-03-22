@@ -1,4 +1,5 @@
 <?php
+
 namespace LumIT\Typo3bb\Controller;
 
 /***************************************************************
@@ -29,7 +30,8 @@ namespace LumIT\Typo3bb\Controller;
 /**
  * ForumCategoryController
  */
-class ForumCategoryController extends AbstractController {
+class ForumCategoryController extends AbstractController
+{
 
     /**
      * forumCategoryRepository
@@ -44,22 +46,17 @@ class ForumCategoryController extends AbstractController {
      * @inject
      */
     protected $boardController = null;
-    
+
     /**
      * action list
      *
      * @return void
      */
-    public function listAction() {
+    public function listAction()
+    {
         $boards = $this->boardController->getAllowedBoards();
 
-        foreach ($boards as $board) {
-            $test = 1;
-        }
         $this->view->assign('allBoards', $boards);
-
-//        $forumCategories = $this->forumCategoryRepository->findAll();
-//        $this->view->assign('forumCategories', $forumCategories);
     }
 
 }

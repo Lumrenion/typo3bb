@@ -1,4 +1,5 @@
 <?php
+
 namespace LumIT\Typo3bb\Utility;
 
 /***************************************************************
@@ -34,12 +35,14 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  * Class CacheUtility
  * @package LumIT\Typo3bb\Utility
  */
-class CacheUtility {
+class CacheUtility
+{
 
     /**
      * @return VariableFrontend
      */
-    public static function getCacheInstance() {
+    public static function getCacheInstance()
+    {
         return GeneralUtility::makeInstance(CacheManager::class)->getCache('typo3bb');
     }
 
@@ -48,12 +51,13 @@ class CacheUtility {
      * Respects the frontend user group combination and the current page id (for the case that the forum is
      * included on different pages)
      *
-     * @param string    $class      The calling class
-     * @param string    $action     The calling action
-     * @param string    $identifier An identifier that represents the action arguments
+     * @param string $class The calling class
+     * @param string $action The calling action
+     * @param string $identifier An identifier that represents the action arguments
      * @return string
      */
-    public static function getIdentifier(string $class, string $action, string $identifier = '') {
+    public static function getIdentifier(string $class, string $action, string $identifier = '')
+    {
         return md5(
             $GLOBALS['TSFE']->id . '-' . $GLOBALS['TSFE']->sys_language_uid . '-' . $class . '::' . $action . '::' . $identifier
         );
@@ -64,7 +68,8 @@ class CacheUtility {
      *
      * @return string
      */
-    public static function getUsergroupIdentifier() {
+    public static function getUsergroupIdentifier()
+    {
         $userGroups = explode(',', $GLOBALS['TSFE']->gr_list);
         $userGroups = array_unique($userGroups);
         sort($userGroups);

@@ -1,4 +1,5 @@
 <?php
+
 namespace LumIT\Typo3bb\Exception;
 
 /***************************************************************
@@ -26,6 +27,7 @@ namespace LumIT\Typo3bb\Exception;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-class ActionNotAllowedException extends AbstractException {
+class ActionNotAllowedException extends AbstractException
+{
 
 }

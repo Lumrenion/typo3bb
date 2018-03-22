@@ -1,4 +1,5 @@
 <?php
+
 namespace LumIT\Typo3bb\Controller;
 
 
@@ -30,7 +31,6 @@ use LumIT\Typo3bb\Domain\Model\Board;
 use LumIT\Typo3bb\Domain\Model\Reader;
 use LumIT\Typo3bb\Domain\Model\Topic;
 use LumIT\Typo3bb\Exception\ActionNotAllowedException;
-
 use LumIT\Typo3bb\Utility\SecurityUtility;
 use TYPO3\CMS\Extbase\Persistence\Generic\LazyLoadingProxy;
 
@@ -38,7 +38,8 @@ use TYPO3\CMS\Extbase\Persistence\Generic\LazyLoadingProxy;
 /**
  * BoardController
  */
-class BoardController extends AbstractController {
+class BoardController extends AbstractController
+{
 
     /**
      * boardRepository
@@ -46,33 +47,34 @@ class BoardController extends AbstractController {
      * @var \LumIT\Typo3bb\Domain\Repository\BoardRepository
      * @inject
      */
-    protected $boardRepository = NULL;
+    protected $boardRepository = null;
 
     /**
      * @var \LumIT\Typo3bb\Domain\Repository\ReaderRepository
      * @inject
      */
-    protected $readerRepository = NULL;
+    protected $readerRepository = null;
 
     /**
      * @var \LumIT\Typo3bb\Domain\Repository\PostRepository
      * @inject
      */
-    protected $postRepository = NULL;
+    protected $postRepository = null;
 
     /**
      * @var \LumIT\Typo3bb\Domain\Repository\FrontendUserRepository
      * @inject
      */
-    protected $frontendUserRepository = NULL;
-    
+    protected $frontendUserRepository = null;
+
     /**
      * action show
      *
      * @param \LumIT\Typo3bb\Domain\Model\Board $board
      * @return void
      */
-    public function showAction(Board $board) {
+    public function showAction(Board $board)
+    {
         SecurityUtility::assertAccessPermission('Board.show', $board);
         if (!empty($board->getRedirect())) {
             $board->increaseRedirectCount();
@@ -85,12 +87,13 @@ class BoardController extends AbstractController {
     }
 
     /**
-     * @param bool                              $all
+     * @param bool $all
      * @param \LumIT\Typo3bb\Domain\Model\Board $board
      *
      * @throws ActionNotAllowedException
      */
-    public function markAsReadAction(bool $all, Board $board = null) {
+    public function markAsReadAction(bool $all, Board $board = null)
+    {
         SecurityUtility::assertAccessPermission('Board.markAsRead', $board);
 
         if ($all && !($board instanceof Board)) {
@@ -115,7 +118,8 @@ class BoardController extends AbstractController {
     /**
      * @param \LumIT\Typo3bb\Domain\Model\Board $board
      */
-    protected function markAsReadRecursive($board) {
+    protected function markAsReadRecursive($board)
+    {
         /** @var Topic $topic */
         foreach ($board->getTopics() as $topic) {
             $reader = new Reader();
@@ -137,7 +141,8 @@ class BoardController extends AbstractController {
      * @param \LumIT\Typo3bb\Domain\Model\Board $board
      * @param bool $unsubscribe
      */
-    public function subscribeAction(Board $board, bool $unsubscribe = false) {
+    public function subscribeAction(Board $board, bool $unsubscribe = false)
+    {
         SecurityUtility::assertAccessPermission('Board.subscribe', $board);
 
         if ($unsubscribe) {

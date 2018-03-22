@@ -1,4 +1,5 @@
 <?php
+
 namespace LumIT\Typo3bb\Controller;
 
 
@@ -31,10 +32,7 @@ use LumIT\Typo3bb\Exception\AbstractException;
 use LumIT\Typo3bb\Utility\FrontendUserUtility;
 use LumIT\Typo3bb\Utility\RteUtility;
 use TYPO3\CMS\Core\Cache\CacheManager;
-
-
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Mvc\View\NotFoundView;
@@ -44,22 +42,23 @@ use TYPO3\CMS\Extbase\Mvc\Web\Response;
 /**
  * BoardController
  */
-abstract class AbstractController extends ActionController {
+abstract class AbstractController extends ActionController
+{
 
     /**
      * @var \LumIT\Typo3bb\Domain\Model\FrontendUser
      */
-    protected $frontendUser = NULL;
+    protected $frontendUser = null;
 
     /**
      * @var \TYPO3\CMS\Core\Cache\Frontend\VariableFrontend
      */
-    protected $cacheManager = NULL;
+    protected $cacheManager = null;
 
     /**
      * @var \TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer
      */
-    protected $cObj = NULL;
+    protected $cObj = null;
 
     /**
      * persistence manager
@@ -69,7 +68,8 @@ abstract class AbstractController extends ActionController {
      */
     protected $persistenceManager;
 
-    public function initializeAction() {
+    public function initializeAction()
+    {
         $this->cacheManager = GeneralUtility::makeInstance(CacheManager::class)->getCache("typo3bb");
         $this->cObj = $this->configurationManager->getContentObject();
         $this->frontendUser = FrontendUserUtility::getCurrentUser();
@@ -86,20 +86,7 @@ abstract class AbstractController extends ActionController {
                 . '</script>');
         }
     }
-    
-    protected function handleError(AbstractException $e) {
-        $this->request->setControllerName('Default');
-        $this->request->setControllerActionName('error');
-        if ($this->view instanceof NotFoundView) {
-            $this->view = $this->resolveView();
-        }
-        $controllerContext = $this->buildControllerContext();
-        $this->view->setControllerContext($controllerContext);
 
-        $this->view->assign('exception', $e);
-        $content = $this->view->render('error');
-        $this->response->appendContent($content);
-    }
     /**
      *
      * Calls a controller action. This method wraps the callActionMethod method of
@@ -111,11 +98,27 @@ abstract class AbstractController extends ActionController {
      * @return void
      *
      */
-    protected function callActionMethod() {
+    protected function callActionMethod()
+    {
         try {
             parent::callActionMethod();
         } catch (AbstractException $e) {
             $this->handleError($e);
         }
+    }
+
+    protected function handleError(AbstractException $e)
+    {
+        $this->request->setControllerName('Default');
+        $this->request->setControllerActionName('error');
+        if ($this->view instanceof NotFoundView) {
+            $this->view = $this->resolveView();
+        }
+        $controllerContext = $this->buildControllerContext();
+        $this->view->setControllerContext($controllerContext);
+
+        $this->view->assign('exception', $e);
+        $content = $this->view->render('error');
+        $this->response->appendContent($content);
     }
 }

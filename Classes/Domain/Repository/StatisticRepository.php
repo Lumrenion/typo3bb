@@ -1,5 +1,7 @@
 <?php
+
 namespace LumIT\Typo3bb\Domain\Repository;
+
 use LumIT\Typo3bb\Domain\Model\Statistic;
 use TYPO3\CMS\Extbase\Persistence\Generic\Exception\RepositoryException;
 
@@ -7,12 +9,14 @@ use TYPO3\CMS\Extbase\Persistence\Generic\Exception\RepositoryException;
  * Class StatisticRepository
  * @package LumIT\Typo3bb\Domain\Repository
  */
-class StatisticRepository extends AbstractRepository {
+class StatisticRepository extends AbstractRepository
+{
 
     /**
      * @return object|\LumIT\Typo3bb\Domain\Model\Statistic
      */
-    public function getToday() {
+    public function getToday()
+    {
         return $this->findByDate(new \DateTime());
     }
 
@@ -20,7 +24,8 @@ class StatisticRepository extends AbstractRepository {
      * @param \DateTime $date
      * @return object|\LumIT\Typo3bb\Domain\Model\Statistic
      */
-    public function findByDate(\DateTime $date) {
+    public function findByDate(\DateTime $date)
+    {
         $query = $this->createQuery();
         $query->matching($query->equals('date', $date->setTimezone(new \DateTimeZone('UTC'))->format('Y-m-d')));
 
@@ -38,7 +43,8 @@ class StatisticRepository extends AbstractRepository {
      * @param \DateTime|null $dateTo
      * @return array
      */
-    public function getAverages(\DateTime $dateFrom = null, \DateTime $dateTo = null) {
+    public function getAverages(\DateTime $dateFrom = null, \DateTime $dateTo = null)
+    {
         if ($dateFrom !== null && $dateTo !== null) {
             $whereClause = 'date BETWEEN(' . $dateFrom->format('Y-m-d') . ',' . $dateTo->format('Y-m-d') . ')';
         } else {
@@ -67,7 +73,9 @@ class StatisticRepository extends AbstractRepository {
      * @param object $object
      * @throws \TYPO3\CMS\Extbase\Persistence\Generic\Exception\RepositoryException
      */
-    public function add($object) {
-        throw new RepositoryException("This repository does not support the add method. Please use findByDate() to create a statistics entry for a non existent date.", 1487347390);
+    public function add($object)
+    {
+        throw new RepositoryException("This repository does not support the add method. Please use findByDate() to create a statistics entry for a non existent date.",
+            1487347390);
     }
 }

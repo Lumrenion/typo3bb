@@ -1,4 +1,5 @@
 <?php
+
 namespace LumIT\Typo3bb\Slot;
 
 /***************************************************************
@@ -29,12 +30,11 @@ namespace LumIT\Typo3bb\Slot;
 use LumIT\Typo3bb\Domain\Model\MessageParticipant;
 use LumIT\Typo3bb\Domain\Model\Post;
 use LumIT\Typo3bb\Domain\Model\Topic;
-
 use LumIT\Typo3bb\Domain\Repository\MessageRepository;
 use LumIT\Typo3bb\Domain\Repository\PostRepository;
 use LumIT\Typo3bb\Domain\Repository\TopicRepository;
-
 use LumIT\Typo3bb\Utility\RteUtility;
+use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 
@@ -42,13 +42,15 @@ use TYPO3\CMS\Extbase\Object\ObjectManager;
  * Class FrontendUserSlot
  * @package LumIT\Typo3bb\Slot
  */
-class FrontendUserSlot implements \TYPO3\CMS\Core\SingletonInterface {
+class FrontendUserSlot implements SingletonInterface
+{
 
     /**
      * Sets authorNames and editorNames of topics and posts from the frontendUser to be deleted.
      * @param \LumIT\Typo3bb\Domain\Model\FrontendUser $forumUser
      */
-    public static function processDeletedForumUser($forumUser) {
+    public static function processDeletedForumUser($forumUser)
+    {
         $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
         /** @var PostRepository $postRepository */
         $postRepository = $objectManager->get(PostRepository::class);
@@ -96,7 +98,8 @@ class FrontendUserSlot implements \TYPO3\CMS\Core\SingletonInterface {
      * @param \LumIT\Typo3bb\Domain\Model\FrontendUser $user
      * @param array $settings
      */
-    public static function sanitizeHtmlSignatureBeforeSave($user, $settings) {
+    public static function sanitizeHtmlSignatureBeforeSave($user, $settings)
+    {
         $user->setSignature(RteUtility::sanitizeHtml($user->getSignature()));
     }
 }

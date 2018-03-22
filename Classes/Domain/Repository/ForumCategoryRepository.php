@@ -1,4 +1,5 @@
 <?php
+
 namespace LumIT\Typo3bb\Domain\Repository;
 
 
@@ -27,6 +28,8 @@ namespace LumIT\Typo3bb\Domain\Repository;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use TYPO3\CMS\Extbase\Persistence\QueryInterface;
+
 /**
  * The repository for ForumCategories
  */
@@ -37,7 +40,7 @@ class ForumCategoryRepository extends AbstractRepository
      * @var array
      */
     protected $defaultOrderings = [
-        'sorting' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING
+        'sorting' => QueryInterface::ORDER_ASCENDING
     ];
 
 }

@@ -1,9 +1,10 @@
 <?php
+
 namespace LumIT\Typo3bb\Utility;
+
 use LumIT\Typo3bb\Domain\Model\Post;
 use LumIT\Typo3bb\Domain\Model\Topic;
 use TYPO3\CMS\Core\SingletonInterface;
-
 use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
 
 /***************************************************************
@@ -30,10 +31,11 @@ use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+class UrlUtility implements SingletonInterface
+{
 
-class UrlUtility implements SingletonInterface {
-
-    public static function getPostUrl(UriBuilder $uriBuilder, Post $post, Topic $topic = null) {
+    public static function getPostUrl(UriBuilder $uriBuilder, Post $post, Topic $topic = null)
+    {
         $topic = is_null($topic) ? $post->getTopic() : $topic;
         $uri = $uriBuilder->uriFor('show', ['topic' => $topic, 'post' => $post]);
         $uri .= '#post-' . $post->getUid();

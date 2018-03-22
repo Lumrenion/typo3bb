@@ -32,13 +32,20 @@
                                 <div class="forum-board-topic">
                                     <div class="row row-eq-height">
                                         <div class="col-xs-7 forum-board-topic-title">
+                                            <div class="small forum-board-topic-title-rootline">
+                                                <f:for each="{post.rootline}" as="item" iteration="it">
+                                                    {item.title -> f:format.htmlentitiesDecode()}<f:if condition="!{it.isLast}"> > </f:if>
+                                                </f:for>
+                                            </div>
                                             <div class="clearfix">
                                                 <div class="pull-right">
                                                     <f:if condition="{post.topic.sticky}"><span class="glyphicon glyphicon-pushpin"></span></f:if>
                                                     <f:if condition="{post.topic.closed}"><span class="glyphicon glyphicon-lock"></span></f:if>
                                                 </div>
-                                                <f:link.action pageUid="{settings.pid.forum}" action="show" controller="Topic" arguments="{topic: post.topic}">{post.topic.title}</f:link.action>
-                                                <f:link.action pageUid="{settings.pid.forum}" action="showNewPost" controller="Topic" arguments="{topic: post.topic}"><span class="label label-primary"><f:translate key="topic.hasNew" />&nbsp;<i class="fa fa-arrow-circle-right"></i></span></f:link.action>
+                                                <div>
+                                                    <f:link.action pageUid="{settings.pid.forum}" action="show" controller="Topic" arguments="{topic: post.topic}">{post.topic.title}</f:link.action>
+                                                    <f:link.action pageUid="{settings.pid.forum}" action="showNewPost" controller="Topic" arguments="{topic: post.topic}"><span class="label label-primary"><f:translate key="topic.hasNew" />&nbsp;<i class="fa fa-arrow-circle-right"></i></span></f:link.action>
+                                                </div>
                                             </div>
                                             <div>
                                                 <small>
@@ -53,7 +60,7 @@
                                         <div class="col-xs-5 col-md-3 forum-board-topic-latest-post">
                                             <small>
                                                 <f:format.date format="d.m.Y, H:i">{post.topic.latestPost.crdate}</f:format.date><br>
-                                                <f:translate key="topic.latestPost.author.label" />&nbsp;<f:if condition="{post.topic.latestPost.authorName}">
+                                                <f:translate key="latestPost.author.label" />&nbsp;<f:if condition="{post.topic.latestPost.author}">
                                                 <f:then><f:link.action action="show" controller="FrontendUser" extensionName="IglarpTemplate" pluginName="User-Profile" arguments="{user: post.topic.latestPost.author}" pageUid="{settings.pid.profile}">{post.topic.latestPost.authorName}</f:link.action></f:then>
                                                 <f:else>{post.topic.latestPost.authorName}</f:else>
                                             </f:if>

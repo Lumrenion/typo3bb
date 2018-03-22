@@ -1,8 +1,12 @@
 <?php
+
 namespace LumIT\Typo3bb\Security\AccessValidator;
+
+use LumIT\Typo3bb\Domain\Model\FrontendUserGroup;
 use LumIT\Typo3bb\Domain\Model\Board;
 use LumIT\Typo3bb\Domain\Model\Post;
 use LumIT\Typo3bb\Domain\Model\Topic;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
 use TYPO3\CMS\Extbase\Persistence\Generic\LazyLoadingProxy;
 
@@ -30,44 +34,51 @@ use TYPO3\CMS\Extbase\Persistence\Generic\LazyLoadingProxy;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-
-class IsBoardModeratorAccessValidator extends AbstractAccessValidator{
+class IsBoardModeratorAccessValidator extends AbstractAccessValidator
+{
 
     /**
      * @param \LumIT\Typo3bb\Domain\Model\Board|\LumIT\Typo3bb\Domain\Model\Topic|\LumIT\Typo3bb\Domain\Model\Post $objectToValidate
      * @return bool
      * @throws IllegalObjectTypeException
      */
-    public function validate($objectToValidate) {
+    public function validate($objectToValidate)
+    {
         if ($objectToValidate instanceof LazyLoadingProxy) {
             $objectToValidate = $objectToValidate->_loadRealInstance();
         }
-        if($objectToValidate instanceof Board) {
+        if ($this->frontendUser == null) {
+            return false;
+        }
+        if ($objectToValidate instanceof Board) {
             return $this->validateBoard($objectToValidate);
-        } elseif($objectToValidate instanceof Topic) {
+        } elseif ($objectToValidate instanceof Topic) {
             return $this->validateTopic($objectToValidate);
-        } elseif($objectToValidate instanceof Post) {
+        } elseif ($objectToValidate instanceof Post) {
             return $this->validatePost($objectToValidate);
         } else {
             throw new IllegalObjectTypeException('Object to validate must be of type ' . Board::class . ', ' . Topic::class . ' or ' . Post::class . '!');
         }
-
-        return false;
     }
 
     /**
      * @param \LumIT\Typo3bb\Domain\Model\Board $boardToValidate
      * @return bool
      */
-    protected function validateBoard($boardToValidate) {
-        if($boardToValidate->getParentBoard() != null) {
-            if($this->validateBoard($boardToValidate->getParentBoard())) {
+    protected function validateBoard($boardToValidate)
+    {
+        if ($boardToValidate->getParentBoard() != null) {
+            if ($this->validateBoard($boardToValidate->getParentBoard())) {
                 return true;
             }
         }
 
-        foreach (array_filter(explode(',', $boardToValidate->getModerators()), 'strlen') as $moderatorUid) {
-            if (trim($moderatorUid) == $GLOBALS['TSFE']->fe_user->user['uid']) {
+        /** @var FrontendUserGroup $usergroup */
+        foreach ($this->frontendUser->getUsergroup() as $usergroup) {
+            if (
+                $usergroup->isGlobalModeratorGroup()
+                || GeneralUtility::inList($boardToValidate->getModeratorGroups(), $usergroup->getUid())
+            ) {
                 return true;
             }
         }
@@ -79,7 +90,8 @@ class IsBoardModeratorAccessValidator extends AbstractAccessValidator{
      * @param \LumIT\Typo3bb\Domain\Model\Topic $topicToValidate
      * @return bool
      */
-    protected function validateTopic($topicToValidate) {
+    protected function validateTopic($topicToValidate)
+    {
         return $this->validateBoard($topicToValidate->getBoard());
     }
 
@@ -87,7 +99,8 @@ class IsBoardModeratorAccessValidator extends AbstractAccessValidator{
      * @param \LumIT\Typo3bb\Domain\Model\Post $postToValidate
      * @return bool
      */
-    protected function validatePost($postToValidate) {
+    protected function validatePost($postToValidate)
+    {
         return $this->validateTopic($postToValidate->getTopic());
     }
 }

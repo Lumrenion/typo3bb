@@ -1,9 +1,7 @@
 <?php
-namespace LumIT\Typo3bb\Security\AccessValidator;
-use LumIT\Typo3bb\Domain\Model\Board;
-use LumIT\Typo3bb\Domain\Model\Post;
-use LumIT\Typo3bb\Domain\Model\Topic;
-use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
+
+namespace LumIT\Typo3bb\Domain\Repository;
+
 
 /***************************************************************
  *
@@ -30,14 +28,17 @@ use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-class IsGlobalModeratorAccessValidator extends AbstractAccessValidator{
+/**
+ * The repository for FrontendUserGroups
+ */
+class FrontendUserGroupRepository extends \TYPO3\CMS\Extbase\Domain\Repository\FrontendUserGroupRepository
+{
+    use RepositoryTrait;
 
-    /**
-     * @param \LumIT\Typo3bb\Domain\Model\Board|\LumIT\Typo3bb\Domain\Model\Topic|\LumIT\Typo3bb\Domain\Model\Post $objectToValidate
-     * @return bool
-     * @throws IllegalObjectTypeException
-     */
-    public function validate($objectToValidate) {
-        return $this->_getCurrentLoginUser() != null && $this->_getCurrentLoginUser()->isGlobalModerator();
+
+    public function findByUids(array $uids)
+    {
+        $query = $this->createQuery();
+        return $query->matching($query->in('uid', $uids))->execute();
     }
 }

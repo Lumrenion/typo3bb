@@ -1,9 +1,11 @@
 <?php
+
 namespace LumIT\Typo3bb\Utility;
+
 use LumIT\Typo3bb\Domain\Model\FrontendUser;
 use LumIT\Typo3bb\Domain\Repository\FrontendUserRepository;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-
+use LumIT\Typo3bb\Domain\Model\FrontendUserGroup;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 
 
@@ -31,28 +33,30 @@ use TYPO3\CMS\Extbase\Object\ObjectManager;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-
-class FrontendUserUtility {
+class FrontendUserUtility
+{
     /**
      * @var \LumIT\Typo3bb\Domain\Model\FrontendUser
      */
-    protected static $frontendUser = null;
+    protected static $currentFrontendUser = null;
 
     /**
      * @return \LumIT\Typo3bb\Domain\Model\FrontendUser
      */
-    public static function getCurrentUser() {
-        if($GLOBALS['TSFE']->loginUser && is_null(self::$frontendUser)) {
-            self::$frontendUser = self::getUser($GLOBALS['TSFE']->fe_user->user['uid']);
+    public static function getCurrentUser()
+    {
+        if ($GLOBALS['TSFE']->loginUser && is_null(self::$currentFrontendUser)) {
+            self::$currentFrontendUser = self::getUser($GLOBALS['TSFE']->fe_user->user['uid']);
         }
-        return self::$frontendUser;
+        return self::$currentFrontendUser;
     }
 
     /**
      * @param int $uid
      * @return FrontendUser
      */
-    public static function getUser(int $uid) {
+    public static function getUser(int $uid)
+    {
         /** @var FrontendUser $frontendUser */
         $frontendUser = self::getFrontendUserRepositoryInstance()->findByUid($uid);
         return $frontendUser;
@@ -61,7 +65,8 @@ class FrontendUserUtility {
     /**
      * @return FrontendUserRepository
      */
-    protected static function getFrontendUserRepositoryInstance() {
+    protected static function getFrontendUserRepositoryInstance()
+    {
         /** @var ObjectManager $objectManager */
         $objectManager = self::getObjectManagerInstance();
         return $objectManager->get(FrontendUserRepository::class);
@@ -70,7 +75,32 @@ class FrontendUserUtility {
     /**
      * @return ObjectManager
      */
-    protected static function getObjectManagerInstance() {
+    protected static function getObjectManagerInstance()
+    {
         return GeneralUtility::makeInstance(ObjectManager::class);
+    }
+
+    /**
+     * Returns the Usergroup comma separated list of the current or a specific user. Includes 0 and -2 in list.
+     *
+     * @param FrontendUser $frontendUser
+     * @return string
+     */
+    public static function getUsergroupList($frontendUser = null)
+    {
+        if ($frontendUser === null) {
+            return $GLOBALS['TSFE']->gr_list;
+        } else {
+            $usergroups = $frontendUser->getUsergroup()->toArray();
+            $usergroups = array_map(function ($usergroup) {
+                /** @var FrontendUserGroup $usergroup */
+                return $usergroup->getUid();
+            }, $usergroups);
+            // 0: matches 'logged in and not logged in users'
+            $usergroups[] = 0;
+            // -2: matches 'any login user'
+            $usergroups[] = -2;
+            return implode(',', $usergroups);
+        }
     }
 }

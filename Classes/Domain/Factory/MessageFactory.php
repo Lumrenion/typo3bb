@@ -1,4 +1,5 @@
 <?php
+
 namespace LumIT\Typo3bb\Domain\Factory;
 
 /*
@@ -14,6 +15,7 @@ namespace LumIT\Typo3bb\Domain\Factory;
  * The TYPO3 project - inspiring people to share!
  */
 
+use LumIT\Typo3bb\Domain\Model\FrontendUser;
 use LumIT\Typo3bb\Domain\Model\MessageParticipant;
 use LumIT\Typo3bb\Domain\Repository\FrontendUserRepository;
 use LumIT\Typo3bb\Utility\FrontendUserUtility;
@@ -26,21 +28,24 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
  * Class MessageFactory
  * @package LumIT\Typo3bb\Domain\Factory
  */
-class MessageFactory {
+class MessageFactory
+{
     /** @var FrontendUserRepository */
-    protected static $frontendUserRepository = NULL;
+    protected static $frontendUserRepository = null;
 
     /**
      * @param \TYPO3\CMS\Extbase\Mvc\Controller\Argument $messageArgument
      * @param array $message
      * @param string|array $receivers
      */
-    public static function prepareMessage($messageArgument, &$message, $receivers) {
-        if(empty(trim($message['subject']))) {
+    public static function prepareMessage($messageArgument, &$message, $receivers)
+    {
+        if (empty(trim($message['subject']))) {
             $message['subject'] = LocalizationUtility::translate('messages.subject.empty', 'typo3bb');
         }
         $message['sender'] = new MessageParticipant();
         $message['sender']->setUser(FrontendUserUtility::getCurrentUser());
+        $message['sender']->setUserName(FrontendUserUtility::getCurrentUser()->getUsername());
         $message['sender']->setViewed(true);
         $messageArgument->getPropertyMappingConfiguration()->allowAllProperties('sender');
 
@@ -51,18 +56,33 @@ class MessageFactory {
 
         $i = 0;
         $message['receivers'] = [];
+        /** @var FrontendUser $receivingUser */
         foreach ($receivingUsers as $receivingUser) {
             $message['receivers'][$i] = new MessageParticipant();
             $message['receivers'][$i]->setUser($receivingUser);
+            $message['receivers'][$i]->setUserName($receivingUser->getUsername());
             $messageArgument->getPropertyMappingConfiguration()->forProperty('receivers')->allowProperties($i);
             $i++;
         }
     }
 
     /**
+     * @return FrontendUserRepository
+     */
+    protected static function getFrontendUserRepository()
+    {
+        if (self::$frontendUserRepository == null) {
+            /** @var FrontendUserRepository $frontendUserRepository */
+            self::$frontendUserRepository = GeneralUtility::makeInstance(ObjectManager::class)->get(FrontendUserRepository::class);
+        }
+        return self::$frontendUserRepository;
+    }
+
+    /**
      * @param \LumIT\Typo3bb\Domain\Model\Message $message
      */
-    public static function createMessage($message) {
+    public static function createMessage($message)
+    {
         $message->getSender()->setSentMessage($message);
         $message->getSender()->getUser()->addSentMessage($message->getSender());
         /** @var MessageParticipant $receiver */
@@ -70,16 +90,5 @@ class MessageFactory {
             $receiver->setReceivedMessage($message);
             $receiver->getUser()->addReceivedMessage($receiver);
         }
-    }
-
-    /**
-     * @return FrontendUserRepository
-     */
-    protected static function getFrontendUserRepository() {
-        if (self::$frontendUserRepository == NULL) {
-            /** @var FrontendUserRepository $frontendUserRepository */
-            self::$frontendUserRepository = GeneralUtility::makeInstance(ObjectManager::class)->get(FrontendUserRepository::class);
-        }
-        return self::$frontendUserRepository;
     }
 }

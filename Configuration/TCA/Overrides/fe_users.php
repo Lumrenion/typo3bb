@@ -16,14 +16,6 @@ $tmp_typo3bb_columns = [
             'eval' => 'trim'
         ]
     ],
-    'tx_typo3bb_global_moderator' => [
-        'exclude' => 1,
-        'label' => 'LLL:EXT:typo3bb/Resources/Private/Language/locallang_db.xlf:tx_typo3bb_domain_model_frontenduser.global_moderator',
-        'config' => [
-            'type' => 'check',
-            'default' => 0
-        ]
-    ],
     
     'signature' => [
         'exclude' => 1,
@@ -180,7 +172,7 @@ $tmp_typo3bb_columns = [
         'label' => 'LLL:EXT:typo3bb/Resources/Private/Language/locallang_db.xlf:tx_typo3bb_domain_model_frontendUser.hide_sensitive_data',
         'config' => [
             'type' => 'check',
-            'default' => 0
+            'default' => 1
         ]
     ],
     'show_online' => [
@@ -207,6 +199,12 @@ $tmp_typo3bb_columns = [
             'default' => 0,
             'size' => 30,
             'eval' => 'trim, int'
+        ]
+    ],
+    'is_online' => [
+        'exclude' => 1,
+        'config' => [
+            'type' => 'passthrough'
         ]
     ],
     'read_topics' => [
@@ -240,5 +238,7 @@ $tmp_typo3bb_columns = [
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToAllTCAtypes(
     'fe_users',
     ',--div--;LLL:EXT:typo3bb/Resources/Private/Language/locallang_db.xlf:fe_user.tab.typo3bb_settings.label,'
-    . 'tx_typo3bb_global_moderator, signature, hide_sensitive_data, show_online, message_notification, '
+    . 'tx_typo3bb_display_name, signature, hide_sensitive_data, show_online, message_notification, '
 );
+
+unset($tmp_typo3bb_columns);

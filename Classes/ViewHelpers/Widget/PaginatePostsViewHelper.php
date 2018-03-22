@@ -1,4 +1,5 @@
 <?php
+
 namespace LumIT\Typo3bb\ViewHelpers\Widget;
 
 /*                                                                        *
@@ -22,7 +23,7 @@ namespace LumIT\Typo3bb\ViewHelpers\Widget;
  *                                                                        */
 
 
-
+use LumIT\Typo3bb\ViewHelpers\Widget\Controller\PaginatePostsController;
 use TYPO3\CMS\Fluid\ViewHelpers\Widget\PaginateViewHelper;
 
 /**
@@ -55,13 +56,15 @@ use TYPO3\CMS\Fluid\ViewHelpers\Widget\PaginateViewHelper;
  *
  * @api
  */
-class PaginatePostsViewHelper extends PaginateViewHelper {
+class PaginatePostsViewHelper extends PaginateViewHelper
+{
     /**
      * @var \LumIT\Typo3bb\ViewHelpers\Widget\Controller\PaginatePostsController
      */
     protected $controller;
 
-    public function initializeArguments() {
+    public function initializeArguments()
+    {
         parent::initializeArguments();
         $this->registerArgument('currentPost', 'LumIT\Typo3bb\Domain\Model\Post', 'The current post', false);
     }
@@ -69,7 +72,7 @@ class PaginatePostsViewHelper extends PaginateViewHelper {
     /**
      * @param \LumIT\Typo3bb\ViewHelpers\Widget\Controller\PaginatePostsController $controller
      */
-    public function injectPaginateController(\LumIT\Typo3bb\ViewHelpers\Widget\Controller\PaginatePostsController $controller)
+    public function injectPaginateController(PaginatePostsController $controller)
     {
         $this->controller = $controller;
     }

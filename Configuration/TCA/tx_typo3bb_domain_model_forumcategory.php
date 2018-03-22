@@ -18,13 +18,13 @@ return [
 
         ],
         'searchFields' => 'title,boards,',
-        'iconfile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath('typo3bb') . 'Resources/Public/Icons/tx_typo3bb_domain_model_forumcategory.gif'
+        'iconfile' => 'EXT:typo3bb/Resources/Public/Icons/tx_typo3bb_domain_model_forumcategory.gif'
     ],
     'interface' => [
         'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, title, boards',
     ],
     'types' => [
-        '1' => ['showitem' => 'sys_language_uid;;;;1-1-1, l10n_parent, l10n_diffsource, hidden;;1, title, boards, '],
+        '1' => ['showitem' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, --palette--;;1, title, boards, '],
     ],
     'palettes' => [
         '1' => ['showitem' => ''],

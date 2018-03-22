@@ -16,13 +16,13 @@ return [
             'endtime' => 'endtime',
         ],
         'searchFields' => 'title,sticky,closed,posts_count,latest_post_crdate,posts,poll,author,author_name,subscribers,latest_post,',
-        'iconfile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath('typo3bb') . 'Resources/Public/Icons/tx_typo3bb_domain_model_topic.gif'
+        'iconfile' => 'EXT:typo3bb/Resources/Public/Icons/tx_typo3bb_domain_model_topic.gif'
     ],
     'interface' => [
         'showRecordFieldList' => 'hidden, title, sticky, closed, posts_count, latest_post_crdate, posts, poll, author, author_name, subscribers, readers, latest_post',
     ],
     'types' => [
-        '1' => ['showitem' => 'hidden;;1, title, sticky, closed, author, author_name, poll, posts, --div--;LLL:EXT:cms/locallang_ttc.xlf:tabs.access, starttime, endtime'],
+        '1' => ['showitem' => 'hidden, --palette--;;1, title, sticky, closed, author, author_name, poll, posts, --div--;LLL:EXT:cms/locallang_ttc.xlf:tabs.access, starttime, endtime'],
     ],
     'palettes' => [
         '1' => ['showitem' => ''],
@@ -37,34 +37,38 @@ return [
         ],
         'starttime' => [
             'exclude' => 1,
-            'l10n_mode' => 'mergeIfNotBlank',
             'label' => 'LLL:EXT:lang/locallang_general.xlf:LGL.starttime',
             'config' => [
                 'type' => 'input',
+                'renderType' => 'inputDateTime',
                 'size' => 13,
-                'max' => 20,
                 'eval' => 'datetime',
                 'checkbox' => 0,
                 'default' => 0,
                 'range' => [
                     'lower' => mktime(0, 0, 0, date('m'), date('d'), date('Y'))
                 ],
+                'behaviour' => [
+                    'allowLanguageSynchronization' => 1
+                ]
             ],
         ],
         'endtime' => [
             'exclude' => 1,
-            'l10n_mode' => 'mergeIfNotBlank',
             'label' => 'LLL:EXT:lang/locallang_general.xlf:LGL.endtime',
             'config' => [
                 'type' => 'input',
+                'renderType' => 'inputDateTime',
                 'size' => 13,
-                'max' => 20,
                 'eval' => 'datetime',
                 'checkbox' => 0,
                 'default' => 0,
                 'range' => [
                     'lower' => mktime(0, 0, 0, date('m'), date('d'), date('Y'))
                 ],
+                'behaviour' => [
+                    'allowLanguageSynchronization' => 1
+                ]
             ],
         ],
 
@@ -188,8 +192,8 @@ return [
             'label' => 'LLL:EXT:typo3bb/Resources/Private/Language/locallang_db.xlf:tx_typo3bb_domain_model_topic.latest_post_crdate',
             'config' => [
                 'type' => 'input',
+                'renderType' => 'inputDateTime',
                 'size' => 13,
-                'max' => 20,
                 'eval' => 'datetime',
                 'checkbox' => 0,
                 'default' => 0,

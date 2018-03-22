@@ -1,4 +1,5 @@
 <?php
+
 namespace LumIT\Typo3bb\Domain\Model;
 
 
@@ -30,7 +31,6 @@ namespace LumIT\Typo3bb\Domain\Model;
 use LumIT\Typo3bb\Domain\Repository\PostRepository;
 use LumIT\Typo3bb\Utility\FrontendUserUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
@@ -50,35 +50,35 @@ class Topic extends AbstractEntity
      * @validate NotEmpty
      */
     protected $title = '';
-    
+
     /**
      * If the topic is pinned
      *
      * @var bool
      */
     protected $sticky = false;
-    
+
     /**
      * If new posts can be added to the topic
      *
      * @var bool
      */
     protected $closed = false;
-    
+
     /**
      * crdate
      *
      * @var \DateTime
      */
     protected $crdate = null;
-    
+
     /**
      * Number of posts, added for performance reasons
      *
      * @var int
      */
     protected $postsCount = 0;
-    
+
     /**
      * posts
      *
@@ -86,7 +86,7 @@ class Topic extends AbstractEntity
      * @lazy
      */
     protected $posts = null;
-    
+
     /**
      * poll
      *
@@ -109,7 +109,7 @@ class Topic extends AbstractEntity
      * @var string
      */
     protected $authorName = '';
-    
+
     /**
      * The users subscribed this topic
      *
@@ -123,10 +123,10 @@ class Topic extends AbstractEntity
      *
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\LumIT\Typo3bb\Domain\Model\Reader>
      * @lazy
-     * @cascade remove
+     * @TYPO3\CMS\Extbase\Annotation\ORM\Cascade("remove")
      */
     protected $readers = null;
-    
+
     /**
      * Pointer to the latest post of the topic.
      *
@@ -153,16 +153,17 @@ class Topic extends AbstractEntity
      * @var int
      */
     protected $views = 0;
-    
+
     /**
      * __construct
      */
-    public function __construct() {
+    public function __construct()
+    {
         //Do not remove the next line: It would break the functionality
         $this->initStorageObjects();
         $this->crdate = new \DateTime();
     }
-    
+
     /**
      * Initializes all ObjectStorage properties
      * Do not modify this method!
@@ -171,12 +172,13 @@ class Topic extends AbstractEntity
      *
      * @return void
      */
-    protected function initStorageObjects() {
+    protected function initStorageObjects()
+    {
         $this->posts = new ObjectStorage();
         $this->subscribers = new ObjectStorage();
         $this->readers = new ObjectStorage();
     }
-    
+
     /**
      * Returns the title
      *
@@ -187,7 +189,7 @@ class Topic extends AbstractEntity
     {
         return $this->title;
     }
-    
+
     /**
      * Sets the title
      *
@@ -198,7 +200,7 @@ class Topic extends AbstractEntity
     {
         $this->title = $title;
     }
-    
+
     /**
      * Returns the sticky
      *
@@ -208,7 +210,17 @@ class Topic extends AbstractEntity
     {
         return $this->sticky;
     }
-    
+
+    /**
+     * Returns the boolean state of sticky
+     *
+     * @return bool
+     */
+    public function isSticky()
+    {
+        return $this->sticky;
+    }
+
     /**
      * Sets the sticky
      *
@@ -219,17 +231,7 @@ class Topic extends AbstractEntity
     {
         $this->sticky = $sticky;
     }
-    
-    /**
-     * Returns the boolean state of sticky
-     *
-     * @return bool
-     */
-    public function isSticky()
-    {
-        return $this->sticky;
-    }
-    
+
     /**
      * Returns the closed
      *
@@ -239,7 +241,17 @@ class Topic extends AbstractEntity
     {
         return $this->closed;
     }
-    
+
+    /**
+     * Returns the boolean state of closed
+     *
+     * @return bool
+     */
+    public function isClosed()
+    {
+        return $this->closed;
+    }
+
     /**
      * Sets the closed
      *
@@ -250,17 +262,7 @@ class Topic extends AbstractEntity
     {
         $this->closed = $closed;
     }
-    
-    /**
-     * Returns the boolean state of closed
-     *
-     * @return bool
-     */
-    public function isClosed()
-    {
-        return $this->closed;
-    }
-    
+
     /**
      * Returns the crdate
      *
@@ -270,7 +272,7 @@ class Topic extends AbstractEntity
     {
         return $this->crdate;
     }
-    
+
     /**
      * Sets the crdate
      *
@@ -281,7 +283,7 @@ class Topic extends AbstractEntity
     {
         $this->crdate = $crdate;
     }
-    
+
     /**
      * Returns the postsCount
      *
@@ -291,7 +293,7 @@ class Topic extends AbstractEntity
     {
         return $this->postsCount;
     }
-    
+
     /**
      * Sets the postsCount
      *
@@ -303,7 +305,7 @@ class Topic extends AbstractEntity
         $this->postsCount = $postsCount;
     }
 
-    
+
     /**
      * Adds a Post
      *
@@ -313,25 +315,27 @@ class Topic extends AbstractEntity
     public function addPost(Post $post)
     {
         $this->posts->attach($post);
-        
+
         $post->setTopic($this);
         $this->postsCount++;
-        
-        if($this->latestPost === NULL || $this->latestPost->getCrdate() < $post->getCrdate()) {
-            $this->setLatestPost($post);
-        }
-        if($this->crdate < $post->getCrdate()) {
+        // if there are no posts in this topic yet, set the needed data
+        if ($this->posts->count() == 0) {
             $this->setCrdate($post->getCrdate());
             $this->setAuthor($post->getAuthor());
-            $this->setAuthorName($post->getAuthorName());
+            $this->setAuthorName($post->getTrueAuthorName());
         }
-        
+        // if the added post is newer than the latestPost, change latestPost
+        if ($this->latestPost === null || $this->latestPost->getCrdate() < $post->getCrdate()) {
+            $this->setLatestPost($post);
+        }
+
         $this->board->_increasePostsCount();
-        if($this->board->getLatestPost() === NULL || $this->board->getLatestPost()->getCrdate() < $post->getCrdate()) {
+        // if the added post is newer than the boards latestPost, change latestPost
+        if ($this->board->getLatestPost() === null || $this->board->getLatestPost()->getCrdate() < $post->getCrdate()) {
             $this->board->setLatestPost($post);
         }
     }
-    
+
     /**
      * Removes a Post
      *
@@ -341,21 +345,21 @@ class Topic extends AbstractEntity
     public function removePost(Post $postToRemove)
     {
         $this->posts->detach($postToRemove);
-        
+
         $this->postsCount--;
-        if($this->latestPost == $postToRemove) {
+        if ($this->latestPost->getUid() == $postToRemove->getUid()) {
             $postsArray = $this->posts->toArray();
-            if(count($postsArray) > 0) {
+            if (count($postsArray) > 0) {
                 $this->setLatestPost(array_pop($postsArray));
             }
         }
-        
+
         $this->board->_increasePostsCount(-1);
-        if($this->board->getLatestPost() === $postToRemove) {
+        if ($this->board->getLatestPost() === $postToRemove) {
             $this->board->_resetLatestPost();
         }
     }
-    
+
     /**
      * Returns the posts
      *
@@ -366,7 +370,7 @@ class Topic extends AbstractEntity
     {
         return $this->posts;
     }
-    
+
     /**
      * Sets the posts
      *
@@ -377,7 +381,7 @@ class Topic extends AbstractEntity
     {
         $this->posts = $posts;
     }
-    
+
     /**
      * Returns the poll
      *
@@ -387,7 +391,7 @@ class Topic extends AbstractEntity
     {
         return $this->poll;
     }
-    
+
     /**
      * Sets the poll
      *
@@ -397,6 +401,25 @@ class Topic extends AbstractEntity
     public function setPoll($poll)
     {
         $this->poll = $poll;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAuthorName()
+    {
+        if (!is_null($this->getAuthor())) {
+            return $this->getAuthor()->getDisplayName();
+        }
+        return $this->authorName;
+    }
+
+    /**
+     * @param string $authorName
+     */
+    public function setAuthorName($authorName)
+    {
+        $this->authorName = $authorName;
     }
 
     /**
@@ -421,23 +444,6 @@ class Topic extends AbstractEntity
     }
 
     /**
-     * @return string
-     */
-    public function getAuthorName() {
-        if (!is_null($this->getAuthor())) {
-            return $this->getAuthor()->getDisplayName();
-        }
-        return $this->authorName;
-    }
-
-    /**
-     * @param string $authorName
-     */
-    public function setAuthorName($authorName) {
-        $this->authorName = $authorName;
-    }
-    
-    /**
      * Adds a FrontendUser
      *
      * @param \LumIT\Typo3bb\Domain\Model\FrontendUser $subscriber
@@ -447,7 +453,7 @@ class Topic extends AbstractEntity
     {
         $this->subscribers->attach($subscriber);
     }
-    
+
     /**
      * Removes a FrontendUser
      *
@@ -458,7 +464,7 @@ class Topic extends AbstractEntity
     {
         $this->subscribers->detach($subscriberToRemove);
     }
-    
+
     /**
      * Returns the subscribers
      *
@@ -468,7 +474,7 @@ class Topic extends AbstractEntity
     {
         return $this->subscribers;
     }
-    
+
     /**
      * Sets the subscribers
      *
@@ -482,10 +488,25 @@ class Topic extends AbstractEntity
 
     /**
      * Whether the current user has subscribed the board
+     * Alias for {@link isSubscribed()}
      *
      * @return bool
      */
-    public function isSubscribed() {
+    public function getSubscribed()
+    {
+        return $this->isSubscribed();
+    }
+
+    /**
+     * Whether the current user has subscribed the board
+     *
+     * @return bool
+     */
+    public function isSubscribed()
+    {
+        // TODO there seems to be an inconsistency when getting database records via Repository or via ObjectStorage
+        // TODO when getting via Repository, a Typo3bb-FrontendUser is returned
+        // TODO when getting via ObjectStorage, IglarpTemplate-FrontendUser is returned
         $user = FrontendUserUtility::getCurrentUser();
         if (is_null($user)) {
             return false;
@@ -495,22 +516,13 @@ class Topic extends AbstractEntity
     }
 
     /**
-     * Whether the current user has subscribed the board
-     * Alias for {@link isSubscribed()}
-     *
-     * @return bool
-     */
-    public function getSubscribed() {
-        return $this->isSubscribed();
-    }
-
-    /**
      * Adds a FrontendUser
      *
      * @param \LumIT\Typo3bb\Domain\Model\Reader $reader
      * @return void
      */
-    public function addReader($reader) {
+    public function addReader($reader)
+    {
         $this->readers->attach($reader);
     }
 
@@ -520,36 +532,49 @@ class Topic extends AbstractEntity
      * @param \LumIT\Typo3bb\Domain\Model\Reader $reader
      * @return void
      */
-    public function removeReader($reader) {
+    public function removeReader($reader)
+    {
         $this->readers->detach($reader);
     }
-    
+
     /**
      * Returns the readers
      *
      * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage $readers
      */
-    public function getReaders() {
+    public function getReaders()
+    {
         return $this->readers;
     }
-    
+
     /**
      * Sets the readers
      *
      * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\LumIT\Typo3bb\Domain\Model\Reader> $readers
      * @return void
      */
-    public function setReaders($readers) {
+    public function setReaders($readers)
+    {
         $this->readers = $readers;
     }
 
     /**
      * @return bool
      */
-    public function isRead() {
+    public function getRead()
+    {
+        return $this->isRead();
+    }
+
+    /**
+     * @return bool
+     */
+    public function isRead()
+    {
         $frontendUser = FrontendUserUtility::getCurrentUser();
-        if (is_null($frontendUser))
+        if (is_null($frontendUser)) {
             return true;
+        }
 
         /** @var ObjectManager $objectManager */
         $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
@@ -560,28 +585,23 @@ class Topic extends AbstractEntity
     }
 
     /**
-     * @return bool
-     */
-    public function getRead() {
-        return $this->isRead();
-    }
-    
-    /**
      * Returns the latestPost
      *
      * @return \LumIT\Typo3bb\Domain\Model\Post $latestPost
      */
-    public function getLatestPost() {
+    public function getLatestPost()
+    {
         return $this->latestPost;
     }
-    
+
     /**
      * Sets the latestPost
      *
      * @param \LumIT\Typo3bb\Domain\Model\Post $latestPost
      * @return void
      */
-    public function setLatestPost($latestPost) {
+    public function setLatestPost($latestPost)
+    {
         $this->latestPost = $latestPost;
         $this->latestPostCrdate = $latestPost->getCrdate();
     }
@@ -591,7 +611,8 @@ class Topic extends AbstractEntity
      *
      * @return \DateTime $latestPostCrdate
      */
-    public function getLatestPostCrdate() {
+    public function getLatestPostCrdate()
+    {
         return $this->latestPostCrdate;
     }
 
@@ -601,21 +622,24 @@ class Topic extends AbstractEntity
      * @param \DateTime $latestPostCrdate
      * @return void
      */
-    public function setLatestPostCrdate($latestPostCrdate) {
+    public function setLatestPostCrdate($latestPostCrdate)
+    {
         $this->latestPostCrdate = $latestPostCrdate;
     }
 
     /**
      * @return \LumIT\Typo3bb\Domain\Model\Board
      */
-    public function getBoard() {
+    public function getBoard()
+    {
         return $this->board;
     }
 
     /**
      * @param \LumIT\Typo3bb\Domain\Model\Board $board
      */
-    public function setBoard($board) {
+    public function setBoard($board)
+    {
         $this->board = $board;
     }
 
@@ -623,7 +647,8 @@ class Topic extends AbstractEntity
     /**
      * @return array
      */
-    public function getRootline() {
+    public function getRootline()
+    {
         $rootline = $this->board->getRootline();
         $rootline[] = $this;
         return $rootline;
@@ -632,18 +657,21 @@ class Topic extends AbstractEntity
     /**
      * @return int
      */
-    public function getViews() {
+    public function getViews()
+    {
         return $this->views;
     }
 
     /**
      * @param int $views
      */
-    public function setViews($views) {
+    public function setViews($views)
+    {
         $this->views = $views;
     }
 
-    public function addView() {
+    public function addView()
+    {
         $this->views++;
     }
 }

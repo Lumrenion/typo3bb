@@ -1,4 +1,5 @@
 <?php
+
 namespace LumIT\Typo3bb\Domain\Model;
 
 
@@ -28,13 +29,15 @@ namespace LumIT\Typo3bb\Domain\Model;
  ***************************************************************/
 use LumIT\Typo3bb\Domain\Repository\BoardRepository;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
+use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
 /**
  * A forum category is displayed on the index page of the bulletin board and
  * contains boards.
  */
-class ForumCategory extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
+class ForumCategory extends AbstractEntity
 {
 
     /**
@@ -44,12 +47,12 @@ class ForumCategory extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * @validate NotEmpty
      */
     protected $title = '';
-    
+
     /**
      * Boards in this cateogry
      *
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\LumIT\Typo3bb\Domain\Model\Board>
-     * @cascade remove
+     * @TYPO3\CMS\Extbase\Annotation\ORM\Cascade("remove")
      * @lazy
      */
     protected $boards = null;
@@ -58,7 +61,7 @@ class ForumCategory extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * @var \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
      */
     protected $allowedBoards = null;
-    
+
     /**
      * __construct
      */
@@ -67,7 +70,7 @@ class ForumCategory extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         //Do not remove the next line: It would break the functionality
         $this->initStorageObjects();
     }
-    
+
     /**
      * Initializes all ObjectStorage properties
      * Do not modify this method!
@@ -78,9 +81,9 @@ class ForumCategory extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     protected function initStorageObjects()
     {
-        $this->boards = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
+        $this->boards = new ObjectStorage();
     }
-    
+
     /**
      * Returns the title
      *
@@ -90,7 +93,7 @@ class ForumCategory extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     {
         return $this->title;
     }
-    
+
     /**
      * Sets the title
      *
@@ -101,45 +104,46 @@ class ForumCategory extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     {
         $this->title = $title;
     }
-    
+
     /**
      * Adds a Board
      *
      * @param \LumIT\Typo3bb\Domain\Model\Board $board
      * @return void
      */
-    public function addBoard(\LumIT\Typo3bb\Domain\Model\Board $board)
+    public function addBoard(Board $board)
     {
         $this->boards->attach($board);
     }
-    
+
     /**
      * Removes a Board
      *
      * @param \LumIT\Typo3bb\Domain\Model\Board $boardToRemove The Board to be removed
      * @return void
      */
-    public function removeBoard(\LumIT\Typo3bb\Domain\Model\Board $boardToRemove)
+    public function removeBoard(Board $boardToRemove)
     {
         $this->boards->detach($boardToRemove);
     }
-    
+
     /**
      * Returns the boards
      *
      * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage
      */
-    public function getBoards() {
+    public function getBoards()
+    {
         return $this->boards;
     }
-    
+
     /**
      * Sets the boards
      *
      * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\LumIT\Typo3bb\Domain\Model\Board> $boards
      * @return void
      */
-    public function setBoards(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $boards)
+    public function setBoards(ObjectStorage $boards)
     {
         $this->boards = $boards;
     }
@@ -149,7 +153,8 @@ class ForumCategory extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
      */
-    public function getAllowedBoards() {
+    public function getAllowedBoards()
+    {
         if (is_null($this->allowedBoards)) {
             $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
             /** @var BoardRepository $boardRepository */

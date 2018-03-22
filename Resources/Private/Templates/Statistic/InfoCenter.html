@@ -15,26 +15,12 @@
         <f:for each="{latestPosts}" as="latestPost">
             <div class="row">
                 <div class="col-xs-8">
-                    <f:if condition="{latestPost.author}">
-                        <f:then>
-                            <f:translate
-                                    key="plugin.statistics.infoCenter.latestPosts.post"
-                                    arguments="{
-                                        0: '{f:uri.action(controller: \'Topic\', action: \'show\', arguments: \'{topic: latestPost.topic, post: latestPost}\')}',
-                                        1: latestPost.topic.title,
-                                        2: '{f:uri.action(controller: \'FrontendUser\', action: \'show\', extensionName: \'IglarpTemplate\', pluginName: \'User-Profile\', pageUid: settings.pid.profile, arguments: \'{user: latestPost.author.uid}\')}',
-                                        3: latestPost.authorName
-                                    }"/>
-                        </f:then>
-                        <f:else>
-                            <f:translate
-                                    key="plugin.statistics.infoCenter.latestPosts.postByGuest"
-                                    arguments="{
-                                        0: '{f:uri.action(controller: \'Topic\', action: \'show\', arguments: \'{topic: latestPost.topic, post: latestPost}\')}',
-                                        1: latestPost.topic.title,
-                                        2: latestPost.authorName
-                                    }"/>
-                        </f:else>
+                    <f:translate key="latestPost.topic.label" />&nbsp;<f:link.action controller="Topic" action="show" pageUid="{settings.pid.forum}"
+                                                                                     arguments="{topic: latestPost.topic, post: latestPost}">{latestPost.topic.title}</f:link.action>
+                    <f:translate key="latestPost.author.label" />&nbsp;<f:if condition="{latestPost.author}">
+                        <f:then><f:link.action controller="FrontendUser" action="show" extensionName="IglarpTemplate" pluginName="User-Profile" pageUid="{settings.pid.profile"
+                                               arguments="{user: latestPost.author}">{latestPost.authorName}</f:link.action></f:then>
+                        <f:else>{latestPost.authorName}</f:else>
                     </f:if>
                 </div>
                 <div class="col-xs-4">
@@ -46,12 +32,11 @@
         <h3><i class="fa fa-bar-chart fa-fw"></i> <f:translate key="plugin.statistics.infoCenter.statisticsSummary.headline.label" /></h3>
         <p>
             <f:translate key="plugin.statistics.infoCenter.statisticsSummary.counts" arguments="{0: postsCount, 1: topicsCount, 2: membersCount}" />.
-            <f:translate
-                key="plugin.statistics.infoCenter.statisticsSummary.newestMember"
-                arguments="{
-                    0: '{f:uri.action(controller: \'FrontendUser\', action: \'show\', extensionName: \'IglarpTemplate\', pluginName: \'User-Profile\', pageUid: settings.pid.profile, arguments: \'{user: newestMember}\')}',
-                    1: newestMember.displayName
-                }"/>
+            <f:translate key="plugin.statistics.infoCenter.statisticsSummary.newestMember" />&nbsp;<f:link.action controller="FrontendUser" action="show" extensionName="IglarpTemplate" pluginName="User-Profile" pageUid="{settings.pid.profile}"
+                                                                                                             arguments="{user: newestMember}">{newestMember.displayName}</f:link.action><br>
+            <f:link.page pageUid="{settings.pid.usersList}">
+                <f:translate key="plugin.statistics.infoCenter.statisticsSummary.allMembers" />
+            </f:link.page>
         </p>
         <p>
             <f:link.page pageUid="{settings.pid.statistics}">

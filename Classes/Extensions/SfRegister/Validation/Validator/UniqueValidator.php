@@ -1,4 +1,5 @@
 <?php
+
 namespace LumIT\Typo3bb\Extensions\SfRegister\Validation\Validator;
 
 
@@ -32,7 +33,8 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
  * UniqueValidator
  * Extends the SfRegister UniqueValidator by adding a check of the username or display name property for being unique among each others
  */
-class UniqueValidator extends \Evoweb\SfRegister\Validation\Validator\UniqueValidator {
+class UniqueValidator extends \Evoweb\SfRegister\Validation\Validator\UniqueValidator
+{
     /**
      * @var \LumIT\Typo3bb\Domain\Repository\FrontendUserRepository
      * @inject
@@ -43,8 +45,12 @@ class UniqueValidator extends \Evoweb\SfRegister\Validation\Validator\UniqueVali
      * @var array
      */
     protected $supportedOptions = array(
-        'global'     => array(true, 'Whether to check uniqueness globally', 'boolean'),
-        'context'   => array('create', 'create or edit. If edit and if the field was not changed, count = 1 and the validator would fail', 'string')
+        'global' => array(true, 'Whether to check uniqueness globally', 'boolean'),
+        'context' => array(
+            'create',
+            'create or edit. If edit and if the field was not changed, count = 1 and the validator would fail',
+            'string'
+        )
     );
 
     /**
@@ -54,7 +60,8 @@ class UniqueValidator extends \Evoweb\SfRegister\Validation\Validator\UniqueVali
      *
      * @return boolean
      */
-    public function isValid($value) {
+    public function isValid($value)
+    {
         $result = true;
 
         if ($this->propertyName == 'username' || $this->propertyName == 'tx_typo3bb_display_name') {
@@ -82,7 +89,8 @@ class UniqueValidator extends \Evoweb\SfRegister\Validation\Validator\UniqueVali
      *
      * @return string
      */
-    protected function getOtherField() {
+    protected function getOtherField()
+    {
         return $this->propertyName == 'username' ? 'tx_typo3bb_display_name' : 'username';
     }
 }

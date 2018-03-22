@@ -1,4 +1,5 @@
 <?php
+
 namespace LumIT\Typo3bb\Domain\Model;
 
 
@@ -26,15 +27,15 @@ namespace LumIT\Typo3bb\Domain\Model;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-use LumIT\Typo3bb\Domain\Repository\FrontendUserRepository;
 use LumIT\Typo3bb\Utility\FrontendUserUtility;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
+use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
 /**
  * A poll consists of a question and a number of options to select.
  * It can has a maximum number of poll choices.
  */
-class Poll extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
+class Poll extends AbstractEntity
 {
 
     /**
@@ -44,40 +45,40 @@ class Poll extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * @validate NotEmpty
      */
     protected $question = '';
-    
+
     /**
      * The maximum number of choices a user can select
      *
      * @var int
      */
     protected $maxChoicesSelect = 0;
-    
+
     /**
      * If the user is allowed to change his selection afterwards
      *
      * @var bool
      */
     protected $changeVoteAllowed = false;
-    
+
     /**
      * Number of votes, added for performance reasons
      *
      * @var int
      */
     protected $voteCount = 0;
-    
+
     /**
      * If the results should be hidden until the poll ended
      *
      * @var bool
      */
     protected $resultHidden = false;
-    
+
     /**
      * The choices the poll contains
      *
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\LumIT\Typo3bb\Domain\Model\PollChoice>
-     * @cascade remove
+     * @TYPO3\CMS\Extbase\Annotation\ORM\Cascade("remove")
      * @validate NotEmpty
      * @lazy
      */
@@ -89,7 +90,7 @@ class Poll extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * @var \DateTime null
      */
     protected $endtime = null;
-    
+
     /**
      * __construct
      */
@@ -98,7 +99,7 @@ class Poll extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         //Do not remove the next line: It would break the functionality
         $this->initStorageObjects();
     }
-    
+
     /**
      * Initializes all ObjectStorage properties
      * Do not modify this method!
@@ -109,9 +110,9 @@ class Poll extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     protected function initStorageObjects()
     {
-        $this->choices = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
+        $this->choices = new ObjectStorage();
     }
-    
+
     /**
      * Returns the question
      *
@@ -121,7 +122,7 @@ class Poll extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     {
         return $this->question;
     }
-    
+
     /**
      * Sets the question
      *
@@ -132,7 +133,7 @@ class Poll extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     {
         $this->question = $question;
     }
-    
+
     /**
      * Returns the maxChoicesSelect
      *
@@ -142,7 +143,7 @@ class Poll extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     {
         return $this->maxChoicesSelect;
     }
-    
+
     /**
      * Sets the maxChoicesSelect
      *
@@ -153,7 +154,7 @@ class Poll extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     {
         $this->maxChoicesSelect = $maxChoicesSelect;
     }
-    
+
     /**
      * Returns the changeVoteAllowed
      *
@@ -163,7 +164,17 @@ class Poll extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     {
         return $this->changeVoteAllowed;
     }
-    
+
+    /**
+     * Returns the boolean state of changeVoteAllowed
+     *
+     * @return bool
+     */
+    public function isChangeVoteAllowed()
+    {
+        return $this->changeVoteAllowed;
+    }
+
     /**
      * Sets the changeVoteAllowed
      *
@@ -174,17 +185,7 @@ class Poll extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     {
         $this->changeVoteAllowed = $changeVoteAllowed;
     }
-    
-    /**
-     * Returns the boolean state of changeVoteAllowed
-     *
-     * @return bool
-     */
-    public function isChangeVoteAllowed()
-    {
-        return $this->changeVoteAllowed;
-    }
-    
+
     /**
      * Returns the voteCount
      *
@@ -194,7 +195,7 @@ class Poll extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     {
         return $this->voteCount;
     }
-    
+
     /**
      * Sets the voteCount
      *
@@ -205,7 +206,7 @@ class Poll extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     {
         $this->voteCount = $voteCount;
     }
-    
+
     /**
      * Returns the resultHidden
      *
@@ -215,7 +216,17 @@ class Poll extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     {
         return $this->resultHidden;
     }
-    
+
+    /**
+     * Returns the boolean state of resultHidden
+     *
+     * @return bool
+     */
+    public function isResultHidden()
+    {
+        return $this->resultHidden;
+    }
+
     /**
      * Sets the resultHidden
      *
@@ -226,39 +237,29 @@ class Poll extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     {
         $this->resultHidden = $resultHidden;
     }
-    
-    /**
-     * Returns the boolean state of resultHidden
-     *
-     * @return bool
-     */
-    public function isResultHidden()
-    {
-        return $this->resultHidden;
-    }
-    
+
     /**
      * Adds a PollChoice
      *
      * @param \LumIT\Typo3bb\Domain\Model\PollChoice $choice
      * @return void
      */
-    public function addChoice(\LumIT\Typo3bb\Domain\Model\PollChoice $choice)
+    public function addChoice(PollChoice $choice)
     {
         $this->choices->attach($choice);
     }
-    
+
     /**
      * Removes a PollChoice
      *
      * @param \LumIT\Typo3bb\Domain\Model\PollChoice $choiceToRemove The PollChoice to be removed
      * @return void
      */
-    public function removeChoice(\LumIT\Typo3bb\Domain\Model\PollChoice $choiceToRemove)
+    public function removeChoice(PollChoice $choiceToRemove)
     {
         $this->choices->detach($choiceToRemove);
     }
-    
+
     /**
      * Returns the choices
      *
@@ -268,30 +269,16 @@ class Poll extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     {
         return $this->choices;
     }
-    
+
     /**
      * Sets the choices
      *
      * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\LumIT\Typo3bb\Domain\Model\PollChoice> $choices
      * @return void
      */
-    public function setChoices(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $choices)
+    public function setChoices(ObjectStorage $choices)
     {
         $this->choices = $choices;
-    }
-
-    /**
-     * @return \DateTime
-     */
-    public function getEndtime() {
-        return $this->endtime;
-    }
-
-    /**
-     * @param \DateTime $endtime
-     */
-    public function setEndtime($endtime) {
-        $this->endtime = $endtime;
     }
 
     /**
@@ -299,7 +286,8 @@ class Poll extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @return bool
      */
-    public function hasFrontendUserVoted() {
+    public function hasFrontendUserVoted()
+    {
         if ($GLOBALS['TSFE']->loginUser) {
             /** @var FrontendUser $frontendUser */
             $frontendUser = FrontendUserUtility::getCurrentUser();
@@ -312,7 +300,24 @@ class Poll extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * @return bool
      */
-    public function hasEnded() {
+    public function hasEnded()
+    {
         return (new \DateTime()) > $this->getEndtime();
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getEndtime()
+    {
+        return $this->endtime;
+    }
+
+    /**
+     * @param \DateTime $endtime
+     */
+    public function setEndtime($endtime)
+    {
+        $this->endtime = $endtime;
     }
 }

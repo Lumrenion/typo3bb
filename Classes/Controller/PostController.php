@@ -1,4 +1,5 @@
 <?php
+
 namespace LumIT\Typo3bb\Controller;
 
 
@@ -27,7 +28,6 @@ namespace LumIT\Typo3bb\Controller;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 use LumIT\Typo3bb\Domain\Factory\PostFactory;
-
 use LumIT\Typo3bb\Domain\Model\Post;
 use LumIT\Typo3bb\Domain\Model\Topic;
 use LumIT\Typo3bb\Exception\AccessValidationException;
@@ -52,13 +52,13 @@ class PostController extends AbstractController
      * @var \LumIT\Typo3bb\Domain\Repository\PostRepository
      * @inject
      */
-    protected $postRepository = NULL;
+    protected $postRepository = null;
 
     /**
      * @var \LumIT\Typo3bb\Domain\Repository\TopicRepository
      * @inject
      */
-    protected $topicRepository = NULL;
+    protected $topicRepository = null;
 
     /**
      * action new
@@ -67,11 +67,13 @@ class PostController extends AbstractController
      * @param \LumIT\Typo3bb\Domain\Model\Post $quotedPost
      * @return void
      */
-    public function newAction(Topic $topic, Post $quotedPost = null) {
+    public function newAction(Topic $topic, Post $quotedPost = null)
+    {
         SecurityUtility::assertAccessPermission('Post.create', $topic);
         if ($quotedPost != null) {
             $url = UrlUtility::getPostUrl($this->uriBuilder, $quotedPost);
-            $quotedText = RteUtility::getQuote($quotedPost->getText(), $quotedPost->getAuthorName(), $quotedPost->getCrdate(), $url);
+            $quotedText = RteUtility::getQuote($quotedPost->getText(), $quotedPost->getAuthorName(),
+                $quotedPost->getCrdate(), $url);
             $this->view->assign('quotedText', $quotedText);
         }
         $this->view->assignMultiple([
@@ -81,13 +83,15 @@ class PostController extends AbstractController
         ]);
     }
 
-    public function initializeCreateAction() {
+    public function initializeCreateAction()
+    {
         $newPost = $this->request->getArgument('newPost');
 
         CreationUtility::preparePostForValidation($this->arguments->getArgument('newPost'), $newPost);
 
         $this->request->setArgument('newPost', $newPost);
     }
+
     /**
      * action create
      *
@@ -103,12 +107,13 @@ class PostController extends AbstractController
         StatisticUtility::addPost();
         $this->persistenceManager->persistAll();
 
-        $this->signalSlotDispatcher->dispatch(Post::class, 'afterCreation', ['post' => $newPost, 'controllerContext' => $this->controllerContext]);
+        $this->signalSlotDispatcher->dispatch(Post::class, 'afterCreation',
+            ['post' => $newPost, 'controllerContext' => $this->controllerContext]);
 
         //TODO cache
-        $this->redirect('showNewPost', 'Topic', null, ['topic' => $newPost->getTopic()]);
+        $this->forward('showNewPost', 'Topic', null, ['topic' => $newPost->getTopic()]);
     }
-    
+
     /**
      * action edit
      *
@@ -123,7 +128,7 @@ class PostController extends AbstractController
             'previousPosts' => $this->postRepository->findPrevious($post->getTopic(), $post)
         ]);
     }
-    
+
     /**
      * action update
      *
@@ -143,7 +148,7 @@ class PostController extends AbstractController
         $this->postRepository->update($post);
 
         //TODO cache
-        $this->redirect('show', 'Topic', null, ['topic' => $post->getTopic()]);
+        $this->redirect('show', 'Topic', null, ['topic' => $post->getTopic(), 'post' => $post]);
     }
 
     /**
@@ -158,9 +163,10 @@ class PostController extends AbstractController
     {
         SecurityUtility::assertAccessPermission('Post.delete', $post);
         $topic = $post->getTopic();
-        if($topic->getPosts()->toArray()[0] == $post) {
-            if($topic->getPostsCount() > 1) {
-                throw new ActionNotAllowedException(LocalizationUtility::translate('exception.delete.firstPost', $this->extensionName));
+        if ($topic->getPosts()->toArray()[0] == $post) {
+            if ($topic->getPostsCount() > 1) {
+                throw new ActionNotAllowedException(LocalizationUtility::translate('exception.delete.firstPost',
+                    $this->extensionName));
             } else {
                 $this->redirect('delete', 'Topic', null, ['topic' => $post->getTopic()]);
             }
@@ -175,7 +181,8 @@ class PostController extends AbstractController
     /**
      * @param \LumIT\Typo3bb\Domain\Model\Post $post
      */
-    public function moveAction(Post $post) {
+    public function moveAction(Post $post)
+    {
         SecurityUtility::assertAccessPermission('Post.move', $post);
         $topics = [];
         /**
@@ -198,7 +205,8 @@ class PostController extends AbstractController
      * @param \LumIT\Typo3bb\Domain\Model\Post $post
      * @param \LumIT\Typo3bb\Domain\Model\Topic $destination
      */
-    public function executeMoveAction(Post $post, Topic $destination) {
+    public function executeMoveAction(Post $post, Topic $destination)
+    {
         SecurityUtility::assertAccessPermission('Post.move', $post);
         SecurityUtility::assertAccessPermission('Post.move', $destination);
 
@@ -217,9 +225,11 @@ class PostController extends AbstractController
     /**
      * Lists unread posts.
      */
-    public function listUnreadAction() {
+    public function listUnreadAction()
+    {
         if ($this->frontendUser === null) {
-            throw new AccessValidationException(LocalizationUtility::translate('exception.accessValidation', 'typo3bb'));
+            throw new AccessValidationException(LocalizationUtility::translate('exception.accessValidation',
+                'typo3bb'));
         }
         $unreadPosts = $this->postRepository->findUnread($this->frontendUser);
         $this->view->assignMultiple([

@@ -1,4 +1,5 @@
 <?php
+
 namespace LumIT\Typo3bb\ViewHelpers\Widget\Controller;
 
 /*                                                                        *
@@ -22,7 +23,6 @@ namespace LumIT\Typo3bb\ViewHelpers\Widget\Controller;
  *                                                                        */
 
 use LumIT\Typo3bb\Domain\Model\Message;
-
 use LumIT\Typo3bb\Domain\Repository\MessageRepository;
 use LumIT\Typo3bb\Utility\FrontendUserUtility;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
@@ -30,12 +30,14 @@ use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
 /**
  * Class PaginateMessagesController
  */
-class PaginateMessagesController extends PaginateBaseController {
+class PaginateMessagesController extends PaginateBaseController
+{
 
     /**
      * @param $modifiedObjects
      */
-    public function processModifiedObjects($modifiedObjects) {
+    public function processModifiedObjects($modifiedObjects)
+    {
         $frontendUser = FrontendUserUtility::getCurrentUser();
         if (!empty($frontendUser)) {
             /** @var MessageRepository $messageRepository */

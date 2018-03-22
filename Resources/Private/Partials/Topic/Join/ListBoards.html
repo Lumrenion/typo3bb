@@ -1,0 +1,41 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en"
+      xmlns:f="http://typo3.org/ns/TYPO3/Fluid/ViewHelpers"
+      xmlns:tbb="http://typo3.org/ns/LumIT/Typo3bb/ViewHelpers"
+
+      data-namespace-typo3-fluid="true">
+
+<f:for each="{boards}" as="board">
+    <div class="panel panel-default">
+        <div class="panel-heading" role="tab" data-toggle="collapse" data-target="#board-{board.uid}"
+             data-parent="" aria-controls="board-{board.uid}">
+            <f:format.htmlentitiesDecode>{board.title}</f:format.htmlentitiesDecode>
+        </div>
+        <div id="board-{board.uid}" class="panel-collapse collapse" role="tabpanel">
+            <div class="panel-body">
+                <f:render partial="Topic/Join/ListBoards" arguments="{topic: topic, boards: board.allowedSubBoards}" />
+                <f:if condition="{board.allowedSubBoards}"><br><br></f:if>
+
+                <f:for each="{board.topics}" as="topic2">
+                    <f:if condition="{topic} == {topic2}">
+                        <f:then>
+                            <span class="btn btn-default btn-sm disabled"><i class="fa fa-share-alt fa-lg fa-rotate-180" aria-hidden="true"></i></span>
+                        </f:then>
+                        <f:else>
+                            <f:link.action action="join" controller="Topic" arguments="{topic: topic, topic2: topic2}"
+                                           title="{f:translate(key: 'topic.join.step1.joinLabel', arguments: '{0: topic.title, 1: topic2.title}')}"
+                                           additionalAttributes="{aria-label: '{f:translate(key: \'topic.join.step1.joinLabel\', arguments: \'{0: topic.title, 1: topic2.title}\')}'}"
+                                           class="btn btn-default btn-sm">
+                                <i class="fa fa-share-alt fa-lg fa-rotate-180" aria-hidden="true"></i>
+                            </f:link.action>
+                        </f:else>
+                    </f:if>
+                    <f:link.action action="show" controller="Topic" arguments="{topic: topic2}" target="_blank">
+                        <f:format.htmlentitiesDecode>{topic2.title}</f:format.htmlentitiesDecode>
+                    </f:link.action><br>
+                </f:for>
+            </div>
+        </div>
+    </div>
+</f:for>
+
+</html>

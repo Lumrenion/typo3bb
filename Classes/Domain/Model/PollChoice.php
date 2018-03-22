@@ -1,4 +1,5 @@
 <?php
+
 namespace LumIT\Typo3bb\Domain\Model;
 
 
@@ -28,12 +29,13 @@ namespace LumIT\Typo3bb\Domain\Model;
  ***************************************************************/
 
 use LumIT\Typo3bb\Utility\FrontendUserUtility;
+use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 
 
 /**
  * PollChoice
  */
-class PollChoice extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
+class PollChoice extends AbstractEntity
 {
 
     /**
@@ -43,7 +45,7 @@ class PollChoice extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * @validate NotEmpty
      */
     protected $text = '';
-    
+
     /**
      * The number of votes for this choice
      *
@@ -57,7 +59,7 @@ class PollChoice extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * @var \LumIT\Typo3bb\Domain\Model\Poll
      */
     protected $poll;
-    
+
     /**
      * Returns the text
      *
@@ -67,7 +69,7 @@ class PollChoice extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     {
         return $this->text;
     }
-    
+
     /**
      * Sets the text
      *
@@ -78,7 +80,7 @@ class PollChoice extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     {
         $this->text = $text;
     }
-    
+
     /**
      * Returns the voteCount
      *
@@ -88,7 +90,7 @@ class PollChoice extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     {
         return $this->voteCount;
     }
-    
+
     /**
      * Sets the voteCount
      *
@@ -103,14 +105,16 @@ class PollChoice extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * @return Poll
      */
-    public function getPoll() {
+    public function getPoll()
+    {
         return $this->poll;
     }
 
     /**
      * @param Poll $poll
      */
-    public function setPoll($poll) {
+    public function setPoll($poll)
+    {
         $this->poll = $poll;
     }
 
@@ -119,7 +123,8 @@ class PollChoice extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @return bool
      */
-    public function hasFrontendUserVoted() {
+    public function hasFrontendUserVoted()
+    {
         $frontendUser = FrontendUserUtility::getCurrentUser();
         if (!is_null($frontendUser)) {
             return $frontendUser->getSelectedPollChoices()->contains($this);

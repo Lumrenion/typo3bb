@@ -1,4 +1,5 @@
 <?php
+
 namespace LumIT\Typo3bb\Exception;
 
 /***************************************************************
@@ -26,5 +27,6 @@ namespace LumIT\Typo3bb\Exception;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-abstract class AbstractException extends \Exception {
+abstract class AbstractException extends \Exception
+{
 }

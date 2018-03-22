@@ -13,7 +13,7 @@ return [
 
         ],
         'searchFields' => 'text,vote_count,poll,',
-        'iconfile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath('typo3bb') . 'Resources/Public/Icons/tx_typo3bb_domain_model_pollchoice.gif'
+        'iconfile' => 'EXT:typo3bb/Resources/Public/Icons/tx_typo3bb_domain_model_pollchoice.gif'
     ],
     'interface' => [
         'showRecordFieldList' => 'text,',

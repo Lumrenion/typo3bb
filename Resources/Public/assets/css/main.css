@@ -17,6 +17,11 @@
 
 .forum-category-board {
   border-bottom: 1px solid #CCCCCC; }
+  .forum-category-board.forum-category-board-head {
+    text-align: center;
+    font-weight: bold; }
+    .forum-category-board.forum-category-board-head .board-list-board-title, .forum-category-board.forum-category-board-head .board-list-board-counters, .forum-category-board.forum-category-board-head .board-list-board-latest-post {
+      padding-bottom: 10px; }
   .forum-category-board:last-child {
     border-bottom: none; }
   .forum-category-board .board-list-board-new-indicator {
@@ -35,6 +40,10 @@
     .forum-category-board .board-list-board-title .board-list-board-subboards {
       border-top: 1px solid #dfdfdf;
       margin-right: -15px; }
+  .forum-category-board .board-list-board-latest-post {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; }
   @media screen and (min-width: 992px) {
     .forum-category-board .forum-board-topic-title {
       border: none; }
@@ -66,6 +75,12 @@
     border-bottom: none; }
   .forum-board-topic .forum-board-topic-title {
     border-right: 1px solid #CCCCCC; }
+    .forum-board-topic .forum-board-topic-title .forum-board-topic-title-rootline {
+      border-bottom: 1px dotted #ccc;
+      margin-right: -15px;
+      padding-right: 15px;
+      line-height: 1.1em;
+      font-size: 80%; }
   @media screen and (min-width: 992px) {
     .forum-board-topic .forum-board-topic-title {
       border: none; }

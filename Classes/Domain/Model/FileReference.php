@@ -1,4 +1,5 @@
 <?php
+
 namespace LumIT\Typo3bb\Domain\Model;
 
 /*
@@ -19,11 +20,13 @@ use TYPO3\CMS\Core\Resource\AbstractFile;
  * Class FileReference
  * @package LumIT\Typo3bb\Domain\Model
  */
-class FileReference extends \TYPO3\CMS\Extbase\Domain\Model\FileReference {
+class FileReference extends \TYPO3\CMS\Extbase\Domain\Model\FileReference
+{
     /**
      * @param \TYPO3\CMS\Core\Resource\AbstractFile $file
      */
-    public function setFile(AbstractFile $file) {
+    public function setFile(AbstractFile $file)
+    {
         $this->uidLocal = (int)$file->getUid();
     }
 

@@ -39,11 +39,13 @@ plugin.tx_typo3bb {
             forum =
             # cat=plugin.tx_typo3bb/pages/b; type=int+; label=Page id where user profiles are displayed
             profile =
-            # cat=plugin.tx_typo3bb/pages/c; type=int+; label=Page id where the Messages plugin is inserted
+            # cat=plugin.tx_typo3bb/pages/c; type=int+; label=Page id where users list is displayed
+            usersList =
+            # cat=plugin.tx_typo3bb/pages/d; type=int+; label=Page id where the Messages plugin is inserted
             messages =
-            # cat=plugin.tx_typo3bb/pages/d; type=int+; label=Page id where the Statistics plugin is inserted
+            # cat=plugin.tx_typo3bb/pages/e; type=int+; label=Page id where the Statistics plugin is inserted
             statistics =
-            # cat=plugin.tx_typo3bb/pages/e; type=int+; label=Page id where the unread posts plugin is inserted
+            # cat=plugin.tx_typo3bb/pages/f; type=int+; label=Page id where the unread posts plugin is inserted
             unreadPosts =
         }
         email {

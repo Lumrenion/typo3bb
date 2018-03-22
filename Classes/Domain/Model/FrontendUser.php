@@ -1,4 +1,5 @@
 <?php
+
 namespace LumIT\Typo3bb\Domain\Model;
 
 
@@ -51,7 +52,7 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser
      * @var string
      */
     protected $signature = '';
-    
+
     /**
      * The topics created by this frontend user
      *
@@ -59,7 +60,7 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser
      * @lazy
      */
     protected $createdTopics = null;
-    
+
     /**
      * The topics subscribed by this user
      *
@@ -75,7 +76,7 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser
      * @lazy
      */
     protected $subscribedBoards = null;
-    
+
     /**
      * The posts created by this user
      *
@@ -92,11 +93,11 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser
 
     /**
      * Count of posts, added for performance
-     * 
+     *
      * @var int
      */
     protected $postsCount = 0;
-    
+
     /**
      * The poll choices the frontend user selected
      *
@@ -146,6 +147,11 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser
     protected $loginTime = 0;
 
     /**
+     * @var \DateTime
+     */
+    protected $onlineTime = null;
+
+    /**
      * @var \LumIT\Typo3bb\Domain\Model\Post
      */
     protected $lastReadPost = null;
@@ -155,11 +161,6 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser
      * @lazy
      */
     protected $readTopics = null;
-
-    /**
-     * @var bool
-     */
-    protected $globalModerator = false;
 
     /**
      * __construct
@@ -172,7 +173,7 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser
         //Do not remove the next line: It would break the functionality
         $this->initStorageObjects();
     }
-    
+
     /**
      * Initializes all ObjectStorage properties
      * Do not modify this method!
@@ -198,14 +199,16 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser
     /**
      * @return string
      */
-    public function getDisplayName() {
+    public function getDisplayName()
+    {
         return empty($this->displayName) ? $this->username : $this->displayName;
     }
 
     /**
      * @param string $displayName
      */
-    public function setDisplayName($displayName) {
+    public function setDisplayName($displayName)
+    {
         $this->displayName = $displayName;
     }
 
@@ -239,7 +242,7 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser
     {
         return $this->signature;
     }
-    
+
     /**
      * Sets the signature
      *
@@ -250,7 +253,7 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser
     {
         $this->signature = $signature;
     }
-    
+
     /**
      * Adds a Topic
      *
@@ -261,7 +264,7 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser
     {
         $this->createdTopics->attach($createdTopic);
     }
-    
+
     /**
      * Removes a Topic
      *
@@ -272,7 +275,7 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser
     {
         $this->createdTopics->detach($createdTopicToRemove);
     }
-    
+
     /**
      * Returns the createdTopics
      *
@@ -282,7 +285,7 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser
     {
         return $this->createdTopics;
     }
-    
+
     /**
      * Sets the createdTopics
      *
@@ -295,30 +298,25 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser
     }
 
     /**
-     * Sets the postsCount
-     * 
-     * @param $postsCount
-     */
-    public function setPostsCount($postsCount) {
-        $this->postsCount = $postsCount;
-    }
-
-    /**
      * Returns the postsCount
-     * 
+     *
      * @return int
      */
-    public function getPostsCount() {
+    public function getPostsCount()
+    {
         return $this->postsCount;
     }
 
     /**
-     * @param int $amount
+     * Sets the postsCount
+     *
+     * @param $postsCount
      */
-    public function _increasePostsCount($amount = 1) {
-        $this->postsCount += $amount;
+    public function setPostsCount($postsCount)
+    {
+        $this->postsCount = $postsCount;
     }
-    
+
     /**
      * Adds a Topic
      *
@@ -329,7 +327,7 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser
     {
         $this->subscribedTopics->attach($subscribedTopic);
     }
-    
+
     /**
      * Removes a Topic
      *
@@ -340,7 +338,7 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser
     {
         $this->subscribedTopics->detach($subscribedTopicToRemove);
     }
-    
+
     /**
      * Returns the subscribedTopics
      *
@@ -350,7 +348,7 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser
     {
         return $this->subscribedTopics;
     }
-    
+
     /**
      * Sets the subscribedTopics
      *
@@ -404,7 +402,7 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser
     {
         $this->subscribedBoards = $subscribedBoards;
     }
-    
+
     /**
      * Adds a Post
      *
@@ -416,7 +414,15 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser
         $this->createdPosts->attach($createdPost);
         $this->_increasePostsCount();
     }
-    
+
+    /**
+     * @param int $amount
+     */
+    public function _increasePostsCount($amount = 1)
+    {
+        $this->postsCount += $amount;
+    }
+
     /**
      * Removes a Post
      *
@@ -428,7 +434,7 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser
         $this->createdPosts->detach($createdPostToRemove);
         $this->_increasePostsCount(-1);
     }
-    
+
     /**
      * Returns the createdPosts
      *
@@ -438,7 +444,7 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser
     {
         return $this->createdPosts;
     }
-    
+
     /**
      * Sets the createdPosts
      *
@@ -492,7 +498,7 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser
     {
         $this->editedPosts = $editedPosts;
     }
-    
+
     /**
      * Adds a PollChoice
      *
@@ -503,7 +509,7 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser
     {
         $this->selectedPollChoices->attach($selectedPollChoice);
     }
-    
+
     /**
      * Removes a PollChoice
      *
@@ -514,7 +520,7 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser
     {
         $this->selectedPollChoices->detach($selectedPollChoiceToRemove);
     }
-    
+
     /**
      * Returns the selectedPollChoices
      *
@@ -524,7 +530,7 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser
     {
         return $this->selectedPollChoices;
     }
-    
+
     /**
      * Sets the selectedPollChoices
      *
@@ -539,147 +545,168 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser
     /**
      * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\LumIT\Typo3bb\Domain\Model\Poll>
      */
-    public function getVotedPolls() {
+    public function getVotedPolls()
+    {
         return $this->votedPolls;
     }
 
     /**
      * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\LumIT\Typo3bb\Domain\Model\Poll> $votedPolls
      */
-    public function setVotedPolls(ObjectStorage $votedPolls) {
+    public function setVotedPolls(ObjectStorage $votedPolls)
+    {
         $this->votedPolls = $votedPolls;
     }
 
     /**
      * @param \LumIT\Typo3bb\Domain\Model\Poll $poll
      */
-    public function addVotedPoll(Poll $poll) {
+    public function addVotedPoll(Poll $poll)
+    {
         $this->votedPolls->attach($poll);
     }
 
     /**
      * @param \LumIT\Typo3bb\Domain\Model\Poll $poll
      */
-    public function removeVotedPoll(Poll $poll) {
+    public function removeVotedPoll(Poll $poll)
+    {
         $this->votedPolls->detach($poll);
     }
 
     /**
      * @return ObjectStorage
      */
-    public function getSentMessages() {
+    public function getSentMessages()
+    {
         return $this->sentMessages;
     }
 
     /**
      * @param ObjectStorage $sentMessages
      */
-    public function setSentMessages(ObjectStorage $sentMessages) {
+    public function setSentMessages(ObjectStorage $sentMessages)
+    {
         $this->sentMessages = $sentMessages;
     }
 
     /**
      * @param \LumIT\Typo3bb\Domain\Model\MessageParticipant $message
      */
-    public function addSentMessage(MessageParticipant $message) {
+    public function addSentMessage(MessageParticipant $message)
+    {
         $this->sentMessages->attach($message);
     }
 
     /**
      * @param \LumIT\Typo3bb\Domain\Model\MessageParticipant $message
      */
-    public function removeSentMessage(MessageParticipant $message) {
+    public function removeSentMessage(MessageParticipant $message)
+    {
         $this->sentMessages->detach($message);
     }
 
     /**
      * @return ObjectStorage
      */
-    public function getReceivedMessages() {
+    public function getReceivedMessages()
+    {
         return $this->receivedMessages;
     }
 
     /**
      * @param ObjectStorage $receivedMessages
      */
-    public function setReceivedMessages(ObjectStorage $receivedMessages) {
+    public function setReceivedMessages(ObjectStorage $receivedMessages)
+    {
         $this->receivedMessages = $receivedMessages;
     }
 
     /**
      * @param \LumIT\Typo3bb\Domain\Model\MessageParticipant $message
      */
-    public function addReceivedMessage(MessageParticipant $message) {
+    public function addReceivedMessage(MessageParticipant $message)
+    {
         $this->receivedMessages->attach($message);
     }
 
     /**
      * @param \LumIT\Typo3bb\Domain\Model\MessageParticipant $message
      */
-    public function removeReceivedMessage(MessageParticipant $message) {
+    public function removeReceivedMessage(MessageParticipant $message)
+    {
         $this->receivedMessages->detach($message);
     }
 
     /**
      * @return boolean
      */
-    public function isHideSensitiveData() {
+    public function isHideSensitiveData()
+    {
         return $this->hideSensitiveData;
     }
 
     /**
      * @param boolean $hideSensitiveData
      */
-    public function setHideSensitiveData(bool $hideSensitiveData) {
+    public function setHideSensitiveData(bool $hideSensitiveData)
+    {
         $this->hideSensitiveData = $hideSensitiveData;
     }
 
     /**
      * @return boolean
      */
-    public function isShowOnline() {
+    public function isShowOnline()
+    {
         return $this->showOnline;
     }
 
     /**
      * @param boolean $showOnline
      */
-    public function setShowOnline(bool $showOnline) {
+    public function setShowOnline(bool $showOnline)
+    {
         $this->showOnline = $showOnline;
     }
 
     /**
      * @return bool
      */
-    public function getMessageNotification() {
+    public function getMessageNotification()
+    {
         return $this->isMessageNotification();
     }
 
     /**
      * @return boolean
      */
-    public function isMessageNotification() {
+    public function isMessageNotification()
+    {
         return $this->messageNotification;
     }
 
     /**
      * @param boolean $messageNotification
      */
-    public function setMessageNotification(bool $messageNotification) {
+    public function setMessageNotification(bool $messageNotification)
+    {
         $this->messageNotification = $messageNotification;
     }
 
     /**
      * @return int
      */
-    public function getLoginTime() {
+    public function getLoginTime()
+    {
         return $this->loginTime;
     }
 
     /**
      * @param int $loginTime
      */
-    public function setLoginTime(int $loginTime) {
+    public function setLoginTime(int $loginTime)
+    {
         $this->loginTime = $loginTime;
     }
 
@@ -688,66 +715,75 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser
      *
      * @return float
      */
-    public function getPostsCountPerDay() {
+    public function getPostsCountPerDay()
+    {
         $now = time();
         $secondsRegistered = $now - $this->crdate->getTimestamp();
-        $daysRegistered = $secondsRegistered / (60*60*24);
+        $daysRegistered = $secondsRegistered / (60 * 60 * 24);
         return $this->postsCount / $daysRegistered;
     }
 
     /**
      * @return \LumIT\Typo3bb\Domain\Model\Post
      */
-    public function getLastReadPost() {
+    public function getLastReadPost()
+    {
         return $this->lastReadPost;
     }
 
     /**
      * @param \LumIT\Typo3bb\Domain\Model\Post $lastReadPost
      */
-    public function setLastReadPost($lastReadPost) {
+    public function setLastReadPost($lastReadPost)
+    {
         $this->lastReadPost = $lastReadPost;
     }
 
     /**
      * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\LumIT\Typo3bb\Domain\Model\Reader>
      */
-    public function getReadTopics() {
+    public function getReadTopics()
+    {
         return $this->readTopics;
     }
 
     /**
      * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\LumIT\Typo3bb\Domain\Model\Reader> $readTopics
      */
-    public function setReadTopics($readTopics) {
+    public function setReadTopics($readTopics)
+    {
         $this->readTopics = $readTopics;
     }
 
     /**
      * @param \LumIT\Typo3bb\Domain\Model\Reader $reader
      */
-    public function addReadTopic($reader) {
+    public function addReadTopic($reader)
+    {
         $this->readTopics->attach($reader);
     }
 
     /**
      * @param \LumIT\Typo3bb\Domain\Model\Reader $reader
      */
-    public function removeReadTopic($reader) {
+    public function removeReadTopic($reader)
+    {
         $this->readTopics->detach($reader);
     }
 
     /**
-     * @return bool
+     * @return \DateTime
      */
-    public function isGlobalModerator() {
-        return $this->globalModerator;
+    public function getOnlineTime()
+    {
+        return $this->onlineTime;
     }
 
     /**
-     * @param bool $globalModerator
+     * @param \DateTime $onlineTime
      */
-    public function setGlobalModerator($globalModerator) {
-        $this->globalModerator = $globalModerator;
+    public function setOnlineTime(\DateTime $onlineTime)
+    {
+        $this->onlineTime = $onlineTime;
     }
 }

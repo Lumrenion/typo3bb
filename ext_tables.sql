@@ -43,7 +43,7 @@ CREATE TABLE tx_typo3bb_domain_model_board (
     sub_boards int(11) unsigned DEFAULT '0' NOT NULL,
     read_permissions varchar(255) DEFAULT '' NOT NULL,
     write_permissions varchar(255) DEFAULT '' NOT NULL,
-    moderators varchar(255) DEFAULT '' NOT NULL,
+    moderator_groups varchar(255) DEFAULT '' NOT NULL,
     parent_board int(11) unsigned DEFAULT '0',
     forum_category int(11) unsigned DEFAULT '0',
     topics_count int(11) unsigned DEFAULT '0',
@@ -189,7 +189,6 @@ CREATE TABLE tx_typo3bb_domain_model_pollchoice (
 CREATE TABLE fe_users (
 
     tx_typo3bb_display_name varchar(255) DEFAULT '' NOT NULL,
-    tx_typo3bb_global_moderator tinyint(4) DEFAULT '0' NOT NULL,
     signature text NOT NULL,
     created_topics int(11) unsigned DEFAULT '0' NOT NULL,
     subscribed_topics int(11) unsigned DEFAULT '0' NOT NULL,
@@ -201,7 +200,7 @@ CREATE TABLE fe_users (
     voted_polls varchar(255) DEFAULT '' NOT NULL,
     sent_messages int(11) unsigned DEFAULT '0' NOT NULL,
     received_messages int(11) unsigned DEFAULT '0' NOT NULL,
-    hide_sensitive_data tinyint(1) unsigned DEFAULT '0' NOT NULL,
+    hide_sensitive_data tinyint(1) unsigned DEFAULT '1' NOT NULL,
     show_online tinyint(1) unsigned DEFAULT '1' NOT NULL,
     message_notification tinyint(1) unsigned DEFAULT '1' NOT NULL,
     login_time int(11) unsigned DEFAULT '0' NOT NULL,
@@ -209,6 +208,14 @@ CREATE TABLE fe_users (
     read_topics int(11) unsigned DEFAULT '0' NOT NULL,
 
     tx_extbase_type varchar(255) DEFAULT '0' NOT NULL
+);
+
+#
+# Table structure for table 'fe_groups'
+#
+CREATE TABLE fe_groups (
+
+    tx_typo3bb_global_moderator_group tinyint(4) DEFAULT '0' NOT NULL
 );
 
 CREATE TABLE tx_typo3bb_domain_model_reader (

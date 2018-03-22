@@ -1,6 +1,6 @@
 <?php
-namespace LumIT\Typo3bb\Security\AccessValidator;
 
+namespace LumIT\Typo3bb\Security\AccessValidator;
 
 
 /***************************************************************
@@ -28,14 +28,17 @@ namespace LumIT\Typo3bb\Security\AccessValidator;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-class IsLoggedInAccessValidator extends AbstractAccessValidator{
+class IsLoggedInAccessValidator extends AbstractAccessValidator
+{
 
     /**
      * @param $objectToValidate
      *
      * @return bool
      */
-    public function validate($objectToValidate) {
+    public function validate($objectToValidate)
+    {
+        // TODO refactor this validator to be called with any frontendUser
         return $GLOBALS['TSFE']->loginUser;
     }
 }

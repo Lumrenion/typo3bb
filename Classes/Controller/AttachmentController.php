@@ -1,4 +1,5 @@
 <?php
+
 namespace LumIT\Typo3bb\Controller;
 
 
@@ -35,7 +36,8 @@ use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
 /**
  * AttachmentController
  */
-class AttachmentController extends AbstractController {
+class AttachmentController extends AbstractController
+{
 
     /**
      * postRepository
@@ -43,13 +45,14 @@ class AttachmentController extends AbstractController {
      * @var \LumIT\Typo3bb\Domain\Repository\PostRepository
      * @inject
      */
-    protected $postRepository = NULL;
+    protected $postRepository = null;
 
     /**
      * @param \LumIT\Typo3bb\Domain\Model\Attachment $attachment
      * @param string $returnTo
      */
-    public function removeAction(Attachment $attachment, string $returnTo = '') {
+    public function removeAction(Attachment $attachment, string $returnTo = '')
+    {
         $post = $attachment->getPost();
 
         SecurityUtility::assertAccessPermission('Post.edit', $post);
@@ -73,7 +76,8 @@ class AttachmentController extends AbstractController {
     /**
      * @param \LumIT\Typo3bb\Domain\Model\Attachment $attachment
      */
-    public function downloadAction(Attachment $attachment) {
+    public function downloadAction(Attachment $attachment)
+    {
         SecurityUtility::assertAccessPermission('Topic.show', $attachment->getPost()->getTopic());
         $attachment->increaseDownloadCount();
         $this->postRepository->update($attachment->getPost());

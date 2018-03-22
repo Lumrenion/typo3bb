@@ -1,5 +1,7 @@
 <?php
+
 namespace LumIT\Typo3bb\Utility;
+
 use TYPO3\CMS\Core\Utility\MathUtility;
 use TYPO3\CMS\Extbase\Property\TypeConverter\DateTimeConverter;
 use TYPO3\CMS\Extbase\Property\TypeConverter\PersistentObjectConverter;
@@ -33,18 +35,37 @@ use TYPO3\CMS\Extbase\Validation\Validator\StringLengthValidator;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-
-class CreationUtility {
+class CreationUtility
+{
 
     /**
      * @param \TYPO3\CMS\Extbase\Mvc\Controller\Argument $topicArgument The topic controller argument
      * @param array $topic The topic from the request
      */
-    public static function prepareTopicForValidation($topicArgument, &$topic) {
+    public static function prepareTopicForValidation($topicArgument, &$topic)
+    {
         if (!empty($topic['poll'])) {
             CreationUtility::setDateTimePropertyMapperToIsoDate($topicArgument, 'poll.starttime');
             CreationUtility::setDateTimePropertyMapperToIsoDate($topicArgument, 'poll.endtime');
         }
+    }
+
+    /**
+     * @param \TYPO3\CMS\Extbase\Mvc\Controller\Argument $argument Argument to evaluate that was passed to the controller
+     * @param string $property The datetime property of the argument to change
+     */
+    public static function setDateTimePropertyMapperToIsoDate($argument, $property)
+    {
+        $argument->getPropertyMappingConfiguration()
+            ->setTypeConverterOption(
+                'TYPO3\CMS\Extbase\Property\TypeConverter\PersistentObjectConverter',
+                PersistentObjectConverter::CONFIGURATION_CREATION_ALLOWED,
+                true
+            )->forProperty($property)->setTypeConverterOption(
+                'TYPO3\\CMS\\Extbase\\Property\\TypeConverter\\DateTimeConverter',
+                DateTimeConverter::CONFIGURATION_DATE_FORMAT,
+                'Y-m-d'
+            );
     }
 
     /**
@@ -53,7 +74,8 @@ class CreationUtility {
      * @param \TYPO3\CMS\Extbase\Mvc\Controller\Argument $pollArgument The poll controller argument
      * @param array $poll The poll from the request
      */
-    public static function preparePollForValidation($pollArgument, &$poll) {
+    public static function preparePollForValidation($pollArgument, &$poll)
+    {
         CreationUtility::setDateTimePropertyMapperToIsoDate($pollArgument, 'starttime');
         CreationUtility::setDateTimePropertyMapperToIsoDate($pollArgument, 'endtime');
 
@@ -67,7 +89,7 @@ class CreationUtility {
                 return;
             }
             foreach ($poll['choices'] as $index => $choice) {
-                if(empty($choice['text'])) {
+                if (empty($choice['text'])) {
                     unset($poll['choices'][$index]);
                 }
             }
@@ -80,50 +102,35 @@ class CreationUtility {
         }
 
         // the fallback for endtime interval is 1 Day
-        if(MathUtility::canBeInterpretedAsInteger($poll['endtime'])) {
-            $poll['endtime'] = (int) $poll['endtime'];
+        if (MathUtility::canBeInterpretedAsInteger($poll['endtime'])) {
+            $poll['endtime'] = (int)$poll['endtime'];
         } else {
             $poll['endtime'] = 1;
         }
-        $poll['endtime'] = (new \DateTime())->add(new \DateInterval('P' . (int) $poll['endtime'] . 'D'));
+        $poll['endtime'] = (new \DateTime())->add(new \DateInterval('P' . (int)$poll['endtime'] . 'D'));
     }
 
     /**
      * @param \TYPO3\CMS\Extbase\Mvc\Controller\Argument $postArgument The post controller argument
      * @param array $post The post from the request
      */
-    public static function preparePostForValidation($postArgument, &$post) {
-        if ($GLOBALS['TSFE']->loginUser) {
+    public static function preparePostForValidation($postArgument, &$post)
+    {
+        if (!$GLOBALS['TSFE']->loginUser) {
+            CreationUtility::setAuthorPropertyMapperForAnonymousUser($postArgument, 'authorName');
+        } else {
             $postArgument->getPropertyMappingConfiguration()->allowProperties('author', 'authorName');
             $post['author']['__identity'] = $GLOBALS['TSFE']->fe_user->user['uid'];
-            $post['authorName'] = $GLOBALS['TSFE']->fe_user->user['name'];
-        } else {
-            CreationUtility::setAuthorPropertyMapperForAnonymousUser($postArgument, 'authorName');
+            $post['authorName'] = $GLOBALS['TSFE']->fe_user->user['username'];
         }
-    }
-
-    /**
-     * @param \TYPO3\CMS\Extbase\Mvc\Controller\Argument $argument Argument to evaluate that was passed to the controller
-     * @param string $property The datetime property of the argument to change
-     */
-    public static function setDateTimePropertyMapperToIsoDate($argument, $property) {
-        $argument->getPropertyMappingConfiguration()
-            ->setTypeConverterOption(
-                'TYPO3\CMS\Extbase\Property\TypeConverter\PersistentObjectConverter',
-                PersistentObjectConverter::CONFIGURATION_CREATION_ALLOWED,
-                TRUE
-            )->forProperty($property)->setTypeConverterOption(
-                'TYPO3\\CMS\\Extbase\\Property\\TypeConverter\\DateTimeConverter',
-                DateTimeConverter::CONFIGURATION_DATE_FORMAT,
-                'Y-m-d'
-            );
     }
 
     /**
      * @param \TYPO3\CMS\Extbase\Mvc\Controller\Argument $argument The controller argument that holds the author name
      * @param string $property The property name of given argument that represents the author name
      */
-    public static function setAuthorPropertyMapperForAnonymousUser($argument, $property) {
+    public static function setAuthorPropertyMapperForAnonymousUser($argument, $property)
+    {
         /** @var ConjunctionValidator $conjunctionValidator */
         $conjunctionValidator = $argument->getValidator();
         /** @var ConjunctionValidator $validator */

@@ -1,4 +1,5 @@
 <?php
+
 namespace LumIT\Typo3bb\Controller;
 
 
@@ -29,7 +30,6 @@ namespace LumIT\Typo3bb\Controller;
 
 use LumIT\Typo3bb\Domain\Factory\PostFactory;
 use LumIT\Typo3bb\Domain\Factory\TopicFactory;
-
 use LumIT\Typo3bb\Domain\Model\Board;
 use LumIT\Typo3bb\Domain\Model\Post;
 use LumIT\Typo3bb\Domain\Model\Topic;
@@ -40,14 +40,13 @@ use LumIT\Typo3bb\Utility\SecurityUtility;
 use LumIT\Typo3bb\Utility\StatisticUtility;
 use LumIT\Typo3bb\Utility\UrlUtility;
 use LumIT\Typo3bb\ViewHelpers\Format\CsvViewHelper;
-
-use TYPO3\CMS\Extbase\Persistence\Generic\LazyLoadingProxy;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
  * TopicController
  */
-class TopicController extends AbstractController {
+class TopicController extends AbstractController
+{
 
     /**
      * topicRepository
@@ -88,7 +87,8 @@ class TopicController extends AbstractController {
      * @param \LumIT\Typo3bb\Domain\Model\Post $post
      * @return void
      */
-    public function showAction(Topic $topic, Post $post = null) {
+    public function showAction(Topic $topic, Post $post = null)
+    {
         SecurityUtility::assertAccessPermission('Topic.show', $topic);
 
         $topic->addView();
@@ -99,7 +99,8 @@ class TopicController extends AbstractController {
         $poll = $topic->getPoll();
         if ($poll != null) {
             $this->view->assign('hidePollResult', !$poll->hasEnded() && $poll->isResultHidden());
-            $this->view->assign('hidePollForm', $poll->hasEnded() || (!$poll->isChangeVoteAllowed() && $poll->hasFrontendUserVoted()) );
+            $this->view->assign('hidePollForm',
+                $poll->hasEnded() || (!$poll->isChangeVoteAllowed() && $poll->hasFrontendUserVoted()));
         }
 
         //TODO cache
@@ -108,7 +109,8 @@ class TopicController extends AbstractController {
     /**
      * @param \LumIT\Typo3bb\Domain\Model\Topic $topic
      */
-    public function showNewPostAction(Topic $topic) {
+    public function showNewPostAction(Topic $topic)
+    {
         $post = null;
         if (!is_null($this->frontendUser)) {
             $reader = $this->readerRepository->findByTopicAndFrontendUser($topic, $this->frontendUser);
@@ -125,23 +127,25 @@ class TopicController extends AbstractController {
         }
         $this->redirectToUri(UrlUtility::getPostUrl($this->uriBuilder, $post, $topic));
     }
-    
+
     /**
      * action new
      *
      * @param \LumIT\Typo3bb\Domain\Model\Board $board
      * @return void
      */
-    public function newAction(Board $board) {
+    public function newAction(Board $board)
+    {
         SecurityUtility::assertAccessPermission('Topic.create', $board);
         $this->view->assign('board', $board);
         $this->view->assign('frontendUser', $this->frontendUser);
     }
 
-    public function initializeCreateAction() {
+    public function initializeCreateAction()
+    {
         $newTopic = $this->request->getArgument('topic');
 
-        if($this->request->hasArgument('poll')) {
+        if ($this->request->hasArgument('poll')) {
             $poll = $this->request->getArgument('poll');
             CreationUtility::preparePollForValidation($this->arguments->getArgument('poll'), $poll);
             $this->request->setArgument('poll', $poll);
@@ -153,6 +157,7 @@ class TopicController extends AbstractController {
 
         $this->request->setArgument('topic', $newTopic);
     }
+
     /**
      * action create
      *
@@ -163,23 +168,25 @@ class TopicController extends AbstractController {
      * @param array $attachments
      * @return void
      */
-    public function createAction(Board $board, Topic $topic, Post $post, $poll = NULL, $attachments = []) {
+    public function createAction(Board $board, Topic $topic, Post $post, $poll = null, $attachments = [])
+    {
         SecurityUtility::assertAccessPermission('Topic.create', $board);
-        if($topic->isSticky()) {
+        if ($topic->isSticky()) {
             SecurityUtility::assertAccessPermission('Topic.pin', $board);
         }
 
         TopicFactory::createTopic($board, $topic, $post, $poll, $attachments);
-        
+
         $this->topicRepository->add($topic);
         StatisticUtility::addTopic();
         $this->persistenceManager->persistAll();
 
-        $this->signalSlotDispatcher->dispatch(Topic::class, 'afterCreation', ['topic' => $topic, 'controllerContext' => $this->controllerContext]);
+        $this->signalSlotDispatcher->dispatch(Topic::class, 'afterCreation',
+            ['topic' => $topic, 'controllerContext' => $this->controllerContext]);
         //TODO cache
-        $this->redirect('show', 'Board', $this->extensionName, ['board' => $board]);
+        $this->redirect('show', 'Topic', $this->extensionName, ['topic' => $topic]);
     }
-    
+
     /**
      * action edit
      *
@@ -187,16 +194,18 @@ class TopicController extends AbstractController {
      * @ignorevalidation $topic
      * @return void
      */
-    public function editAction(Topic $topic) {
+    public function editAction(Topic $topic)
+    {
         SecurityUtility::assertAccessPermission('Topic.edit', $topic);
         $this->view->assignMultiple(['topic' => $topic, 'board' => $topic->getBoard(), 'poll' => $topic->getPoll()]);
     }
 
-    public function initializeUpdateAction() {
+    public function initializeUpdateAction()
+    {
         $topic = $this->request->getArgument('topic');
         CreationUtility::prepareTopicForValidation($this->arguments->getArgument('topic'), $topic);
 
-        if($this->request->hasArgument('poll')) {
+        if ($this->request->hasArgument('poll')) {
             $poll = $this->request->getArgument('poll');
             CreationUtility::preparePollForValidation($this->arguments->getArgument('poll'), $poll);
             $this->request->setArgument('poll', $poll);
@@ -206,6 +215,7 @@ class TopicController extends AbstractController {
 
         $this->request->setArgument('topic', $topic);
     }
+
     /**
      * action update
      *
@@ -214,14 +224,15 @@ class TopicController extends AbstractController {
      * @param array $attachments
      * @return void
      */
-    public function updateAction(Topic $topic, $poll = NULL, $attachments = []) {
+    public function updateAction(Topic $topic, $poll = null, $attachments = [])
+    {
         SecurityUtility::assertAccessPermission('Topic.edit', $topic);
-        if($topic->_isDirty('sticky')) {
+        if ($topic->_isDirty('sticky')) {
             SecurityUtility::assertAccessPermission('Topic.pin', $topic);
         }
         /** @var Post $firstPost */
         $firstPost = &$topic->getPosts()->toArray()[0];
-        if($firstPost->_isDirty()) {
+        if ($firstPost->_isDirty()) {
             $firstPost->setText(RteUtility::sanitizeHtml($firstPost->getText()));
             $firstPost->setEditor($this->frontendUser);
         }
@@ -229,7 +240,7 @@ class TopicController extends AbstractController {
             PostFactory::processAttachments($firstPost, $attachments);
         }
 
-        if(!empty($poll)) {
+        if (!empty($poll)) {
             $topic->setPoll($poll);
         }
 
@@ -238,14 +249,15 @@ class TopicController extends AbstractController {
         //TODO cache
         $this->redirect('show', null, null, ['topic' => $topic]);
     }
-    
+
     /**
      * action delete
      *
      * @param \LumIT\Typo3bb\Domain\Model\Topic $topic
      * @return void
      */
-    public function deleteAction(Topic $topic) {
+    public function deleteAction(Topic $topic)
+    {
         SecurityUtility::assertAccessPermission('Topic.delete', $topic);
         $this->topicRepository->remove($topic);
         //TODO cache
@@ -254,10 +266,11 @@ class TopicController extends AbstractController {
 
     /**
      * Action pins or unpins given topic
-     * 
+     *
      * @param \LumIT\Typo3bb\Domain\Model\Topic $topic
      */
-    public function pinAction(Topic $topic) {
+    public function pinAction(Topic $topic)
+    {
         SecurityUtility::assertAccessPermission('Topic.pin', $topic);
         $topic->setSticky(!$topic->isSticky());
 
@@ -269,8 +282,9 @@ class TopicController extends AbstractController {
     /**
      * @param \LumIT\Typo3bb\Domain\Model\Topic $topic
      */
-    public function closeAction(Topic $topic) {
-        if($topic->isClosed()) {
+    public function closeAction(Topic $topic)
+    {
+        if ($topic->isClosed()) {
             SecurityUtility::assertAccessPermission('Topic.reopen', $topic);
             $topic->setClosed(false);
         } else {
@@ -288,16 +302,10 @@ class TopicController extends AbstractController {
      *
      * @param Topic $topic
      */
-    public function moveAction(Topic $topic) {
+    public function moveAction(Topic $topic)
+    {
         SecurityUtility::assertAccessPermission('Topic.move', $topic);
-        $boards = [];
-        /** @var Board $board */
-        foreach ($this->boardRepository->findAll() as $board) {
-            if (SecurityUtility::checkAccessPermission('Topic.move', $board)) {
-                $boards[$board->getUid()] = CsvViewHelper::getCsv($board->getRootline(), 'title', ' &raquo; ');
-            }
-        }
-        asort($boards);
+        $boards = $boards = $this->boardRepository->getAllowedBoards()->toArray();
         $this->view->assignMultiple(['boards' => $boards, 'topic' => $topic]);
     }
 
@@ -307,7 +315,8 @@ class TopicController extends AbstractController {
      * @param Topic $topic
      * @param Board $destinationBoard
      */
-    public function executeMoveAction(Topic $topic, Board $destinationBoard) {
+    public function executeMoveAction(Topic $topic, Board $destinationBoard)
+    {
         SecurityUtility::assertAccessPermission('Topic.move', $topic);
         SecurityUtility::assertAccessPermission('Topic.move', $destinationBoard);
 
@@ -329,7 +338,8 @@ class TopicController extends AbstractController {
     /**
      * @param Post $post
      */
-    public function splitAction(Post $post) {
+    public function splitAction(Post $post)
+    {
         SecurityUtility::assertAccessPermission('Topic.split', $post->getTopic());
         $this->view->assignMultiple([
             'post' => $post,
@@ -338,7 +348,8 @@ class TopicController extends AbstractController {
         ]);
     }
 
-    public function initializeExecuteSplitAction() {
+    public function initializeExecuteSplitAction()
+    {
         if ($this->request->hasArgument('posts')) {
             $posts = $this->request->getArgument('posts');
         } else {
@@ -347,6 +358,7 @@ class TopicController extends AbstractController {
         if ($this->request->hasArgument('post')) {
             $posts[] = $this->request->getArgument('post');
         }
+        $this->arguments->getArgument('posts')->setValue($posts);
 
         $newTopic = $this->request->getArgument('newTopic');
         CreationUtility::prepareTopicForValidation($this->arguments->getArgument('newTopic'), $newTopic);
@@ -359,28 +371,36 @@ class TopicController extends AbstractController {
      * @param array $posts
      * @throws \LumIT\Typo3bb\Exception\AccessValidationException
      */
-    public function executeSplitAction(Topic $oldTopic, Topic $newTopic, array $posts) {
+    public function executeSplitAction(Topic $oldTopic, Topic $newTopic, array $posts)
+    {
         SecurityUtility::assertAccessPermission('Topic.split', $oldTopic);
         asort($posts);
         /** @var Post $firstPost */
         $firstPost = $this->postRepository->findByUid(array_shift($posts));
-        if(!$firstPost->getTopic() == $oldTopic) {
-            throw new AccessValidationException(LocalizationUtility::translate('exception.accessValidation', 'typo3bb'));
+        if (!$firstPost->getTopic() == $oldTopic) {
+            throw new AccessValidationException(LocalizationUtility::translate('exception.accessValidation',
+                'typo3bb'));
         }
         $oldTopic->removePost($firstPost);
-        TopicFactory::createTopic($oldTopic->getBoard(), $newTopic, $firstPost);
+        $postObjects = [];
         foreach ($posts as $post) {
-            /** @var Post $postObject */
             $postObject = $this->postRepository->findByUid($post);
-            if ($firstPost->getTopic() == $oldTopic) {
+            if ($postObject->getTopic() == $oldTopic) {
+                $postObjects[] = $postObject;
                 $oldTopic->removePost($postObject);
-                $newTopic->addPost(($postObject));
-                $this->postRepository->update($postObject);
             }
         }
-
-        $this->topicRepository->add($newTopic);
+        // We need to persist the old topic here, otherwise the updated posts will have topic = 0
         $this->topicRepository->update($oldTopic);
+        $this->persistenceManager->persistAll();
+
+        TopicFactory::createTopic($oldTopic->getBoard(), $newTopic, $firstPost);
+        $this->topicRepository->add($newTopic);
+        $this->postRepository->update($firstPost);
+        foreach ($postObjects as $post) {
+            $newTopic->addPost($post);
+            $this->postRepository->update($post);
+        }
 
         //TODO cache
         $this->redirect('show', 'Board', $this->extensionName, ['board' => $newTopic->getBoard()]);
@@ -390,22 +410,23 @@ class TopicController extends AbstractController {
      * @param \LumIT\Typo3bb\Domain\Model\Topic $topic
      * @param \LumIT\Typo3bb\Domain\Model\Topic $topic2
      */
-    public function joinAction(Topic $topic, Topic $topic2 = null) {
+    public function joinAction(Topic $topic, Topic $topic2 = null)
+    {
         SecurityUtility::assertAccessPermission('Topic.join', $topic);
         $this->view->assign('topic', $topic);
         if (is_null($topic2)) {
-            $topics = $this->topicRepository->findAll()->toArray();
-            foreach ($topics as $key => $topic) {
-                if (!SecurityUtility::checkAccessPermission('Topic.join', $topic)) {
-                    unset($topics[$key]);
-                }
-            }
-            $this->view->assign('topics', $topics);
+            $boards = $this->boardRepository->getAllowedBoards()->toArray();
+
+            $this->view->assign('boards', $boards);
         } else {
             SecurityUtility::assertAccessPermission('Topic.join', $topic2);
             $this->view->assignMultiple([
                 'topic2' => $topic2,
-                'options' => [$topic->getTitle(), $topic2->getTitle(), LocalizationUtility::translate('topic.join.step2.type.newTitle', $this->extensionName)]
+                'options' => [
+                    $topic->getTitle(),
+                    $topic2->getTitle(),
+                    LocalizationUtility::translate('topic.join.step2.type.newTitle', $this->extensionName)
+                ]
             ]);
         }
     }
@@ -416,7 +437,8 @@ class TopicController extends AbstractController {
      * @param integer $type
      * @param string $newTitle
      */
-    public function executeJoinAction(Topic $topic1, Topic $topic2, int $type = null, string $newTitle = '') {
+    public function executeJoinAction(Topic $topic1, Topic $topic2, int $type = null, string $newTitle = '')
+    {
         SecurityUtility::assertAccessPermission('Topic.join', $topic1);
         SecurityUtility::assertAccessPermission('Topic.join', $topic2);
         switch ($type) {
@@ -445,13 +467,14 @@ class TopicController extends AbstractController {
      * @param \LumIT\Typo3bb\Domain\Model\Topic $topic
      * @param bool $unsubscribe
      */
-    public function subscribeAction(Topic $topic, bool $unsubscribe = true) {
+    public function subscribeAction(Topic $topic, bool $unsubscribe = false)
+    {
         SecurityUtility::assertAccessPermission('Topic.subscribe', $topic);
 
         if ($unsubscribe) {
-            $topic->addSubscriber($this->frontendUser);
-        } else {
             $topic->removeSubscriber($this->frontendUser);
+        } else {
+            $topic->addSubscriber($this->frontendUser);
         }
         $this->topicRepository->update($topic);
         //TODO cache

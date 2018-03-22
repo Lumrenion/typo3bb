@@ -1,4 +1,5 @@
 <?php
+
 namespace LumIT\Typo3bb\Security\AccessValidator;
 
 use LumIT\Typo3bb\Domain\Model\Post;
@@ -30,24 +31,28 @@ use TYPO3\CMS\Extbase\Persistence\Generic\LazyLoadingProxy;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-
-class IsAuthorAccessValidator extends AbstractAccessValidator{
+class IsAuthorAccessValidator extends AbstractAccessValidator
+{
 
     /**
      * @param \LumIT\Typo3bb\Domain\Model\Topic|\LumIT\Typo3bb\Domain\Model\Post $objectToValidate
      * @return bool
      * @throws IllegalObjectTypeException
      */
-    public function validate($objectToValidate) {
+    public function validate($objectToValidate)
+    {
         if ($objectToValidate instanceof LazyLoadingProxy) {
             $objectToValidate = $objectToValidate->_loadRealInstance();
         }
-        if(!$objectToValidate instanceof Topic && !$objectToValidate instanceof Post) {
+        if (!$objectToValidate instanceof Topic && !$objectToValidate instanceof Post) {
             throw new IllegalObjectTypeException('Object to validate must be of type ' . Topic::class . ' or ' . Post::class . '!');
+        }
+        if ($this->frontendUser == null) {
+            return false;
         }
 
         $author = $objectToValidate->getAuthor();
-        if($author != NULL && $author->getUid() == $GLOBALS['TSFE']->fe_user->user['uid']) {
+        if ($author != null && $author->getUid() == $this->frontendUser->getUid()) {
             return true;
         }
 

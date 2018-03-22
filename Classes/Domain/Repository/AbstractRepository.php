@@ -1,4 +1,5 @@
 <?php
+
 namespace LumIT\Typo3bb\Domain\Repository;
 
 
@@ -28,16 +29,12 @@ namespace LumIT\Typo3bb\Domain\Repository;
  ***************************************************************/
 
 
-use LumIT\Typo3bb\Utility\PluginUtility;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Core\Utility\StringUtility;
-use TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings;
-use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use TYPO3\CMS\Extbase\Persistence\Repository;
 
 /**
  * The abstract repository
  */
-abstract class AbstractRepository extends Repository {
+abstract class AbstractRepository extends Repository
+{
     use RepositoryTrait;
 }

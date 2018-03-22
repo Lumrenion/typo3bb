@@ -17,20 +17,17 @@ return [
             'disabled' => 'hidden',
 
         ],
-        'searchFields' => 'title,description,redirect,topics,sub_boards,read_permissions,write_permissions,moderators,parent_board,forum_category,',
-        'iconfile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath('typo3bb') . 'Resources/Public/Icons/tx_typo3bb_domain_model_board.gif',
-        'requestUpdate' => 'parent_board',
+        'searchFields' => 'title,description,redirect,topics,sub_boards,read_permissions,write_permissions,moderator_groups,parent_board,forum_category,',
+        'iconfile' => 'EXT:typo3bb/Resources/Public/Icons/tx_typo3bb_domain_model_board.gif',
     ],
     'interface' => [
-        'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, title, description, redirect, sub_boards, read_permissions, write_permissions, moderators, parent_board, forum_category',
+        'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, title, description, redirect, sub_boards, read_permissions, write_permissions, moderator_groups, parent_board, forum_category',
     ],
     'types' => [
         '1' => ['showitem' =>
-            'sys_language_uid;;;;1-1-1, l10n_parent, l10n_diffsource, title, description, redirect, moderators, parent_board, forum_category, sub_boards, '
+            'sys_language_uid, l10n_parent, l10n_diffsource, title, description, redirect, moderator_groups, parent_board, forum_category, sub_boards, '
             . '--div--;LLL:EXT:typo3bb/Resources/Private/Language/locallang_db.xlf:tx_typo3bb_domain_model_board.tabs.access, '
-            . 'hidden;;1, read_permissions, write_permissions, '
-            . '--div--;LLL:EXT:typo3bb/Resources/Private/Language/locallang_db.xlf:tx_typo3bb_domain_model_board.tabs.search, '
-            . 'tx_kesearch_index, '
+            . 'hidden, --palette--;;1, read_permissions, write_permissions, '
         ],
     ],
     'palettes' => [
@@ -106,19 +103,10 @@ return [
                 'type' => 'input',
                 'size' => 30,
                 'eval' => 'trim',
-                'wizards' => [
-                    'link' => [
-                        'type' => 'popup',
-                        'title' => 'LLL:EXT:cms/locallang_ttc.xlf:header_link_formlabel',
-                        'icon' => 'link_popup.gif',
-                        'module' => [
-                            'name' => 'wizard_element_browser',
-                            'urlParameters' => [
-                                'mode' => 'wizard'
-                            ]
-                        ],
-                        'JSopenParams' => 'height=300,width=500,status=0,menubar=0,scrollbars=1'
-                    ]
+                'fieldControl' => [
+                    'linkPopup' => [
+                        'options' => [],
+                    ],
                 ],
                 'softref' => 'typolink'
             ],
@@ -238,14 +226,14 @@ return [
                 'enableMultiSelectFilterTextfield' => 1,
             ],
         ],
-        'moderators' => [
+        'moderator_groups' => [
             'exclude' => 1,
-            'label' => 'LLL:EXT:typo3bb/Resources/Private/Language/locallang_db.xlf:tx_typo3bb_domain_model_board.moderators',
+            'label' => 'LLL:EXT:typo3bb/Resources/Private/Language/locallang_db.xlf:tx_typo3bb_domain_model_board.moderator_groups',
             'config' => [
                 'type' => 'select',
                 'renderType' => 'selectMultipleSideBySide',
-                'foreign_table' => 'fe_users',
-                'foreign_table_where' => 'ORDER BY fe_users.name',
+                'foreign_table' => 'fe_groups',
+                'foreign_table_where' => 'ORDER BY fe_groups.title',
                 'size' => 10,
                 'autoSizeMax' => 30,
                 'maxitems' => 9999,
@@ -279,7 +267,8 @@ return [
                 'default' => 0,
                 'items' => [
                     ['', 0],
-                ]
+                ],
+                'onChange' => 'reload'
             ],
         ],
         'forum_category' => [
@@ -316,15 +305,6 @@ return [
         'latest_post_crdate' => [
             'config' => [
                 'type' => 'passthrough'
-            ]
-        ],
-        'tx_kesearch_index' => [
-            'exclude' => 1,
-            'label' => 'LLL:EXT:typo3bb/Resources/Private/Language/locallang_db.xlf:tx_typo3bb_domain_model_board.tx_kesearch_index',
-            'displayCond' => 'EXT:ke_search:LOADED:TRUE',
-            'config' => [
-                'type' => 'check',
-                'default' => 1
             ]
         ]
     ],

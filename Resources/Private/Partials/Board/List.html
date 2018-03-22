@@ -1,8 +1,21 @@
 <div xmlns="http://www.w3.org/1999/xhtml" lang="en"
      xmlns:f="http://typo3.org/ns/TYPO3/Fluid/ViewHelpers"
-     xmlns:tbb="http://typo3.org/ns/LumIT/Typo3bb/ViewHelpers"
+     xmlns:tbb="http://typo3.org/ns/LumIT/Typo3bb/ViewHelpers">
     <f:section name="Content">
         <div class="forum-category-boards">
+            <div class="forum-category-board forum-category-board-head">
+                <div class="row row-eq-height">
+                    <div class="col-xs-7 board-list-board-title">
+                        <f:translate key="board.list.head.board" />
+                    </div>
+                    <div class="hidden-xs hidden-sm col-md-2 board-list-board-counters">
+                        <f:translate key="board.list.head.counters" />
+                    </div>
+                    <div class="col-xs-5 col-md-3 board-list-board-latest-post">
+                        <f:translate key="board.list.head.latestPost" />
+                    </div>
+                </div>
+            </div>
             <f:for each="{boards}" as="board">
                 <tbb:hasAccess key="Board.show" object="{board}">
                     <div class="forum-category-board">
@@ -22,14 +35,14 @@
                                 <f:if condition="{board.description}">
                                     <span class="board-list-board-title-description"><small><f:format.raw>{board.description}</f:format.raw></small></span>
                                 </f:if>
-                                <f:if condition="{board.moderators}">
+                                <f:if condition="{board.moderatorGroups}">
                                     <div class="board-list-board-moderators">
                                         <small>
                                             <f:translate key="board.moderators.label" />
-                                            <f:for each="{board.moderatorsArray}" as="moderator">
-                                                <f:link.action action="show" controller="FrontendUser" extensionName="IglarpTemplate" pluginName="User-Profile" arguments="{user: moderator}" pageUid="{settings.pid.profile}">
-                                                    {moderator.displayName}
-                                                </f:link.action>
+                                            <f:for each="{board.moderatorsArray}" as="moderator" iteration="it">
+                                                <f:link.action action="show" controller="FrontendUser"
+                                                               extensionName="IglarpTemplate" pluginName="User-Profile"
+                                                               arguments="{user: moderator}" pageUid="{settings.pid.profile}">{moderator.displayName}</f:link.action><f:if condition="{it.isLast} == false">,</f:if>
                                             </f:for>
                                         </small>
                                     </div>
@@ -71,13 +84,11 @@
                                 <f:if condition="{board.redirect}"><f:else>
                                     <small>
                                         <f:if condition="{board.viewableLatestPost}">
-                                            <f:link.action action="show" controller="Topic" arguments="{topic: board.viewableLatestPost.topic, post: board.viewableLatestPost}" section="post-{board.viewableLatestPost.uid}">
-                                                <div>
-                                                    <f:translate key="latestPost.author.label" arguments="{0: board.viewableLatestPost.authorName}" /><br>
-                                                    <f:translate key="latestPost.topic.label" arguments="{0: board.viewableLatestPost.topic.title}" /><br>
-                                                    <f:translate key="latestPost.crdate.label" arguments="{0: '{f:format.date(format: \'d.m.Y, H:i\' date: board.viewableLatestPost.crdate)}'}" />
-                                                </div>
-                                            </f:link.action>
+                                            <f:translate key="latestPost.author.label" />&nbsp;<f:if condition="{board.viewableLatestPost.author}">
+                                            <f:then><f:link.action action="show" controller="FrontendUser" extensionName="IglarpTemplate" pluginName="User-Profile" arguments="{user: board.viewableLatestPost.author}" pageUid="{settings.pid.profile}">{board.viewableLatestPost.authorName}</f:link.action></f:then>
+                                            <f:else>{board.viewableLatestPost.authorName}</f:else></f:if><br>
+                                            <f:translate key="latestPost.topic.label" />&nbsp;<f:link.action action="show" controller="Topic" arguments="{topic: board.viewableLatestPost.topic, post: board.viewableLatestPost}">{board.viewableLatestPost.topic.title}</f:link.action><br>
+                                            <f:translate key="latestPost.crdate.label" />&nbsp;<f:format.date format="d.m.Y, H:i">{board.viewableLatestPost.crdate}</f:format.date>
                                         </f:if>
                                     </small>
                                 </f:else></f:if>

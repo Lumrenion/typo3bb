@@ -1,4 +1,5 @@
 <?php
+
 namespace LumIT\Typo3bb\Domain\Model;
 
 /***************************************************************
@@ -26,10 +27,13 @@ namespace LumIT\Typo3bb\Domain\Model;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
+
 /**
  * A Reader
  */
-class Reader extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
+class Reader extends AbstractEntity
+{
 
     /**
      * @var \LumIT\Typo3bb\Domain\Model\FrontendUser
@@ -53,42 +57,48 @@ class Reader extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
     /**
      * @return \LumIT\Typo3bb\Domain\Model\FrontendUser
      */
-    public function getUser() {
+    public function getUser()
+    {
         return $this->user;
     }
 
     /**
      * @param \LumIT\Typo3bb\Domain\Model\FrontendUser $user
      */
-    public function setUser($user) {
+    public function setUser($user)
+    {
         $this->user = $user;
     }
 
     /**
      * @return \LumIT\Typo3bb\Domain\Model\Topic
      */
-    public function getTopic() {
+    public function getTopic()
+    {
         return $this->topic;
     }
 
     /**
      * @param \LumIT\Typo3bb\Domain\Model\Topic $topic
      */
-    public function setTopic($topic) {
+    public function setTopic($topic)
+    {
         $this->topic = $topic;
     }
 
     /**
      * @return \LumIT\Typo3bb\Domain\Model\Post
      */
-    public function getPost() {
+    public function getPost()
+    {
         return $this->post;
     }
 
     /**
      * @param \LumIT\Typo3bb\Domain\Model\Post $post
      */
-    public function setPost($post) {
+    public function setPost($post)
+    {
         $this->post = $post;
     }
 }

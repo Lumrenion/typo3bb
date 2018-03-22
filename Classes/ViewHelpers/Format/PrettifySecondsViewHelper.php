@@ -1,7 +1,9 @@
 <?php
+
 namespace LumIT\Typo3bb\ViewHelpers\Format;
 
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
+use TYPO3\CMS\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
 use TYPO3\CMS\Fluid\Core\ViewHelper\Facets\CompilableInterface;
 
@@ -28,14 +30,15 @@ use TYPO3\CMS\Fluid\Core\ViewHelper\Facets\CompilableInterface;
  *
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-
-class PrettifySecondsViewHelper extends AbstractViewHelper implements CompilableInterface {
+class PrettifySecondsViewHelper extends AbstractViewHelper implements CompilableInterface
+{
     /**
-     * @param int   $seconds
-     * @param bool  $shortcut
+     * @param int $seconds
+     * @param bool $shortcut
      * @return string
      */
-    public function render($seconds = null, $shortcut = false) {
+    public function render($seconds = null, $shortcut = false)
+    {
         return static::renderStatic(
             [
                 'seconds' => $seconds,
@@ -46,13 +49,17 @@ class PrettifySecondsViewHelper extends AbstractViewHelper implements Compilable
         );
     }
 
-    public static function renderStatic(array $arguments, \Closure $renderChildrenClosure, \TYPO3\CMS\Fluid\Core\Rendering\RenderingContextInterface $renderingContext) {
+    public static function renderStatic(
+        array $arguments,
+        \Closure $renderChildrenClosure,
+        RenderingContextInterface $renderingContext
+    ) {
         $time = self::secondsToTime($arguments['seconds']);
 
         $timeString = '';
         $separator = '';
         $unskip = false;
-        foreach (['days','h','i'] as $timeUnit) {
+        foreach (['days', 'h', 'i'] as $timeUnit) {
             if ($time->$timeUnit == 0 && !$unskip) {
                 continue;
             }
@@ -86,7 +93,8 @@ class PrettifySecondsViewHelper extends AbstractViewHelper implements Compilable
      * @param int $seconds
      * @return bool|\DateInterval
      */
-    protected static function secondsToTime($seconds) {
+    protected static function secondsToTime($seconds)
+    {
         $then = new \DateTime(date('Y-m-d H:i:s', 0));
         $now = new \DateTime(date('Y-m-d H:i:s', $seconds));
         $diff = $then->diff($now);

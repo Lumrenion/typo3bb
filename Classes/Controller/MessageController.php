@@ -1,4 +1,5 @@
 <?php
+
 namespace LumIT\Typo3bb\Controller;
 
 
@@ -37,7 +38,8 @@ use LumIT\Typo3bb\Utility\SecurityUtility;
 /**
  * MessageController
  */
-class MessageController extends AbstractController {
+class MessageController extends AbstractController
+{
 
     /**
      * messageRepository
@@ -45,21 +47,23 @@ class MessageController extends AbstractController {
      * @var \LumIT\Typo3bb\Domain\Repository\MessageRepository
      * @inject
      */
-    protected $messageRepository = NULL;
+    protected $messageRepository = null;
 
     /**
      * @var \LumIT\Typo3bb\Domain\Repository\FrontendUserRepository
      * @inject
      */
-    protected $frontendUserRepository = NULL;
+    protected $frontendUserRepository = null;
 
-    public function inboxAction() {
+    public function inboxAction()
+    {
         SecurityUtility::assertAccessPermission('Message.inbox');
         $receivedMessages = $this->messageRepository->findInbox($this->frontendUser);
         $this->view->assign('messages', $receivedMessages);
     }
 
-    public function outboxAction() {
+    public function outboxAction()
+    {
         SecurityUtility::assertAccessPermission('Message.outbox');
         $sentMessages = $this->messageRepository->findOutbox($this->frontendUser);
         $sentMessages->toArray();
@@ -70,16 +74,18 @@ class MessageController extends AbstractController {
      * @param \LumIT\Typo3bb\Domain\Model\Message $parentMessage
      * @param \LumIT\Typo3bb\Domain\Model\FrontendUser $receiver
      */
-    public function newAction($parentMessage = null, FrontendUser $receiver = null) {
+    public function newAction($parentMessage = null, FrontendUser $receiver = null)
+    {
         SecurityUtility::assertAccessPermission('Message.send');
         $receiverText = '';
         $subject = '';
         $body = '';
         $receiversArray = [];
-        if(!empty($parentMessage)) {
+        if (!empty($parentMessage)) {
             $message = new Message();
             $message->setSubject($parentMessage->getSubject());
-            $body = RteUtility::getQuote($parentMessage->getText(), $parentMessage->getSender()->getUserName(), $parentMessage->getCrdate());
+            $body = RteUtility::getQuote($parentMessage->getText(), $parentMessage->getSender()->getUserName(),
+                $parentMessage->getCrdate());
             $senderUser = $parentMessage->getSender()->getUser();
             if (!empty($senderUser)) {
                 $receiverText .= $parentMessage->getSender()->getUser()->getUsername() . ',';
@@ -90,17 +96,21 @@ class MessageController extends AbstractController {
             }
             /** @var MessageParticipant $receiver */
             foreach ($parentMessage->getReceivers() as $messageReceiver) {
-                if(!empty($messageReceiver->getUser()) && $messageReceiver->getUser() != $this->frontendUser) {
+                if (!empty($messageReceiver->getUser()) && $messageReceiver->getUser() != $this->frontendUser) {
                     $receiverText .= $messageReceiver->getUser()->getUsername() . ',';
                     $receiversArray[] = [
                         'id' => $messageReceiver->getUser()->getUsername(),
-                        'text' => $messageReceiver->getUser()->getName()
+                        'text' => $messageReceiver->getUser()->getDisplayName()
                     ];
                 }
             }
             $subject = $parentMessage->getSubject();
         } elseif (!empty($receiver)) {
-            $receiverText = $receiver->getDisplayName() . ',';
+            $receiverText = $receiver->getUsername() . ',';
+            $receiversArray[] = [
+                'id' => $receiver->getUsername(),
+                'text' => $receiver->getDisplayName()
+            ];
         }
         $this->view->assignMultiple([
             'user' => $this->frontendUser,
@@ -111,19 +121,22 @@ class MessageController extends AbstractController {
         ]);
     }
 
-    public function initializeSendAction() {
+    public function initializeSendAction()
+    {
         if (!$this->request->hasArgument('receivers')) {
             $this->request->setArgument('receivers', '');
         }
         $message = $this->request->getArgument('message');
-        MessageFactory::prepareMessage($this->arguments->getArgument('message'), $message, $this->request->getArgument('receivers'));
+        MessageFactory::prepareMessage($this->arguments->getArgument('message'), $message,
+            $this->request->getArgument('receivers'));
         $this->request->setArgument('message', $message);
     }
 
     /**
      * @param \LumIT\Typo3bb\Domain\Model\Message $message
      */
-    public function sendAction(Message $message) {
+    public function sendAction(Message $message)
+    {
         SecurityUtility::assertAccessPermission('Message.send');
         $message->setText(RteUtility::sanitizeHtml($message->getText()));
 
@@ -131,7 +144,8 @@ class MessageController extends AbstractController {
 
         $this->messageRepository->add($message);
         $this->persistenceManager->persistAll();
-        $this->signalSlotDispatcher->dispatch(Message::class, 'afterCreation', ['message' => $message, 'controllerContext' => $this->controllerContext]);
+        $this->signalSlotDispatcher->dispatch(Message::class, 'afterCreation',
+            ['message' => $message, 'controllerContext' => $this->controllerContext]);
         $this->redirect('inbox');
     }
 
@@ -139,7 +153,8 @@ class MessageController extends AbstractController {
      * @param Message $message
      * @param string $from Can be inbox or outbox
      */
-    public function deleteAction(Message $message, $from = 'inbox') {
+    public function deleteAction(Message $message, $from = 'inbox')
+    {
         SecurityUtility::assertAccessPermission('Message.delete');
         if ($from == 'inbox') {
             $messageParticipant = $message->getMessageReceiver($this->frontendUser);
@@ -150,7 +165,7 @@ class MessageController extends AbstractController {
             }
         }
 
-        if(!empty($messageParticipant)) {
+        if (!empty($messageParticipant)) {
             $messageParticipant->setDeleted(true);
         }
 
@@ -184,11 +199,12 @@ class MessageController extends AbstractController {
 
     /**
      * Returns a filtered list of possible receivers by search value
-     * @param string $search    The search value
+     * @param string $search The search value
      *
      * @return string
      */
-    public function getAjaxReceiversAction($search) {
+    public function getAjaxReceiversAction($search)
+    {
         SecurityUtility::assertAccessPermission("Message.send");
 
         $possibleUsers = $this->frontendUserRepository->findByNameOrUsername($search);

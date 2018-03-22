@@ -7,6 +7,11 @@ config.tx_extbase{
                     0 = LumIT\Typo3bb\Domain\Model\FrontendUser
                 }
             }
+            TYPO3\CMS\Extbase\Domain\Model\FrontendUserGroup {
+                subclasses {
+                    0 = LumIT\Typo3bb\Domain\Model\FrontendUserGroup
+                }
+            }
             LumIT\Typo3bb\Domain\Model\FileReference {
                 mapping {
                     tableName = sys_file_reference
@@ -17,8 +22,17 @@ config.tx_extbase{
                     recordType = 0
                     tableName = fe_users
                     columns {
+                        is_online.mapOnProperty = onlineTime
                         tx_typo3bb_display_name.mapOnProperty = displayName
-                        tx_typo3bb_global_moderator.mapOnProperty = globalModerator
+                    }
+                }
+            }
+            LumIT\Typo3bb\Domain\Model\FrontendUserGroup {
+                mapping {
+                    recordType = 0
+                    tableName = fe_users
+                    columns {
+                        tx_typo3bb_global_moderator_group.mapOnProperty = globalModeratorGroup
                     }
                 }
             }

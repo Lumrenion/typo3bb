@@ -15,7 +15,7 @@
                                 <f:if condition="{post.author}">
                                     <f:then>
                                         <dt class="author-avatar-container">
-                                            <tbb:image width="90" src="uploads/pics/{post.author.image}" class="image-responsive img-thumbnail profile-user-image"
+                                            <tbb:image width="90" src="{post.author.image.0.originalResource.publicUrl}" class="image-responsive img-thumbnail profile-user-image"
                                                      alt="{frontendUser.displayName}" title="{frontendUser.displayName}">
                                                 <i class="fa fa-user fa-5x" aria-hidden="true"></i>
                                             </tbb:image>
@@ -73,9 +73,11 @@
 
                                 <f:if condition="{post.edited}">
                                     <p class="post-edited-note">
-                                        <small>
-                                            <f:translate key="post.edited.label" arguments="{0: '{f:format.date(format: \'d.m.Y\', date: post.tstamp)}', 1: '{f:if(condition: post.editor, then: post.editor.displayName, else: post.editorName)}'}" />
-                                        </small>
+                                        <small><f:format.htmlentitiesDecode>
+                                            <f:translate key="post.edited.label" arguments="{
+                                            0: '{f:format.date(format: \'d.m.Y\', date: post.tstamp)}',
+                                            1: '{post.editorName}'}" />
+                                        </f:format.htmlentitiesDecode></small>
                                     </p>
                                 </f:if>
 

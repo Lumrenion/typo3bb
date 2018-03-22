@@ -1,4 +1,5 @@
 <?php
+
 namespace LumIT\Typo3bb\Security\AccessValidator;
 
 /***************************************************************
@@ -26,15 +27,17 @@ namespace LumIT\Typo3bb\Security\AccessValidator;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-class IsAdminAccessValidator extends AbstractAccessValidator{
+class IsAdminAccessValidator extends AbstractAccessValidator
+{
 
     /**
      * @param $objectToValidate
      * @return bool
      */
-    public function validate($objectToValidate) {
-        if($GLOBALS['TSFE']->beUserLogin) {
-            if($GLOBALS['BE_USER']->user['admin']) {
+    public function validate($objectToValidate)
+    {
+        if ($GLOBALS['TSFE']->beUserLogin) {
+            if ($GLOBALS['BE_USER']->user['admin']) {
                 return true;
             }
         }

@@ -1,4 +1,5 @@
 <?php
+
 namespace LumIT\Typo3bb\ViewHelpers\Widget;
 
 /*                                                                        *
@@ -22,7 +23,7 @@ namespace LumIT\Typo3bb\ViewHelpers\Widget;
  *                                                                        */
 
 
-
+use LumIT\Typo3bb\ViewHelpers\Widget\Controller\PaginateMessagesController;
 use TYPO3\CMS\Fluid\ViewHelpers\Widget\PaginateViewHelper;
 
 /**
@@ -55,7 +56,8 @@ use TYPO3\CMS\Fluid\ViewHelpers\Widget\PaginateViewHelper;
  *
  * @api
  */
-class PaginateMessagesViewHelper extends PaginateViewHelper {
+class PaginateMessagesViewHelper extends PaginateViewHelper
+{
     /**
      * @var \LumIT\Typo3bb\ViewHelpers\Widget\Controller\PaginateMessagesController
      */
@@ -64,7 +66,7 @@ class PaginateMessagesViewHelper extends PaginateViewHelper {
     /**
      * @param \LumIT\Typo3bb\ViewHelpers\Widget\Controller\PaginateMessagesController $controller
      */
-    public function injectPaginateController(\LumIT\Typo3bb\ViewHelpers\Widget\Controller\PaginateMessagesController $controller)
+    public function injectPaginateController(PaginateMessagesController $controller)
     {
         $this->controller = $controller;
     }

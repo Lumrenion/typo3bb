@@ -1,4 +1,5 @@
 <?php
+
 namespace LumIT\Typo3bb\Domain\Repository;
 
 
@@ -29,6 +30,7 @@ namespace LumIT\Typo3bb\Domain\Repository;
 use LumIT\Typo3bb\Domain\Model\Board;
 use LumIT\Typo3bb\Domain\Model\Post;
 use LumIT\Typo3bb\Domain\Model\Topic;
+use LumIT\Typo3bb\Utility\FrontendUserUtility;
 use TYPO3\CMS\Extbase\Domain\Model\FrontendUser;
 use TYPO3\CMS\Extbase\Persistence\Generic\Query;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
@@ -45,15 +47,16 @@ class PostRepository extends AbstractRepository
      * @var \LumIT\Typo3bb\Domain\Repository\TopicRepository
      * @inject
      */
-    protected $topicRepository = NULL;
+    protected $topicRepository = null;
 
     /**
      * @param \LumIT\Typo3bb\Domain\Model\Post $post
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
      */
-    public function remove($post) {
+    public function remove($post)
+    {
         parent::remove($post);
-        if(!is_null($post->getAuthor())) {
+        if (!is_null($post->getAuthor())) {
             $post->getAuthor()->removeCreatedPost($post);
         }
         if (!is_null($post->getEditor())) {
@@ -67,14 +70,15 @@ class PostRepository extends AbstractRepository
      * Returns the previous posts of specified post. If no post is specified, it returns the last posts of specified topic.
      *
      * @param \LumIT\Typo3bb\Domain\Model\Topic $topic
-     * @param \LumIT\Typo3bb\Domain\Model\Post  $post
-     * @param int                               $limit
+     * @param \LumIT\Typo3bb\Domain\Model\Post $post
+     * @param int $limit
      * @return array|\TYPO3\CMS\Extbase\Persistence\QueryResultInterface
      */
-    public function findPrevious(Topic $topic, Post $post = null, $limit = 5) {
+    public function findPrevious(Topic $topic, Post $post = null, $limit = 5)
+    {
         $query = $this->createQuery();
         $constraints[] = $query->equals('topic', $topic);
-        if($post != null) {
+        if ($post != null) {
             $constraints[] = $query->lessThan('crdate', $post->getCrdate());
         }
         return $query->matching($query->logicalAnd($constraints))
@@ -89,7 +93,8 @@ class PostRepository extends AbstractRepository
      * @param \LumIT\Typo3bb\Domain\Model\Post $post
      * @return QueryResultInterface
      */
-    public function findFollowing(Post $post) {
+    public function findFollowing(Post $post)
+    {
         $query = $this->createQuery();
         return $query->matching($query->logicalAnd(
             $query->equals('topic', $post->getTopic()),
@@ -101,23 +106,19 @@ class PostRepository extends AbstractRepository
      * Returns the first unread post of each readable topic.
      * If $board is specified, only posts in the specified board are returned.
      *
-     * @param \LumIT\Typo3bb\Domain\Model\FrontendUser|int  $frontendUser
-     * @param Board|int                                     $board
-     * @param Topic|int                                     $topic
+     * @param \LumIT\Typo3bb\Domain\Model\FrontendUser|int $frontendUser
+     * @param Board|int $board
+     * @param Topic|int $topic
      * @return array|QueryResultInterface|Query
      * //TODO it might be possible to simplify the resulting query (replace sub queries with joins)
      * //TODO if TYPO3v8 brings a better database abstraction through doctrine, refactor this query.
      */
-    public function findUnread($frontendUser, $board = null, $topic = null, $all = false, $returnQuery = false) {
-        if (! ($frontendUser instanceof FrontendUser)) {
+    public function findUnread($frontendUser, $board = null, $topic = null, $all = false, $returnQuery = false)
+    {
+        if (!($frontendUser instanceof FrontendUser)) {
             $frontendUser = $this->objectManager->get(FrontendUserRepository::class)->findByUid($frontendUser);
         }
-        $usergroups = $frontendUser->getUsergroup()->toArray();
-        $usergroups = array_map(function($usergroup) {
-            return $usergroup->getUid();
-        }, $usergroups);
-        $usergroups[] = 0;
-        $usergroups[] = -2;
+        $usergroups = FrontendUserUtility::getUsergroupList($frontendUser);
 
         /** @var Query $query */
         $query = $this->createQuery();
@@ -178,7 +179,6 @@ LEFT JOIN tx_typo3bb_domain_model_board as board ON (topic.board = board.uid)
         $sqlQuery .= ' AND post.pid IN (' . implode(',', $query->getQuerySettings()->getStoragePageIds()) . ')';
         //APPEND READ PERMISSION CONSTRAINT
         $sqlQuery .= ' AND (';
-        $usergroups = implode(',', $usergroups);
         $sqlQuery .= 'hasAccess(board.uid, \'' . $usergroups . '\') = TRUE';
         $sqlQuery .= ')';
 
@@ -196,7 +196,8 @@ LEFT JOIN tx_typo3bb_domain_model_board as board ON (topic.board = board.uid)
      *
      * @return QueryResultInterface
      */
-    public function findLatest($usergroups, $boards = null, $limit = 0) {
+    public function findLatest($usergroups, $boards = null, $limit = 0)
+    {
         if (!is_array($usergroups)) {
             $usergroups = explode(',', $usergroups);
         }
@@ -240,7 +241,8 @@ LEFT JOIN tx_typo3bb_domain_model_board as board ON (topic.board = board.uid)
      *
      * @return \LumIT\Typo3bb\Domain\Model\Post
      */
-    public function findNext($currentPost) {
+    public function findNext($currentPost)
+    {
         $query = $this->createQuery();
         $query->matching(
             $query->logicalAnd(

@@ -1,4 +1,5 @@
 <?php
+
 namespace LumIT\Typo3bb\Utility;
 
 
@@ -60,6 +61,14 @@ class EmailUtility
     }
 
     /**
+     * @return ObjectManager
+     */
+    protected static function _getObjectManager()
+    {
+        return GeneralUtility::makeInstance(ObjectManager::class);
+    }
+
+    /**
      * Returns the rendered email body by template name. The Template must be located in templateRootPath/Email/$templateName
      *
      * @param String $templateName
@@ -74,7 +83,8 @@ class EmailUtility
         $emailView = GeneralUtility::makeInstance(StandaloneView::class);
         $emailView->setControllerContext($controllerContext);
         $emailView->setFormat('html');
-        $extbaseFrameworkConfiguration = GeneralUtility::makeInstance(ConfigurationManager::class)->getConfiguration(\TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK, 'typo3bb');
+        $extbaseFrameworkConfiguration = GeneralUtility::makeInstance(ConfigurationManager::class)->getConfiguration(ConfigurationManager::CONFIGURATION_TYPE_FRAMEWORK,
+            'typo3bb');
         $emailView->setTemplateRootPaths($extbaseFrameworkConfiguration['view']['templateRootPaths']);
         $emailView->setLayoutRootPaths($extbaseFrameworkConfiguration['view']['layoutRootPaths']);
         $emailView->setPartialRootPaths($extbaseFrameworkConfiguration['view']['partialRootPaths']);
@@ -98,16 +108,8 @@ class EmailUtility
      */
     public static function substituteMarkers($emailBody, $variables)
     {
-        return preg_replace_callback('/###([A-Z0-9_\.]*)###/is', function($match) use ($variables) {
+        return preg_replace_callback('/###([A-Z0-9_\.]*)###/is', function ($match) use ($variables) {
             return ObjectAccess::getPropertyPath($variables, $match[1]);
         }, $emailBody);
-    }
-
-    /**
-     * @return ObjectManager
-     */
-    protected static function _getObjectManager()
-    {
-        return GeneralUtility::makeInstance(ObjectManager::class);
     }
 }

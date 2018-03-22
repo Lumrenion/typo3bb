@@ -1,4 +1,5 @@
 <?php
+
 namespace LumIT\Typo3bb\Domain\Repository;
 
 
@@ -28,6 +29,7 @@ namespace LumIT\Typo3bb\Domain\Repository;
  ***************************************************************/
 use LumIT\Typo3bb\Domain\Model\Board;
 use LumIT\Typo3bb\Domain\Model\ForumCategory;
+use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 
 
 /**
@@ -41,16 +43,17 @@ class BoardRepository extends AbstractRepository
      * @var array
      */
     protected $defaultOrderings = [
-        'sorting' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING
+        'sorting' => QueryInterface::ORDER_ASCENDING
     ];
 
     /**
      * @param ForumCategory|Board $parent
      * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
      */
-    public function getAllowedBoards($parent = null) {
+    public function getAllowedBoards($parent = null)
+    {
         $usergroups = $GLOBALS['TSFE']->gr_list;
-        if ($parent === NULL) {
+        if ($parent === null) {
             $parentField = 'parent_board';
             $uid = 0;
         } elseif ($parent instanceof ForumCategory) {
@@ -66,7 +69,7 @@ class BoardRepository extends AbstractRepository
         $sql = 'SELECT tx_typo3bb_domain_model_board.* FROM tx_typo3bb_domain_model_board';
         $sql .= ' WHERE 1 = 1 ' . $GLOBALS['TSFE']->sys_page->enableFields($this->tableName);
         $sql .= ' AND hasAccess(tx_typo3bb_domain_model_board.uid, \'' . $usergroups . '\') = TRUE';
-        $sql .= ' AND ' . $parentField . ' = '. $uid;
+        $sql .= ' AND ' . $parentField . ' = ' . $uid;
 
         // ordering
         $sql .= ' ORDER BY ';

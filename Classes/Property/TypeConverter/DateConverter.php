@@ -1,4 +1,5 @@
 <?php
+
 namespace LumIT\Typo3bb\Property\TypeConverter;
 
 /***************************************************************
@@ -24,12 +25,16 @@ namespace LumIT\Typo3bb\Property\TypeConverter;
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use TYPO3\CMS\Extbase\Property\PropertyMappingConfigurationInterface;
+use TYPO3\CMS\Extbase\Property\TypeConverter\AbstractTypeConverter;
+
 
 /**
  * Class DateConverter
  * @package LumIT\Typo3bb\Property\TypeConverter
  */
-class DateConverter extends \TYPO3\CMS\Extbase\Property\TypeConverter\AbstractTypeConverter {
+class DateConverter extends AbstractTypeConverter
+{
 
     /**
      * @var array<string>
@@ -67,10 +72,10 @@ class DateConverter extends \TYPO3\CMS\Extbase\Property\TypeConverter\AbstractTy
         $source,
         $targetType,
         array $convertedChildProperties = [],
-        \TYPO3\CMS\Extbase\Property\PropertyMappingConfigurationInterface $configuration = null
+        PropertyMappingConfigurationInterface $configuration = null
     ) {
         $date = new \DateTime($source);
-        $date->setTime(0,0,0);
+        $date->setTime(0, 0, 0);
 
         return $date;
     }

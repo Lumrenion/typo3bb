@@ -1,5 +1,7 @@
 <?php
+
 namespace LumIT\Typo3bb\Security\AccessValidator;
+
 use LumIT\Typo3bb\Domain\Model\Post;
 use LumIT\Typo3bb\Domain\Model\Topic;
 use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
@@ -29,21 +31,22 @@ use TYPO3\CMS\Extbase\Persistence\Generic\LazyLoadingProxy;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-
-class IsNotClosedAccessValidator extends AbstractAccessValidator {
+class IsNotClosedAccessValidator extends AbstractAccessValidator
+{
 
     /**
      * @param \LumIT\Typo3bb\Domain\Model\Topic|\LumIT\Typo3bb\Domain\Model\Post $objectToValidate
      * @return bool
      * @throws IllegalObjectTypeException
      */
-    public function validate($objectToValidate) {
+    public function validate($objectToValidate)
+    {
         if ($objectToValidate instanceof LazyLoadingProxy) {
             $objectToValidate = $objectToValidate->_loadRealInstance();
         }
-        if($objectToValidate instanceof Topic) {
+        if ($objectToValidate instanceof Topic) {
             return !$objectToValidate->isClosed();
-        } elseif($objectToValidate instanceof Post) {
+        } elseif ($objectToValidate instanceof Post) {
             return !$objectToValidate->getTopic()->isClosed();
         } else {
             throw new IllegalObjectTypeException('Object to validate must be of type ' . Topic::class . ' or ' . Post::class . '!');

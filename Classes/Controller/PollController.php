@@ -1,4 +1,5 @@
 <?php
+
 namespace LumIT\Typo3bb\Controller;
 
 
@@ -36,7 +37,8 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 /**
  * TopicController
  */
-class PollController extends AbstractController {
+class PollController extends AbstractController
+{
 
     /**
      * @var \LumIT\Typo3bb\Domain\Repository\TopicRepository
@@ -60,7 +62,8 @@ class PollController extends AbstractController {
      * @param \LumIT\Typo3bb\Domain\Model\Topic $topic
      * @param array $redirectTo
      */
-    public function deleteAction(Topic $topic, $redirectTo) {
+    public function deleteAction(Topic $topic, $redirectTo)
+    {
         SecurityUtility::assertAccessPermission('Topic.edit', $topic);
 
         $this->pollRepository->remove($topic->getPoll());
@@ -68,8 +71,9 @@ class PollController extends AbstractController {
         $this->topicRepository->update($topic);
 
         //TODO cache
-        if(!empty($redirectTo)) {
-            $this->redirect($redirectTo['action'], $redirectTo['controller'], $redirectTo['extension'], $redirectTo['arguments'], $redirectTo['pageUid']);
+        if (!empty($redirectTo)) {
+            $this->redirect($redirectTo['action'], $redirectTo['controller'], $redirectTo['extension'],
+                $redirectTo['arguments'], $redirectTo['pageUid']);
         } else {
             $this->redirect('show', 'Topic', ['topic' => $topic]);
         }
@@ -81,25 +85,29 @@ class PollController extends AbstractController {
      * @throws AccessValidationException
      * @throws UnsupportedMethodException
      */
-    public function voteAction(Topic $topic, array $selection) {
+    public function voteAction(Topic $topic, array $selection)
+    {
         SecurityUtility::assertAccessPermission('Poll.vote', $topic);
 
         $poll = $topic->getPoll();
         if (!$poll->isChangeVoteAllowed() && $poll->hasFrontendUserVoted()) {
-            throw new AccessValidationException(LocalizationUtility::translate('exception.poll.alreadyVoted', $this->extensionName));
+            throw new AccessValidationException(LocalizationUtility::translate('exception.poll.alreadyVoted',
+                $this->extensionName));
         }
         if ($poll->getMaxChoicesSelect() > 0 && $poll->getMaxChoicesSelect() < count($selection)) {
-            throw new AccessValidationException(LocalizationUtility::translate('exception.poll.maxVotesExceeded', $this->extensionName, [0 => $poll->getMaxChoicesSelect()]));
+            throw new AccessValidationException(LocalizationUtility::translate('exception.poll.maxVotesExceeded',
+                $this->extensionName, [0 => $poll->getMaxChoicesSelect()]));
         }
         $now = new \DateTime();
         if ($poll->getEndtime() < $now) {
-            throw new AccessValidationException(LocalizationUtility::translate('exception.poll.timeLimit', $this->extensionName, [0 => $poll->getEndtime()->format('d.m.Y H:i')]));
+            throw new AccessValidationException(LocalizationUtility::translate('exception.poll.timeLimit',
+                $this->extensionName, [0 => $poll->getEndtime()->format('d.m.Y H:i')]));
         }
 
         if ($poll->hasFrontendUserVoted()) {
             $previouslySelected = $this->frontendUser->getSelectedPollChoices();
             foreach ($poll->getChoices() as $choice) {
-                if($previouslySelected->contains($choice)) {
+                if ($previouslySelected->contains($choice)) {
                     $this->frontendUser->removeSelectedPollChoice($choice);
                     $choice->setVoteCount($choice->getVoteCount() - 1);
                 }

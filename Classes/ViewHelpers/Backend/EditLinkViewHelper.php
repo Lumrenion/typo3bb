@@ -1,4 +1,5 @@
 <?php
+
 namespace LumIT\Typo3bb\ViewHelpers\Backend;
 
 
@@ -17,9 +18,10 @@ namespace LumIT\Typo3bb\ViewHelpers\Backend;
 
 use LumIT\Typo3bb\Domain\Model\Board;
 use LumIT\Typo3bb\Domain\Model\ForumCategory;
+use TYPO3\CMS\Backend\Utility\BackendUtility as BackendUtilityCore;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\DomainObject\AbstractDomainObject;
-use TYPO3\CMS\Backend\Utility\BackendUtility as BackendUtilityCore;
+use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractTagBasedViewHelper;
 
 /**
  * Based on the tx_examples VH from Francois Suter (Cobweb) <typo3@cobweb.ch>
@@ -27,7 +29,8 @@ use TYPO3\CMS\Backend\Utility\BackendUtility as BackendUtilityCore;
  * Inspired by a Blog Post from http://www.npostnik.de
  *
  */
-class EditLinkViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractTagBasedViewHelper {
+class EditLinkViewHelper extends AbstractTagBasedViewHelper
+{
 
     /**
      * @var string
@@ -40,7 +43,8 @@ class EditLinkViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractTagBas
      * @return void
      * @api
      */
-    public function initializeArguments() {
+    public function initializeArguments()
+    {
         $this->registerUniversalTagAttributes();
         $this->registerTagAttribute('name', 'string', 'Specifies the name of an anchor');
         $this->registerTagAttribute('target', 'string', 'Specifies where to open the linked document');
@@ -57,7 +61,8 @@ class EditLinkViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractTagBas
      * @return string The <a> tag
      * @see \TYPO3\CMS\Backend\Utility::editOnClick()
      */
-    public function render($table, $record = null, $context = 'edit', $returnUrl = '', $parent = null) {
+    public function render($table, $record = null, $context = 'edit', $returnUrl = '', $parent = null)
+    {
         if ($context != 'edit' && $context != 'new') {
             throw new \InvalidArgumentException('Context must be either edit or new');
         }
@@ -90,7 +95,7 @@ class EditLinkViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractTagBas
 
         $this->tag->addAttribute('href', $uri);
         $this->tag->setContent($this->renderChildren());
-        $this->tag->forceClosingTag(TRUE);
+        $this->tag->forceClosingTag(true);
         return $this->tag->render();
     }
 

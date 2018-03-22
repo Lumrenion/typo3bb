@@ -1,4 +1,5 @@
 <?php
+
 namespace LumIT\Typo3bb\Domain\Repository;
 
 
@@ -33,13 +34,15 @@ use LumIT\Typo3bb\Domain\Model\Reader;
 /**
  * The repository for Readers
  */
-class ReaderRepository extends AbstractRepository  {
+class ReaderRepository extends AbstractRepository
+{
     protected $table = 'tx_typo3bb_domain_model_reader';
 
     /**
      * @param FrontendUser $frontendUser
      */
-    public function removeAllByFrontendUser($frontendUser) {
+    public function removeAllByFrontendUser($frontendUser)
+    {
         $query = $this->createQuery();
         $readersToRemove = $query->matching($query->equals('user', $frontendUser))->execute();
         foreach ($readersToRemove as $readerToRemove) {
@@ -48,24 +51,18 @@ class ReaderRepository extends AbstractRepository  {
     }
 
     /**
-     * @param \LumIT\Typo3bb\Domain\Model\Topic $topic
-     * @param \LumIT\Typo3bb\Domain\Model\FrontendUser $frontendUser
-     * @return \LumIT\Typo3bb\Domain\Model\Reader
+     * @param \LumIT\Typo3bb\Domain\Model\Reader $reader
      */
-    public function findByTopicAndFrontendUser($topic, $frontendUser) {
-        $query = $this->createQuery();
-        /** @var Reader $reader */
-        $reader =  $query->matching($query->logicalAnd(
-            $query->equals('topic', $topic),
-            $query->equals('user', $frontendUser)
-        ))->execute()->getFirst();
-        return $reader;
+    public function update($reader)
+    {
+        $this->add($reader);
     }
 
     /**
      * @param \LumIT\Typo3bb\Domain\Model\Reader $reader
      */
-    public function add($reader) {
+    public function add($reader)
+    {
         /** @var Reader $previousReader */
         $previousReader = $this->findByTopicAndFrontendUser($reader->getTopic(), $reader->getUser());
         if (empty($previousReader)) {
@@ -83,9 +80,18 @@ class ReaderRepository extends AbstractRepository  {
     }
 
     /**
-     * @param \LumIT\Typo3bb\Domain\Model\Reader $reader
+     * @param \LumIT\Typo3bb\Domain\Model\Topic $topic
+     * @param \LumIT\Typo3bb\Domain\Model\FrontendUser $frontendUser
+     * @return \LumIT\Typo3bb\Domain\Model\Reader
      */
-    public function update($reader) {
-        $this->add($reader);
+    public function findByTopicAndFrontendUser($topic, $frontendUser)
+    {
+        $query = $this->createQuery();
+        /** @var Reader $reader */
+        $reader = $query->matching($query->logicalAnd(
+            $query->equals('topic', $topic),
+            $query->equals('user', $frontendUser)
+        ))->execute()->getFirst();
+        return $reader;
     }
 }

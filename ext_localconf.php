@@ -33,7 +33,7 @@ if (!defined('TYPO3_MODE')) {
     ],
     //non-cacheable actions
     [
-        'Message' => 'inbox, outbox, send, delete, getAjaxReceivers'
+        'Message' => 'inbox, outbox, new, send, delete, getAjaxReceivers'
     ]
 );
 \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
@@ -160,7 +160,4 @@ $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][\TYPO3\CMS\Extbase\Persistence\Gen
     'className' => \LumIT\Typo3bb\Xclass\Extbase\Persistence\Generic\Storage\Typo3DbBackend::class,
 ];
 
-// extend ke_search for supporting andStacks in gr_list
-$GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][\tx_kesearch_db::class] = [
-    'className' => \LumIT\Typo3bb\Xclass\KeSearch\DbLib::class
-];
+$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['getQueryParts']['typo3bb'] = \LumIT\Typo3bb\Extensions\KeSearch\Hook\QueryPartsHook::class;

@@ -1,4 +1,5 @@
 <?php
+
 namespace LumIT\Typo3bb\Controller;
 
 
@@ -31,7 +32,8 @@ use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 /**
  * UtilityController
  */
-class StatisticController extends ActionController {
+class StatisticController extends ActionController
+{
 
     /**
      * postRepository
@@ -39,25 +41,25 @@ class StatisticController extends ActionController {
      * @var \LumIT\Typo3bb\Domain\Repository\PostRepository
      * @inject
      */
-    protected $postRepository = NULL;
+    protected $postRepository = null;
 
     /**
      * @var \LumIT\Typo3bb\Domain\Repository\TopicRepository
      * @inject
      */
-    protected $topicRepository = NULL;
+    protected $topicRepository = null;
 
     /**
      * @var \LumIT\Typo3bb\Domain\Repository\BoardRepository
      * @inject
      */
-    protected $boardRepository = NULL;
+    protected $boardRepository = null;
 
     /**
      * @var \LumIT\Typo3bb\Domain\Repository\ForumCategoryRepository
      * @inject
      */
-    protected $forumCategoryRepository = NULL;
+    protected $forumCategoryRepository = null;
 
     /**
      * frontendUserRepository
@@ -65,19 +67,20 @@ class StatisticController extends ActionController {
      * @var \LumIT\Typo3bb\Domain\Repository\FrontendUserRepository
      * @inject
      */
-    protected $frontendUserRepository = NULL;
+    protected $frontendUserRepository = null;
 
     /**
      * @var \LumIT\Typo3bb\Domain\Repository\StatisticRepository
      * @inject
      */
-    protected $statisticRepository = NULL;
+    protected $statisticRepository = null;
 
 
     /**
      * infoCenterAction
      */
-    public function infoCenterAction() {
+    public function infoCenterAction()
+    {
         $latestPosts = $this->postRepository->findLatest($GLOBALS['TSFE']->gr_list, null, 5);
         $newestMember = $this->frontendUserRepository->findSingleLatest();
         $onlineUsers = $this->frontendUserRepository->findOnlineUsers();
@@ -92,7 +95,8 @@ class StatisticController extends ActionController {
         ]);
     }
 
-    public function statisticsAction() {
+    public function statisticsAction()
+    {
 //        $dailyRegistrations;
 //        $dailyPosts;
 //        $dailyTopics;
@@ -102,7 +106,6 @@ class StatisticController extends ActionController {
 //        $topTopicsViews;
 //        $topTopicsPosts;
 //        $longestTimeOnline;
-
 
 
         $this->view->assignMultiple([

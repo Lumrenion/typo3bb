@@ -14,7 +14,7 @@ return [
 //            'endtime' => 'endtime',
         ],
         'searchFields' => 'question,max_choices_select,change_vote_allowed,vote_count,result_hidden,choices,',
-        'iconfile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath('typo3bb') . 'Resources/Public/Icons/tx_typo3bb_domain_model_poll.gif'
+        'iconfile' => 'EXT:typo3bb/Resources/Public/Icons/tx_typo3bb_domain_model_poll.gif'
     ],
     'interface' => [
         'showRecordFieldList' => 'question, max_choices_select, change_vote_allowed, vote_count, result_hidden, choices',
@@ -29,18 +29,20 @@ return [
 
         'endtime' => [
             'exclude' => 1,
-            'l10n_mode' => 'mergeIfNotBlank',
             'label' => 'LLL:EXT:lang/locallang_general.xlf:LGL.endtime',
             'config' => [
                 'type' => 'input',
+                'renderType' => 'inputDateTime',
                 'size' => 13,
-                'max' => 20,
                 'eval' => 'datetime',
                 'checkbox' => 0,
                 'default' => 0,
                 'range' => [
                     'lower' => mktime(0, 0, 0, date('m'), date('d'), date('Y'))
                 ],
+                'behaviour' => [
+                    'allowLanguageSynchronization' => 1
+                ]
             ],
         ],
 

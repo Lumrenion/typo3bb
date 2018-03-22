@@ -1,4 +1,5 @@
 <?php
+
 namespace LumIT\Typo3bb\Utility;
 
 
@@ -33,25 +34,30 @@ use TYPO3\CMS\Extbase\Object\ObjectManager;
 /**
  * PluginUtility
  */
-class PluginUtility {
+class PluginUtility
+{
     static $configuration = null;
+
     /**
      * @return array The Plugin Settings
      */
-    public static function _getPluginSettings() {
+    public static function _getPluginSettings()
+    {
         return self::_getPluginConfiguration()['settings'];
     }
 
     /**
      * @return array    The Plugin Configuration
      */
-    public static function _getPluginConfiguration() {
-        if(empty(self::$configuration)) {
+    public static function _getPluginConfiguration()
+    {
+        if (empty(self::$configuration)) {
             $objectManager = self::_getObjectManagerInstance();
             /** @var ConfigurationManager $configurationManager */
             $configurationManager = $objectManager->get(ConfigurationManager::class);
 
-            self::$configuration = $configurationManager->getConfiguration(ConfigurationManager::CONFIGURATION_TYPE_FRAMEWORK, 'typo3bb');
+            self::$configuration = $configurationManager->getConfiguration(ConfigurationManager::CONFIGURATION_TYPE_FRAMEWORK,
+                'typo3bb');
         }
         return self::$configuration;
     }
@@ -59,7 +65,8 @@ class PluginUtility {
     /**
      * @return ObjectManager
      */
-    protected static function _getObjectManagerInstance() {
+    protected static function _getObjectManagerInstance()
+    {
         return GeneralUtility::makeInstance(ObjectManager::class);
     }
 }

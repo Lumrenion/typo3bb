@@ -1,4 +1,5 @@
 <?php
+
 namespace LumIT\Typo3bb\ViewHelpers\Widget\Controller;
 
 /*                                                                        *
@@ -23,16 +24,15 @@ namespace LumIT\Typo3bb\ViewHelpers\Widget\Controller;
 
 use LumIT\Typo3bb\Domain\Model\Post;
 use LumIT\Typo3bb\Domain\Model\Reader;
-
 use LumIT\Typo3bb\Domain\Repository\ReaderRepository;
-
 use LumIT\Typo3bb\Utility\FrontendUserUtility;
 
 
 /**
  * Class PaginatePostsController
  */
-class PaginatePostsController extends PaginateBaseController {
+class PaginatePostsController extends PaginateBaseController
+{
     /**
      * @var array
      */
@@ -46,7 +46,8 @@ class PaginatePostsController extends PaginateBaseController {
         'currentPost' => ''
     );
 
-    public function initializeIndexAction() {
+    public function initializeIndexAction()
+    {
         if (!empty($this->configuration['currentPost'])) {
             $itemsPerPage = (int)$this->configuration['itemsPerPage'];
             $positionOfPost = $this->objects->getPosition($this->configuration['currentPost']);
@@ -57,11 +58,12 @@ class PaginatePostsController extends PaginateBaseController {
     /**
      * @param $modifiedObjects
      */
-    public function processModifiedObjects($modifiedObjects) {
+    public function processModifiedObjects($modifiedObjects)
+    {
         if (empty($modifiedObjects)) {
             return;
         }
-        if($GLOBALS['TSFE']->loginUser) {
+        if ($GLOBALS['TSFE']->loginUser) {
             $lastNotNullIndex = 0;
             foreach ($modifiedObjects as $index => $modifiedObject) {
                 if (is_null($modifiedObject)) {

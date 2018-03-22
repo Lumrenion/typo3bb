@@ -5,7 +5,7 @@ return [
         'label' => 'uid_local',
         'dividers2tabs' => true,
         'searchFields' => '',
-        'iconfile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath('typo3bb') . 'Resources/Public/Icons/tx_typo3bb_domain_model_reader.gif',
+        'iconfile' => 'EXT:typo3bb/Resources/Public/Icons/tx_typo3bb_domain_model_reader.gif',
         'hideTable' => 1,
     ],
     'interface' => [
@@ -22,6 +22,7 @@ return [
             'label' => 'User',
             'config' => [
                 'type' => 'select',
+                'renderType' => 'selectSingle',
                 'foreign_table' => 'fe_users',
                 'size' => 1,
                 'minitems' => 1,
@@ -32,6 +33,7 @@ return [
             'label' => 'Topic',
             'config' => [
                 'type' => 'select',
+                'renderType' => 'selectSingle',
                 'foreign_table' => 'tx_typo3bb_domain_model_topic',
                 'size' => 1,
                 'minitems' => 1,
@@ -42,6 +44,7 @@ return [
             'label' => 'Post',
             'config' => [
                 'type' => 'select',
+                'renderType' => 'selectSingle',
                 'foreign_table' => 'tx_typo3bb_domain_model_post',
                 'size' => 1,
                 'minitems' => 1,

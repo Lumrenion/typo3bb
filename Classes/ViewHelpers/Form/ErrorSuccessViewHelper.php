@@ -1,4 +1,5 @@
 <?php
+
 namespace LumIT\Typo3bb\ViewHelpers\Form;
 
 
@@ -29,19 +30,21 @@ use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
 /**
  * ErrorSuccessViewHelper
  */
-class ErrorSuccessViewHelper extends AbstractViewHelper {
+class ErrorSuccessViewHelper extends AbstractViewHelper
+{
     /**
      * If the form form has errors, if
      *  the field has no errors: returns success-classname
      *  the field has errors:    returns error-classname
      *
-     * @param string $for       The name of the error name (e.g. argument name or property name). This can also be a property path (like blog.title), and will then only display the validation errors of that property.
-     * @param string $success   The class name to return if there is no error in field
-     * @param string $error     The class name to return if there are errors in field
+     * @param string $for The name of the error name (e.g. argument name or property name). This can also be a property path (like blog.title), and will then only display the validation errors of that property.
+     * @param string $success The class name to return if there is no error in field
+     * @param string $error The class name to return if there are errors in field
      * @return string Rendered string
      * @api
      */
-    public function render($for, $success = 'has-success', $error = 'has-error') {
+    public function render($for, $success = 'has-success', $error = 'has-error')
+    {
         $validationResults = $this->controllerContext->getRequest()->getOriginalRequestMappingResults();
         if (!$validationResults->hasErrors()) {
             return '';

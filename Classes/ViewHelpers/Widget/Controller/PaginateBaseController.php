@@ -1,4 +1,5 @@
 <?php
+
 namespace LumIT\Typo3bb\ViewHelpers\Widget\Controller;
 
 /*                                                                        *
@@ -25,14 +26,17 @@ use TYPO3\CMS\Fluid\ViewHelpers\Widget\Controller\PaginateController;
 /**
  * Class PaginateBaseController
  */
-class PaginateBaseController extends PaginateController  {
+class PaginateBaseController extends PaginateController
+{
 
     protected $currentPage = -1;
+
     /**
      * @param int $currentPage
      * @return void
      */
-    public function indexAction($currentPage = 1) {
+    public function indexAction($currentPage = 1)
+    {
         // set current page if it was not set yet
         if ($this->currentPage < 1) {
             $this->currentPage = $currentPage < 1 ? 1 : $currentPage;
@@ -60,6 +64,7 @@ class PaginateBaseController extends PaginateController  {
     /**
      * @param $modifiedObjects
      */
-    public function processModifiedObjects($modifiedObjects) {
+    public function processModifiedObjects($modifiedObjects)
+    {
     }
 }

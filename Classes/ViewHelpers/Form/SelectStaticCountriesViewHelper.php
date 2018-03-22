@@ -1,4 +1,5 @@
 <?php
+
 namespace LumIT\Typo3bb\ViewHelpers\Form;
 
 
@@ -38,10 +39,13 @@ namespace LumIT\Typo3bb\ViewHelpers\Form;
  *    name="country" optionLabelField="cnShortDe"/>
  * </code>
  */
-class SelectStaticCountriesViewHelper extends \Evoweb\SfRegister\ViewHelpers\Form\SelectStaticCountriesViewHelper {
-    public function initialize() {
+class SelectStaticCountriesViewHelper extends \Evoweb\SfRegister\ViewHelpers\Form\SelectStaticCountriesViewHelper
+{
+    public function initialize()
+    {
         parent::initialize();
         $this->arguments['options'] = $this->arguments['options']->toArray();
-        array_unshift($this->arguments['options'], [$this->arguments['optionValueField'] => '', $this->arguments['optionLabelField'] => '']);
+        array_unshift($this->arguments['options'],
+            [$this->arguments['optionValueField'] => '', $this->arguments['optionLabelField'] => '']);
     }
 }

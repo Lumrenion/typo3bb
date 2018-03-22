@@ -30,20 +30,22 @@
                 </f:then>
                 <f:else>
                     <p><f:translate key="topic.join.step1.description" /></p>
-                    <f:for each="{topics}" as="topic2">
-                        <div>
-                            <hr>
-                            <f:link.action action="join" controller="Topic" arguments="{topic: topic, topic2: topic2}"
-                                           title="{f:translate(key: 'topic.join.step1.joinLabel' arguments: '{0: topic.title, 1: topic2.title}')}"
-                                           additionalAttributes="{aria-label: '{f:translate(key: \'topic.join.step1.joinLabel\', arguments: \'{0: topic.title, 1: topic2.title}\')}'}"
-                                           class="btn btn-default btn-sm">
-                                <i class="fa fa-share-alt fa-lg fa-rotate-180" aria-hidden="true"></i>
-                            </f:link.action>
-                            <f:link.action action="show" controller="Topic" arguments="{topic: topic2}" target="_blank">
-                                <tbb:format.csv subject="{topic2.rootline}" property="title" glue=" &raquo; " />
-                            </f:link.action>
-                        </div>
-                    </f:for>
+
+                    <div class="panel-group" id="forum-categories" role="tablist" aria-multiselectable="true">
+                        <f:groupedFor each="{boards}" groupBy="forumCategory" groupKey="forumCategory" as="categoryBoards">
+                            <div class="panel panel-default">
+                                <div class="panel-heading" role="tab" data-toggle="collapse" data-target="#forum-category-{forumCategory.uid}"
+                                     data-parent="#forum-categories" aria-controls="forum-category-{forumCategory.uid}">
+                                    <f:format.htmlentitiesDecode>{forumCategory.title}</f:format.htmlentitiesDecode>
+                                </div>
+                                <div id="forum-category-{forumCategory.uid}" class="panel-collapse collapse" role="tabpanel">
+                                    <div class="panel-body">
+                                        <f:render partial="Topic/Join/ListBoards" arguments="{topic: topic, boards: categoryBoards}" />
+                                    </div>
+                                </div>
+                            </div>
+                        </f:groupedFor>
+                    </div>
                 </f:else>
             </f:if>
         </div>

@@ -1,4 +1,5 @@
 <?php
+
 namespace LumIT\Typo3bb\Hook;
 
 /***************************************************************
@@ -27,6 +28,7 @@ use LumIT\Typo3bb\Domain\Model\Board;
 use LumIT\Typo3bb\Domain\Model\Topic;
 use LumIT\Typo3bb\Domain\Repository\BoardRepository;
 use LumIT\Typo3bb\Domain\Repository\TopicRepository;
+use TYPO3\CMS\Core\DataHandling\DataHandler;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
@@ -34,7 +36,8 @@ use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
 /**
  *
  */
-class ProcessBoardsHook {
+class ProcessBoardsHook
+{
     /**
      * Called before deletion, with complete record-info ($recordToDelete)
      * @param $table
@@ -43,7 +46,13 @@ class ProcessBoardsHook {
      * @param null $recordWasDeleted
      * @param \TYPO3\CMS\Core\DataHandling\DataHandler $pObj
      */
-    public function processCmdmap_deleteAction($table, $id, $recordToDelete, $recordWasDeleted=NULL, \TYPO3\CMS\Core\DataHandling\DataHandler &$pObj) {
+    public function processCmdmap_deleteAction(
+        $table,
+        $id,
+        $recordToDelete,
+        $recordWasDeleted = null,
+        DataHandler &$pObj
+    ) {
         if ($table == 'tx_typo3bb_domain_model_board') {
             $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
             /** @var BoardRepository $boardRepository */

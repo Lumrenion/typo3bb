@@ -1,5 +1,7 @@
 <?php
+
 namespace LumIT\Typo3bb\Security\AccessValidator;
+
 use LumIT\Typo3bb\Utility\FrontendUserUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -27,19 +29,32 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-
-abstract class AbstractAccessValidator implements AccessValidator {
+abstract class AbstractAccessValidator implements AccessValidator
+{
 
     /**
      * @var \LumIT\Typo3bb\Domain\Model\FrontendUser $frontendUser
-     * @return true;
      */
-    protected $frontendUser = NULL;
+    protected $frontendUser = null;
+
+    /**
+     * AbstractAccessValidator constructor.
+     * @param \LumIT\Typo3bb\Domain\Model\FrontendUser $frontendUser
+     */
+    public function __construct($frontendUser = null)
+    {
+        if ($frontendUser !== null) {
+            $this->frontendUser = $frontendUser;
+        } else {
+            $this->frontendUser = $this->_getCurrentLoginUser();
+        }
+    }
 
     /**
      * @return \LumIT\Typo3bb\Domain\Model\FrontendUser
      */
-    public function _getCurrentLoginUser() {
+    public function _getCurrentLoginUser()
+    {
         return FrontendUserUtility::getCurrentUser();
     }
 
@@ -54,16 +69,17 @@ abstract class AbstractAccessValidator implements AccessValidator {
      *
      * @return bool
      */
-    protected function _checkUserGroup($userGroups) {
+    protected function _checkUserGroup($userGroups)
+    {
         // empty userGroups list means public access, just as the list would contain 0
         if ($userGroups == '') {
             return true;
         }
 
+        $frontendUserGroups = FrontendUserUtility::getUsergroupList($this->frontendUser);
 
-
-        foreach (array_filter(explode(',',$userGroups), 'strlen') as $userGroup) {
-            if (GeneralUtility::inList($GLOBALS['TSFE']->gr_list, $userGroup)) {
+        foreach (array_filter(explode(',', $userGroups), 'strlen') as $userGroup) {
+            if (GeneralUtility::inList($frontendUserGroups, $userGroup)) {
                 return true;
             }
         }

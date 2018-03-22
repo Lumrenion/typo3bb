@@ -1,8 +1,9 @@
 <?php
+
 namespace LumIT\Typo3bb\Xclass\Extbase\Persistence\Generic\Storage;
 
-use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use TYPO3\CMS\Extbase\Persistence\Generic\Storage\Exception;
+use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 
 /**
  * A Storage backend

@@ -5,11 +5,8 @@ namespace LumIT\Typo3bb\ViewHelpers;
 use LumIT\Typo3bb\Domain\Model\Board;
 use LumIT\Typo3bb\Domain\Model\ForumCategory;
 use LumIT\Typo3bb\Domain\Model\Topic;
-
-
 use TYPO3\CMS\Extbase\Persistence\Generic\LazyLoadingProxy;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
-
 use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractTagBasedViewHelper;
 
 
@@ -20,7 +17,8 @@ use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractTagBasedViewHelper;
  * @subpackage Fluid
  * @version
  */
-class BreadcrumbViewHelper extends AbstractTagBasedViewHelper {
+class BreadcrumbViewHelper extends AbstractTagBasedViewHelper
+{
 
     /**
      * @var string $tagName
@@ -30,20 +28,22 @@ class BreadcrumbViewHelper extends AbstractTagBasedViewHelper {
     /**
      * @var array $settings
      */
-    protected $settings = NULL;
+    protected $settings = null;
 
     /**
      * @var \TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder $uriBuilder
      */
-    protected $uriBuilder = NULL;
+    protected $uriBuilder = null;
 
-    public function initialize() {
+    public function initialize()
+    {
         parent::initialize();
         $this->settings = $this->templateVariableContainer->get('settings');
         $this->uriBuilder = $this->controllerContext->getUriBuilder();
     }
 
-    public function initializeArguments() {
+    public function initializeArguments()
+    {
         parent::initializeArguments();
         $this->registerUniversalTagAttributes();
         $this->registerArgument('rootline', 'array', 'The rootline to render', true);
@@ -52,9 +52,10 @@ class BreadcrumbViewHelper extends AbstractTagBasedViewHelper {
     /**
      * @return string|bool
      */
-    public function render() {
+    public function render()
+    {
         $class = 'breadcrumb';
-        if($this->arguments['class']) {
+        if ($this->arguments['class']) {
             $class .= ' ' . $this->arguments['class'];
         }
         $this->tag->addAttribute('class', $class);
@@ -62,7 +63,9 @@ class BreadcrumbViewHelper extends AbstractTagBasedViewHelper {
         $rootline = $this->arguments['rootline'];
 
         $uri = $this->uriBuilder->reset()->setTargetPageUid($this->settings['PID']['Forum']['homepage'])->build();
-        $tagContent = $this->renderBreadcrumbItem($uri, LocalizationUtility::translate('forum.breadcrumb.home', 'typo3bb', []), $this->settings['breadcrumb']['homeIconClass']);
+        $tagContent = $this->renderBreadcrumbItem($uri,
+            LocalizationUtility::translate('forum.breadcrumb.home', 'typo3bb', []),
+            $this->settings['breadcrumb']['homeIconClass']);
         foreach ($rootline as $item) {
             $tagContent .= $this->processBreadcrumbItem($item);
         }
@@ -70,24 +73,26 @@ class BreadcrumbViewHelper extends AbstractTagBasedViewHelper {
         return $this->tag->render();
     }
 
-    protected function renderBreadcrumbItem($uri, $fullTitle, $iconClass) {
+    protected function renderBreadcrumbItem($uri, $fullTitle, $iconClass)
+    {
         $titleMaxChars = (int)$this->settings['breadcrumb']['itemMaxChars'];
         if ($titleMaxChars == 0 || strlen($fullTitle) < $titleMaxChars) {
             $title = $fullTitle;
         } else {
             $title = substr($fullTitle, 0, $titleMaxChars) . "&hellip;";
         }
-        
-        return '<li><a href="' . $uri. '" title="' . $fullTitle . '"><span class="' . $iconClass . '" aria-hidden="true"></span>' . $title . '</a></li>';
+
+        return '<li><a href="' . $uri . '" title="' . $fullTitle . '"><span class="' . $iconClass . '" aria-hidden="true"></span>' . $title . '</a></li>';
     }
 
-    protected function processBreadcrumbItem($item) {
-        if($item instanceof LazyLoadingProxy) {
+    protected function processBreadcrumbItem($item)
+    {
+        if ($item instanceof LazyLoadingProxy) {
             $item = $item->_loadRealInstance();
         }
         $extensionName = 'typo3bb';
         $pluginName = 'forum';
-        if($item instanceof Board) {
+        if ($item instanceof Board) {
             $section = '';
             $controller = 'Board';
             $action = 'show';

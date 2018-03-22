@@ -14,7 +14,7 @@ return [
 
         ],
         'searchFields' => 'text,author_name,editor_name,attachments,author,editor',
-        'iconfile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath('typo3bb') . 'Resources/Public/Icons/tx_typo3bb_domain_model_post.gif'
+        'iconfile' => 'EXT:typo3bb/Resources/Public/Icons/tx_typo3bb_domain_model_post.gif'
     ],
     'interface' => [
         'showRecordFieldList' => 'text, author_name, attachments, author',
@@ -33,6 +33,11 @@ return [
             'config' => [
                 'type' => 'passthrough'
             ],
+        ],
+        'tstamp' => [
+            'config' => [
+                'type' => 'passthrough'
+            ]
         ],
         
         'text' => [

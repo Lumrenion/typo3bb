@@ -1,4 +1,5 @@
 <?php
+
 namespace LumIT\Typo3bb\Extensions\SrFeuserRegister\Hook;
 
 use LumIT\Typo3bb\Slot\FrontendUserSlot;
@@ -7,12 +8,15 @@ use LumIT\Typo3bb\Utility\RteUtility;
 use LumIT\Typo3bb\Utility\StatisticUtility;
 use SJBR\SrFeuserRegister\Domain\Data;
 use SJBR\SrFeuserRegister\Hooks\RegistrationProcessHooks;
+use SJBR\SrFeuserRegister\Request\Parameters;
+use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\DatabaseConnection;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
 
-class RegistrationProcessHook extends RegistrationProcessHooks {
+class RegistrationProcessHook extends RegistrationProcessHooks
+{
 
     public function registrationProcess_beforeSaveDelete($recordArray, $invokingObj)
     {
@@ -50,7 +54,11 @@ class RegistrationProcessHook extends RegistrationProcessHooks {
         $fieldList,
         Data $pObj
     ) {
-        $this->getDatabase()->exec_UPDATEquery($theTable, 'uid=' . (int)$dataArray['uid'], ['signature' => RteUtility::sanitizeHtml($dataArray['signature'])]);
+        $queryBuilder = $this->getQuerBuilder();
+        $queryBuilder->update('fe_users')
+            ->where('uid', $dataArray['uid'])
+            ->set('signature', RteUtility::sanitizeHtml($dataArray['signature']))
+            ->execute();
     }
 
     /**
@@ -79,14 +87,20 @@ class RegistrationProcessHook extends RegistrationProcessHooks {
         $fieldList,
         Data $pObj
     ) {
+        $queryBuilder = $this->getQuerBuilder();
+        $queryBuilder->update('fe_users')
+            ->where($queryBuilder->expr()->eq('uid', $dataArray['uid']))
+            ->set('tx_typo3bb_display_name', $dataArray['username'])
+            ->execute();
+
         StatisticUtility::addRegister();
     }
 
     /**
-     * @return DatabaseConnection
+     * @return \TYPO3\CMS\Core\Database\Query\QueryBuilder
      */
-    protected function getDatabase()
+    protected function getQuerBuilder()
     {
-        return $GLOBALS['TYPO3_DB'];
+        return GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('fe_users');
     }
 }

@@ -1,5 +1,7 @@
 <?php
+
 namespace LumIT\Typo3bb\Utility;
+
 use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Resource\Folder;
 use TYPO3\CMS\Core\Resource\ResourceFactory;
@@ -32,17 +34,19 @@ use TYPO3\CMS\Core\Utility\StringUtility;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-
-class RteUtility {
+class RteUtility
+{
 
     /**
      * @param string $html
      * @return string
      */
-    public static function sanitizeHtml(string $html) {
+    public static function sanitizeHtml(string $html)
+    {
         require_once ExtensionManagementUtility::extPath('typo3bb') . 'Libraries/HTMLPurifier/HTMLPurifier.auto.php';
         $config = \HTMLPurifier_Config::createDefault();
-        $config->set('HTML.Allowed', '*[style|class|id|title],a[target|ping|media|href|hreflang|type],blockquote[cite],big,br,code,dd,div,dl,dt,em,i,footer,h1,h2,h3,h4,h5,h6,hr,img[alt|src|ismap|usemap|width|height],li[value],mark,ol[reversed|start],p,pre,q[cite],small,span,strong,b,sub,sup,table,tbody,td[colspan|rowspan|headers],tfoot,th[colspan|rowspan|headers|scope],thead,tr,u,ul,s');
+        $config->set('HTML.Allowed',
+            '*[style|class|id|title],a[target|ping|media|href|hreflang|type],blockquote[cite],big,br,code,dd,div,dl,dt,em,i,footer,h1,h2,h3,h4,h5,h6,hr,img[alt|src|ismap|usemap|width|height],li[value],mark,ol[reversed|start],p,pre,q[cite],small,span,strong,b,sub,sup,table,tbody,td[colspan|rowspan|headers],tfoot,th[colspan|rowspan|headers|scope],thead,tr,u,ul,s');
         $config->getHTMLDefinition(true)->addElement('footer', 'Block', 'Flow', 'Common');
         $purifier = new \HTMLPurifier($config);
         return $purifier->purify($html);
@@ -54,7 +58,8 @@ class RteUtility {
      * @param string $emoticonPath
      * @return array
      */
-    public static function prepareSmilies(string $emoticonPath) {
+    public static function prepareSmilies(string $emoticonPath)
+    {
         /** @var Folder $emoticonFolder */
         $emoticonFolder = ResourceFactory::getInstance()->retrieveFileOrFolderObject($emoticonPath);
         $emoticons = $emoticonFolder->getFiles();
@@ -68,7 +73,7 @@ class RteUtility {
                 $singleEmoticon['url'] = '/' . $emoticon->getPublicUrl();
                 $singleEmoticon['shortcut'] = (empty($emoticon->getProperty('title')) ? '(' . $singleEmoticon['title'] . ')' : $emoticon->getProperty('title'));
                 $emoticonStack[] = $singleEmoticon;
-                if(count($emoticonStack) >= 7) {
+                if (count($emoticonStack) >= 7) {
                     $emoticonArray[] = $emoticonStack;
                     $emoticonStack = [];
                 }
@@ -90,7 +95,8 @@ class RteUtility {
      * @param string $url
      * @return string
      */
-    public static function getQuote(string $content, string $author = '', \DateTime $date = null, string $url = '') {
+    public static function getQuote(string $content, string $author = '', \DateTime $date = null, string $url = '')
+    {
         $quote = '<br><blockquote>' . $content;
         if (!empty($author)) {
             $quoteInfo = $author;

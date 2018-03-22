@@ -62,6 +62,7 @@ plugin.tx_typo3bb {
         pid {
             forum = {$plugin.tx_typo3bb.settings.pid.forum}
             profile = {$plugin.tx_typo3bb.settings.pid.profile}
+            usersList = {$plugin.tx_typo3bb.settings.pid.usersList}
             unreadPosts = {$plugin.tx_typo3bb.settings.pid.unreadPosts}
 
             messages = {$plugin.tx_typo3bb.settings.pid.messages}
@@ -79,7 +80,6 @@ plugin.tx_typo3bb {
         accessValidation {
             Board {
                 show {
-                    5 = IsGlobalModerator
                     10 = HasReadPermission
                     20 = IsBoardModerator
                 }
@@ -93,12 +93,10 @@ plugin.tx_typo3bb {
             Topic {
                 show < plugin.tx_typo3bb.settings.accessValidation.Board.show
                 create {
-                    5 = IsGlobalModerator
                     10 = HasWritePermission
                     20 = IsBoardModerator
                 }
                 edit {
-                    5 = IsGlobalModerator
                     10 = IsAuthor
                     20 = IsBoardModerator
                 }
@@ -106,20 +104,16 @@ plugin.tx_typo3bb {
                 close < plugin.tx_typo3bb.settings.accessValidation.Topic.edit
                 reopen < plugin.tx_typo3bb.settings.accessValidation.Topic.close
                 move {
-                    5 = IsGlobalModerator
                     10 = IsBoardModerator
                 }
                 split {
-                    5 = IsGlobalModerator
                     10 = IsBoardModerator
                 }
                 join {
-                    5 = IsGlobalModerator
                     10 = IsBoardModerator
                 }
                 pin {
                     0 = IsBoardModerator
-                    1 = IsGlobalModerator
                 }
                 subscribe {
                     0 = IsLoggedIn
@@ -136,13 +130,11 @@ plugin.tx_typo3bb {
                 # create < plugin.tx_typo3bb.settings.accessValidation.Topic.create
                 # create.10 = IsClosed
                 edit {
-                    5 = IsGlobalModerator
                     10 = IsAuthor
                     20 = IsBoardModerator
                 }
                 delete < plugin.tx_typo3bb.settings.accessValidation.Post.edit
                 move {
-                    5 = IsGlobalModerator
                     10 = IsBoardModerator
                 }
             }

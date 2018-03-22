@@ -1,40 +1,41 @@
 <?php
+
 namespace LumIT\Typo3bb\Domain\Model;
 
 
-    /***************************************************************
-     *
-     *  Copyright notice
-     *
-     *  (c) 2016 Philipp Seßner <philipp.sessner@gmail.com>
-     *
-     *  All rights reserved
-     *
-     *  This script is part of the TYPO3 project. The TYPO3 project is
-     *  free software; you can redistribute it and/or modify
-     *  it under the terms of the GNU General Public License as published by
-     *  the Free Software Foundation; either version 3 of the License, or
-     *  (at your option) any later version.
-     *
-     *  The GNU General Public License can be found at
-     *  http://www.gnu.org/copyleft/gpl.html.
-     *
-     *  This script is distributed in the hope that it will be useful,
-     *  but WITHOUT ANY WARRANTY; without even the implied warranty of
-     *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-     *  GNU General Public License for more details.
-     *
-     *  This copyright notice MUST APPEAR in all copies of the script!
-     ***************************************************************/
+/***************************************************************
+ *
+ *  Copyright notice
+ *
+ *  (c) 2016 Philipp Seßner <philipp.sessner@gmail.com>
+ *
+ *  All rights reserved
+ *
+ *  This script is part of the TYPO3 project. The TYPO3 project is
+ *  free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  The GNU General Public License can be found at
+ *  http://www.gnu.org/copyleft/gpl.html.
+ *
+ *  This script is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  This copyright notice MUST APPEAR in all copies of the script!
+ ***************************************************************/
 
 use LumIT\Typo3bb\Utility\FrontendUserUtility;
-
+use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
 /**
  * Message
  */
-class Message extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
+class Message extends AbstractEntity
 {
 
     /**
@@ -46,7 +47,7 @@ class Message extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\LumIT\Typo3bb\Domain\Model\MessageParticipant>
      * @lazy
-     * @cascade remove
+     * @TYPO3\CMS\Extbase\Annotation\ORM\Cascade("remove")
      * @validate NotEmpty
      */
     protected $receivers = null;
@@ -77,7 +78,8 @@ class Message extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * __construct
      */
-    public function __construct() {
+    public function __construct()
+    {
         //Do not remove the next line: It would break the functionality
         $this->initStorageObjects();
     }
@@ -90,21 +92,24 @@ class Message extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @return void
      */
-    protected function initStorageObjects() {
-        $this->receivers = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
+    protected function initStorageObjects()
+    {
+        $this->receivers = new ObjectStorage();
     }
 
     /**
      * @return MessageParticipant
      */
-    public function getSender() {
+    public function getSender()
+    {
         return $this->sender;
     }
 
     /**
      * @param MessageParticipant $sender
      */
-    public function setSender(MessageParticipant $sender) {
+    public function setSender(MessageParticipant $sender)
+    {
         $this->sender = $sender;
     }
 
@@ -131,72 +136,66 @@ class Message extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     }
 
     /**
-     * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage
-     */
-    public function getReceivers() {
-        return $this->receivers;
-    }
-
-    /**
-     * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage $receivers
-     */
-    public function setReceivers(ObjectStorage $receivers) {
-        $this->receivers = $receivers;
-    }
-
-    /**
      * @return string
      */
-    public function getSubject() {
+    public function getSubject()
+    {
         return $this->subject;
     }
 
     /**
      * @param string $subject
      */
-    public function setSubject($subject) {
+    public function setSubject($subject)
+    {
         $this->subject = $subject;
     }
 
     /**
      * @return string
      */
-    public function getText() {
+    public function getText()
+    {
         return $this->text;
     }
 
     /**
      * @param string $text
      */
-    public function setText(string $text) {
+    public function setText(string $text)
+    {
         $this->text = $text;
     }
 
     /**
      * @return \DateTime
      */
-    public function getCrdate() {
+    public function getCrdate()
+    {
         return $this->crdate;
     }
 
     /**
      * @param \DateTime $crdate
      */
-    public function setCrdate(\DateTime $crdate) {
+    public function setCrdate(\DateTime $crdate)
+    {
         $this->crdate = $crdate;
     }
 
     /**
      * @return \LumIT\Typo3bb\Domain\Model\Message
      */
-    public function getParent() {
+    public function getParent()
+    {
         return $this->parent;
     }
 
     /**
      * @param \LumIT\Typo3bb\Domain\Model\Message $parent
      */
-    public function setParent(Message $parent) {
+    public function setParent(Message $parent)
+    {
         $this->parent = $parent;
     }
 
@@ -205,8 +204,9 @@ class Message extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @return bool
      */
-    public function getViewed() {
-        if($GLOBALS['TSFE']->loginUser) {
+    public function getViewed()
+    {
+        if ($GLOBALS['TSFE']->loginUser) {
             /** @var FrontendUser $frontendUser */
             $frontendUser = FrontendUserUtility::getCurrentUser();
             $messageReceiver = $this->getMessageReceiver($frontendUser);
@@ -215,14 +215,31 @@ class Message extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         return true;
     }
 
-    public function getMessageReceiver(FrontendUser $frontendUser) {
+    public function getMessageReceiver(FrontendUser $frontendUser)
+    {
         $messageParticipant = null;
         foreach ($this->getReceivers() as $receiver) {
-            if($receiver->getUser()->getUid() == $frontendUser->getUid()) {
+            if ($receiver->getUser()->getUid() == $frontendUser->getUid()) {
                 $messageParticipant = $receiver;
                 break;
             }
         }
         return $messageParticipant;
+    }
+
+    /**
+     * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage
+     */
+    public function getReceivers()
+    {
+        return $this->receivers;
+    }
+
+    /**
+     * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage $receivers
+     */
+    public function setReceivers(ObjectStorage $receivers)
+    {
+        $this->receivers = $receivers;
     }
 }
