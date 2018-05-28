@@ -42,12 +42,8 @@ class PostFactory
     public static function createPost($topic, $post, $attachments = [])
     {
         $topic->addPost($post);
+        $post->setTopic($topic);
         $post->setText(RteUtility::sanitizeHtml($post->getText()));
-
-        if (!empty($post->getAuthor())) {
-            $post->getAuthor()->addCreatedPost($post);
-            $post->getAuthor()->_increasePostsCount();
-        }
 
         if (!empty($attachments)) {
             self::processAttachments($post, $attachments);

@@ -385,22 +385,12 @@
         .typo3bb-message-wrapper .typo3bb-message .typo3bb-message-body-wrapper .typo3bb-message-body .typo3bb-message-heading h3 {
           margin-bottom: 0;
           margin-top: 0; }
-  .typo3bb-message-wrapper .typo3bb-message.new .typo3bb-message-new-indicator {
+  .typo3bb-message-wrapper .typo3bb-message .typo3bb-unread-indicator {
     position: absolute;
-    color: #f0ad4e; }
-    .typo3bb-message-wrapper .typo3bb-message.new .typo3bb-message-new-indicator:nth-child(1) {
-      top: -30px;
-      right: -15px; }
-    .typo3bb-message-wrapper .typo3bb-message.new .typo3bb-message-new-indicator:nth-child(2) {
-      bottom: -30px;
-      right: -15px; }
-    .typo3bb-message-wrapper .typo3bb-message.new .typo3bb-message-new-indicator:nth-child(3) {
-      bottom: -30px;
-      left: -15px; }
-    .typo3bb-message-wrapper .typo3bb-message.new .typo3bb-message-new-indicator:nth-child(4) {
-      top: -30px;
-      left: -15px; }
-  .typo3bb-message-wrapper .typo3bb-message.new .typo3bb-message-heading-headline {
+    color: #f0ad4e;
+    top: -34px;
+    left: -18px; }
+  .typo3bb-message-wrapper .typo3bb-message .typo3bb-message-heading-headline {
     color: #333333;
     font-weight: bold;
     font-style: italic; }

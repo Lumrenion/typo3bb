@@ -27,7 +27,6 @@ namespace LumIT\Typo3bb\Domain\Repository;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-use LumIT\Typo3bb\Domain\Model\Post;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 
 
@@ -41,51 +40,4 @@ class TopicRepository extends AbstractRepository
         'sticky' => QueryInterface::ORDER_ASCENDING,
         'latestPostCrdate' => QueryInterface::ORDER_ASCENDING
     ];
-
-    /**
-     * @var \LumIT\Typo3bb\Domain\Repository\PostRepository
-     * @inject
-     */
-    protected $postRepository = null;
-
-    /**
-     * @var \LumIT\Typo3bb\Domain\Repository\BoardRepository
-     * @inject
-     */
-    protected $boardRepository = null;
-
-    /**
-     * @param \LumIT\Typo3bb\Domain\Model\Topic $topic
-     */
-    public function remove($topic)
-    {
-        parent::remove($topic);
-        /** @var Post $post */
-        foreach ($topic->getPosts() as $post) {
-            $this->postRepository->remove($post);
-        }
-        if (!is_null($topic->getAuthor())) {
-            $topic->getAuthor()->removeCreatedTopic($topic);
-        }
-        $topic->getBoard()->removeTopic($topic);
-        $this->boardRepository->update($topic->getBoard());
-    }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

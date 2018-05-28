@@ -42,7 +42,7 @@ class ForumIndexer
         $newArray = array(
             'Typo3bb indexer',
             self::$indexerType,
-            ExtensionManagementUtility::extRelPath('typo3bb') . 'ext_icon.gif'
+            ExtensionManagementUtility::extRelPath('typo3bb') . 'ext_icon.svg'
         );
         $params['items'][] = $newArray;
     }

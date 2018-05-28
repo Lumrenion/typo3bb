@@ -92,13 +92,6 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser
     protected $editedPosts = null;
 
     /**
-     * Count of posts, added for performance
-     *
-     * @var int
-     */
-    protected $postsCount = 0;
-
-    /**
      * The poll choices the frontend user selected
      *
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\LumIT\Typo3bb\Domain\Model\PollChoice>
@@ -298,26 +291,6 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser
     }
 
     /**
-     * Returns the postsCount
-     *
-     * @return int
-     */
-    public function getPostsCount()
-    {
-        return $this->postsCount;
-    }
-
-    /**
-     * Sets the postsCount
-     *
-     * @param $postsCount
-     */
-    public function setPostsCount($postsCount)
-    {
-        $this->postsCount = $postsCount;
-    }
-
-    /**
      * Adds a Topic
      *
      * @param \LumIT\Typo3bb\Domain\Model\Topic $subscribedTopic
@@ -412,15 +385,6 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser
     public function addCreatedPost(Post $createdPost)
     {
         $this->createdPosts->attach($createdPost);
-        $this->_increasePostsCount();
-    }
-
-    /**
-     * @param int $amount
-     */
-    public function _increasePostsCount($amount = 1)
-    {
-        $this->postsCount += $amount;
     }
 
     /**
@@ -432,7 +396,6 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser
     public function removeCreatedPost(Post $createdPostToRemove)
     {
         $this->createdPosts->detach($createdPostToRemove);
-        $this->_increasePostsCount(-1);
     }
 
     /**
@@ -720,7 +683,7 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser
         $now = time();
         $secondsRegistered = $now - $this->crdate->getTimestamp();
         $daysRegistered = $secondsRegistered / (60 * 60 * 24);
-        return $this->postsCount / $daysRegistered;
+        return $this->createdPosts->count() / $daysRegistered;
     }
 
     /**

@@ -46,9 +46,6 @@ CREATE TABLE tx_typo3bb_domain_model_board (
     moderator_groups varchar(255) DEFAULT '' NOT NULL,
     parent_board int(11) unsigned DEFAULT '0',
     forum_category int(11) unsigned DEFAULT '0',
-    topics_count int(11) unsigned DEFAULT '0',
-    posts_count int(11) unsigned DEFAULT '0',
-    latest_post int(11) unsigned DEFAULT '0',
     latest_post_crdate int(11) unsigned DEFAULT NULL,
     subscribers int(11) unsigned DEFAULT '0' NOT NULL,
 
@@ -83,7 +80,6 @@ CREATE TABLE tx_typo3bb_domain_model_topic (
     title varchar(255) DEFAULT '' NOT NULL,
     sticky tinyint(1) unsigned DEFAULT '0' NOT NULL,
     closed tinyint(1) unsigned DEFAULT '0' NOT NULL,
-    posts_count int(11) DEFAULT '0' NOT NULL,
     latest_post_crdate int(11) unsigned DEFAULT '0' NOT NULL,
     posts int(11) unsigned DEFAULT '0' NOT NULL,
     poll int(11) unsigned DEFAULT '0',
@@ -91,7 +87,6 @@ CREATE TABLE tx_typo3bb_domain_model_topic (
     author_name varchar(255) DEFAULT '',
     subscribers int(11) unsigned DEFAULT '0' NOT NULL,
     readers int(11) unsigned DEFAULT '0' NOT NULL,
-    latest_post int(11) unsigned DEFAULT '0',
     board int(11) unsigned DEFAULT '0' NOT NULL,
     views int(11) unsigned DEFAULT '0' NOT NULL,
 
@@ -195,7 +190,6 @@ CREATE TABLE fe_users (
     subscribed_boards int(11) unsigned DEFAULT '0' NOT NULL,
     created_posts int(11) unsigned DEFAULT '0' NOT NULL,
     edited_posts int(11) unsigned DEFAULT '0' NOT NULL,
-    posts_count int(11) unsigned DEFAULT '0' NOT NULL,
     selected_poll_choices varchar(255) DEFAULT '' NOT NULL,
     voted_polls varchar(255) DEFAULT '' NOT NULL,
     sent_messages int(11) unsigned DEFAULT '0' NOT NULL,

@@ -29,6 +29,9 @@ namespace LumIT\Typo3bb\Domain\Repository;
  ***************************************************************/
 use LumIT\Typo3bb\Domain\Model\Board;
 use LumIT\Typo3bb\Domain\Model\ForumCategory;
+use TYPO3\CMS\Core\Database\ConnectionPool;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Persistence\Generic\Mapper\DataMapper;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 
 
@@ -48,7 +51,7 @@ class BoardRepository extends AbstractRepository
 
     /**
      * @param ForumCategory|Board $parent
-     * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
+     * @return array
      */
     public function getAllowedBoards($parent = null)
     {
@@ -64,21 +67,18 @@ class BoardRepository extends AbstractRepository
             $uid = $parent->getUid();
         }
 
-        $query = $this->createQuery();
-
-        $sql = 'SELECT tx_typo3bb_domain_model_board.* FROM tx_typo3bb_domain_model_board';
-        $sql .= ' WHERE 1 = 1 ' . $GLOBALS['TSFE']->sys_page->enableFields($this->tableName);
-        $sql .= ' AND hasAccess(tx_typo3bb_domain_model_board.uid, \'' . $usergroups . '\') = TRUE';
-        $sql .= ' AND ' . $parentField . ' = ' . $uid;
-
-        // ordering
-        $sql .= ' ORDER BY ';
-        foreach ($query->getOrderings() as $orderField => $ordering) {
-            $sql .= ' ' . $orderField . ' ' . $ordering;
+        $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('tx_typo3bb_domain_model_board');
+        $queryBuilder->select('*')
+            ->from('tx_typo3bb_domain_model_board')
+            ->where($queryBuilder->expr()->eq($parentField, $uid))
+            ->andWhere('hasAccess(tx_typo3bb_domain_model_board.uid, \'' . $usergroups . '\') = TRUE');
+        foreach ($this->createQuery()->getOrderings() as $field => $ordering) {
+            $queryBuilder->addOrderBy($field, $ordering);
         }
 
-        $query->statement($sql);
+        $allowedBoards = $queryBuilder->execute()->fetchAll();
 
-        return $query->execute();
+        $dataMapper = $this->objectManager->get(DataMapper::class);
+        return $dataMapper->map($this->objectType, $allowedBoards);
     }
 }

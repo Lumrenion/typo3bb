@@ -45,7 +45,7 @@ class Attachment extends AbstractEntity
      * file
      *
      * @var \TYPO3\CMS\Extbase\Domain\Model\FileReference
-     * @TYPO3\CMS\Extbase\Annotation\ORM\Cascade("remove")
+     * @cascade remove
      */
     protected $file = null;
 

@@ -47,7 +47,7 @@ class Message extends AbstractEntity
     /**
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\LumIT\Typo3bb\Domain\Model\MessageParticipant>
      * @lazy
-     * @TYPO3\CMS\Extbase\Annotation\ORM\Cascade("remove")
+     * @cascade remove
      * @validate NotEmpty
      */
     protected $receivers = null;
@@ -219,7 +219,7 @@ class Message extends AbstractEntity
     {
         $messageParticipant = null;
         foreach ($this->getReceivers() as $receiver) {
-            if ($receiver->getUser()->getUid() == $frontendUser->getUid()) {
+            if ($receiver->getUser() !== null && $receiver->getUser()->getUid() == $frontendUser->getUid()) {
                 $messageParticipant = $receiver;
                 break;
             }

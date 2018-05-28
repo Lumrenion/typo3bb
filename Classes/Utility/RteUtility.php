@@ -60,30 +60,25 @@ class RteUtility
      */
     public static function prepareSmilies(string $emoticonPath)
     {
+        $smileySettings = [
+            'smiley_path' => '/' . trim($emoticonPath, '/') . '/',
+            'smiley_descriptions' => [],
+            'smiley_images' => []
+        ];
         /** @var Folder $emoticonFolder */
         $emoticonFolder = ResourceFactory::getInstance()->retrieveFileOrFolderObject($emoticonPath);
         $emoticons = $emoticonFolder->getFiles();
-        $emoticonArray = [];
-        $emoticonStack = [];
         /** @var File $emoticon */
         foreach ($emoticons as $emoticon) {
             if (StringUtility::beginsWith($emoticon->getMimeType(), 'image')) {
-                $singleEmoticon = [];
-                $singleEmoticon['title'] = $emoticon->getNameWithoutExtension();
-                $singleEmoticon['url'] = '/' . $emoticon->getPublicUrl();
-                $singleEmoticon['shortcut'] = (empty($emoticon->getProperty('title')) ? '(' . $singleEmoticon['title'] . ')' : $emoticon->getProperty('title'));
-                $emoticonStack[] = $singleEmoticon;
-                if (count($emoticonStack) >= 7) {
-                    $emoticonArray[] = $emoticonStack;
-                    $emoticonStack = [];
-                }
+                $smileySettings['smiley_descriptions'][] = (empty($emoticon->getProperty('title'))
+                    ? '(' . $emoticon->getNameWithoutExtension() . ')'
+                    : $emoticon->getProperty('title'));
+                $smileySettings['smiley_images'][] = $emoticon->getName();
             }
         }
-        if (count($emoticonStack) > 0) {
-            $emoticonArray[] = $emoticonStack;
-        }
 
-        return $emoticonArray;
+        return $smileySettings;
     }
 
     /**

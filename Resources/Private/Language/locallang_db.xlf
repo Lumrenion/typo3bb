@@ -106,9 +106,6 @@
             <trans-unit id="tx_typo3bb_domain_model_topic.readers">
                 <source>Readers</source>
             </trans-unit>
-            <trans-unit id="tx_typo3bb_domain_model_topic.latest_post">
-                <source>Latest Post</source>
-            </trans-unit>
             <trans-unit id="tx_typo3bb_domain_model_post">
                 <source>Post</source>
             </trans-unit>

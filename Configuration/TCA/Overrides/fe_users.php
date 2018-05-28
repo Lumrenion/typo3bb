@@ -118,11 +118,6 @@ $tmp_typo3bb_columns = [
         ],
 
     ],
-    'posts_count' => [
-        'config' => [
-            'type' => 'passthrough'
-        ]
-    ],
     'selected_poll_choices' => [
         'exclude' => 1,
         'label' => 'LLL:EXT:typo3bb/Resources/Private/Language/locallang_db.xlf:tx_typo3bb_domain_model_frontenduser.selected_poll_choices',

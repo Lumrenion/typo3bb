@@ -83,6 +83,11 @@ $signalSlotDispatcher->connect(
     \LumIT\Typo3bb\Slot\EmailNotificationSlot::class, 'onMessageCreation'
 );
 
+$signalSlotDispatcher->connect(
+    \TYPO3\CMS\Extbase\Persistence\Generic\Mapper\DataMapper::class, 'afterMappingSingleRow',
+    \LumIT\Typo3bb\Slot\ObjectCreationSlot::class, 'afterMappingSingleRow'
+);
+
 /******************************************
  *
  * HOOKS
@@ -126,7 +131,7 @@ if( !isset($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'][
 }
 
 if( !isset($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['typo3bb']['groups'] ) ) {
-    $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['typo3bb']['groups'] = [ 'pages' ];
+    $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['typo3bb']['groups'] = [ 'system' ];
 }
 
 

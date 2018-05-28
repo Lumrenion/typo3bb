@@ -1,9 +1,7 @@
 <div xmlns="http://www.w3.org/1999/xhtml" lang="en"
      xmlns:v="http://typo3.org/ns/FluidTYPO3/Vhs/ViewHelpers"
      xmlns:f="http://typo3.org/ns/TYPO3/Fluid/ViewHelpers"
-     xmlns:tbb="http://typo3.org/ns/LumIT/Typo3bb/ViewHelpers"
-
-     v:schemaLocation="http://fluidtypo3.org/schemas/vhs-1.8.5.xsd">
+     xmlns:tbb="http://typo3.org/ns/LumIT/Typo3bb/ViewHelpers">
 
     <f:layout name="Default" />
     <f:section name="main">
@@ -42,8 +40,8 @@
                                             <f:if condition="{topic.sticky}"><span class="glyphicon glyphicon-pushpin"></span></f:if>
                                             <f:if condition="{topic.closed}"><span class="glyphicon glyphicon-lock"></span></f:if>
                                         </div>
-                                        <f:link.action action="show" controller="Topic" arguments="{topic: topic}">{topic.title}</f:link.action>
-                                        <f:if condition="{topic.read}"><f:else>&nbsp;<f:link.action action="showNewPost" controller="Topic" arguments="{topic: topic}"><span class="label label-primary"><f:translate key="topic.hasNew" />&nbsp;<i class="fa fa-arrow-circle-right"></i></span></f:link.action></f:else></f:if>
+                                        <f:link.action action="show" controller="Topic" arguments="{topic: topic}">{topic.title -> f:format.htmlentitiesDecode()}</f:link.action>
+                                        <f:if condition="{topic.read}"><f:else>&nbsp;<f:link.action action="showNewPost" controller="Topic" arguments="{topic: topic}"><span class="label label-primary"><f:translate key="topic.hasNew" />&nbsp;<i class="fas fa-arrow-circle-right"></i></span></f:link.action></f:else></f:if>
                                     </div>
                                     <div>
                                         <small>
@@ -52,7 +50,7 @@
                                     </div>
                                 </div>
                                 <div class="hidden-xs hidden-sm col-md-2 forum-board-topic-counters">
-                                    <span class="topic-posts-count-number">{topic.postsCount}</span>
+                                    <span class="topic-posts-count-number">{topic.posts -> f:count()}</span>
                                     <span class="topic-posts-count-label"><f:translate key="topic.postsCount.label" /></span>
                                 </div>
                                 <div class="col-xs-5 col-md-3 forum-board-topic-latest-post">

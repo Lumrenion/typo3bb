@@ -30,6 +30,7 @@ namespace LumIT\Typo3bb\Utility;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Cache\Frontend\VariableFrontend;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 
 /**
  * Class CacheUtility
@@ -46,21 +47,22 @@ class CacheUtility
         return GeneralUtility::makeInstance(CacheManager::class)->getCache('typo3bb');
     }
 
+    public static function encodeIdentifier($identifier)
+    {
+        return sha1($identifier);
+    }
+
     /**
-     * Returns the identifier for a certain action with it's arguments.
-     * Respects the frontend user group combination and the current page id (for the case that the forum is
-     * included on different pages)
+     * Returns the cache identifier for an object
      *
-     * @param string $class The calling class
-     * @param string $action The calling action
-     * @param string $identifier An identifier that represents the action arguments
+     * @param AbstractEntity $object
      * @return string
      */
-    public static function getIdentifier(string $class, string $action, string $identifier = '')
+    public static function getObjectCacheIdentifier($object)
     {
-        return md5(
-            $GLOBALS['TSFE']->id . '-' . $GLOBALS['TSFE']->sys_language_uid . '-' . $class . '::' . $action . '::' . $identifier
-        );
+        $class = get_class($object);
+        $uid = $object->getUid();
+        return $class . '_' . $uid;
     }
 
     /**

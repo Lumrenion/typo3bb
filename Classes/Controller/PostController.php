@@ -37,7 +37,6 @@ use LumIT\Typo3bb\Utility\RteUtility;
 use LumIT\Typo3bb\Utility\SecurityUtility;
 use LumIT\Typo3bb\Utility\StatisticUtility;
 use LumIT\Typo3bb\Utility\UrlUtility;
-use LumIT\Typo3bb\ViewHelpers\Format\CsvViewHelper;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
@@ -59,6 +58,12 @@ class PostController extends AbstractController
      * @inject
      */
     protected $topicRepository = null;
+
+    /**
+     * @var \LumIT\Typo3bb\Domain\Repository\BoardRepository
+     * @inject
+     */
+    protected $boardRepository = null;
 
     /**
      * action new
@@ -105,12 +110,13 @@ class PostController extends AbstractController
         PostFactory::createPost($newPost->getTopic(), $newPost, $attachments);
         $this->postRepository->add($newPost);
         StatisticUtility::addPost();
+        $newPost->getTopic()->setLatestPostCrdate($newPost->getCrdate());
         $this->persistenceManager->persistAll();
 
         $this->signalSlotDispatcher->dispatch(Post::class, 'afterCreation',
             ['post' => $newPost, 'controllerContext' => $this->controllerContext]);
 
-        //TODO cache
+        $newPost->getTopic()->flushCache();
         $this->forward('showNewPost', 'Topic', null, ['topic' => $newPost->getTopic()]);
     }
 
@@ -141,6 +147,7 @@ class PostController extends AbstractController
         SecurityUtility::assertAccessPermission('Post.edit', $post);
         $post->setText(RteUtility::sanitizeHtml($post->getText()));
         $post->setEditor($this->frontendUser);
+        $post->setEditorName($this->frontendUser->getUsername());
         $post->setEdited(true);
         if (!empty($attachments)) {
             PostFactory::processAttachments($post, $attachments);
@@ -163,8 +170,8 @@ class PostController extends AbstractController
     {
         SecurityUtility::assertAccessPermission('Post.delete', $post);
         $topic = $post->getTopic();
-        if ($topic->getPosts()->toArray()[0] == $post) {
-            if ($topic->getPostsCount() > 1) {
+        if ($topic->getPosts()->toArray()[0]->getUid() == $post->getUid()) {
+            if ($topic->getPosts()->count() > 1) {
                 throw new ActionNotAllowedException(LocalizationUtility::translate('exception.delete.firstPost',
                     $this->extensionName));
             } else {
@@ -174,7 +181,16 @@ class PostController extends AbstractController
 
         $this->postRepository->remove($post);
 
-        //TODO cache
+        // if the deleted post was the last post, the crdate has to be reset
+        $allPosts = array_reverse($post->getTopic()->getPosts()->toArray());
+        if (isset($allPosts[0]) && $allPosts[0]->getUid() == $post->getUid()) {
+            if (isset($allPosts[1])) {
+                $post->getTopic()->setLatestPostCrdate($allPosts[1]->getCrdate());
+                $this->topicRepository->update($post->getTopic());
+            }
+        }
+
+        $post->getTopic()->flushCache();
         $this->redirect('show', 'Topic', null, ['topic' => $post->getTopic()]);
     }
 
@@ -184,20 +200,11 @@ class PostController extends AbstractController
     public function moveAction(Post $post)
     {
         SecurityUtility::assertAccessPermission('Post.move', $post);
-        $topics = [];
-        /**
-         * @var  $key
-         * @var Topic $topic
-         */
-        foreach ($this->topicRepository->findAll() as $topic) {
-            if (SecurityUtility::checkAccessPermission('Topic.join', $topic)) {
-                $topics[$topic->getUid()] = CsvViewHelper::getCsv($topic->getRootline(), 'title', ' &raquo; ');
-            }
-        }
-        asort($topics);
+        $boards = $this->boardRepository->getAllowedBoards();
+
         $this->view->assignMultiple([
             'post' => $post,
-            'topics' => $topics
+            'boards' => $boards
         ]);
     }
 
@@ -210,15 +217,27 @@ class PostController extends AbstractController
         SecurityUtility::assertAccessPermission('Post.move', $post);
         SecurityUtility::assertAccessPermission('Post.move', $destination);
 
-        $previousTopic = $post->getTopic();
+        $oldTopic = $post->getTopic();
 
-        $previousTopic->removePost($post);
-        $destination->addPost($post);
-        $this->topicRepository->update($previousTopic);
-        $this->topicRepository->update($destination);
+        $post->setTopic($destination);
         $this->postRepository->update($post);
 
-        //TODO cache
+        // for simplicity, post is persisted and the latestPostCrdate for both topics is determined afterwards
+        $this->persistenceManager->persistAll();
+        $allPosts = array_reverse($oldTopic->getPosts()->toArray());
+        if (isset($allPosts[0])) {
+            $oldTopic->setLatestPostCrdate($allPosts[0]->getCrdate());
+        }
+        $allPosts = array_reverse($destination->getPosts()->toArray());
+        if (isset($allPosts[0])) {
+            $destination->setLatestPostCrdate($allPosts[0]->getCrdate());
+        }
+        $this->topicRepository->update($oldTopic);
+        $this->topicRepository->update($destination);
+
+        $oldTopic->flushCache();
+        $destination->flushCache();
+
         $this->redirect('show', 'Topic', null, ['topic' => $destination]);
     }
 

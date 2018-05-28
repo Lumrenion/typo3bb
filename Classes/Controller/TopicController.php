@@ -39,7 +39,6 @@ use LumIT\Typo3bb\Utility\RteUtility;
 use LumIT\Typo3bb\Utility\SecurityUtility;
 use LumIT\Typo3bb\Utility\StatisticUtility;
 use LumIT\Typo3bb\Utility\UrlUtility;
-use LumIT\Typo3bb\ViewHelpers\Format\CsvViewHelper;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
@@ -122,7 +121,7 @@ class TopicController extends AbstractController
                 }
             }
         }
-        if (is_null($post) || $post->getTopic() != $topic) {
+        if (is_null($post) || $post->getTopic()->getUid() != $topic->getUid()) {
             $post = $topic->getLatestPost();
         }
         $this->redirectToUri(UrlUtility::getPostUrl($this->uriBuilder, $post, $topic));
@@ -181,9 +180,10 @@ class TopicController extends AbstractController
         StatisticUtility::addTopic();
         $this->persistenceManager->persistAll();
 
+        $topic->flushCache();
+
         $this->signalSlotDispatcher->dispatch(Topic::class, 'afterCreation',
             ['topic' => $topic, 'controllerContext' => $this->controllerContext]);
-        //TODO cache
         $this->redirect('show', 'Topic', $this->extensionName, ['topic' => $topic]);
     }
 
@@ -246,7 +246,6 @@ class TopicController extends AbstractController
 
         $this->topicRepository->update($topic);
 
-        //TODO cache
         $this->redirect('show', null, null, ['topic' => $topic]);
     }
 
@@ -260,7 +259,7 @@ class TopicController extends AbstractController
     {
         SecurityUtility::assertAccessPermission('Topic.delete', $topic);
         $this->topicRepository->remove($topic);
-        //TODO cache
+        $topic->flushCache();
         $this->redirect('show', 'Board', $this->extensionName, ['board' => $topic->getBoard()]);
     }
 
@@ -275,7 +274,6 @@ class TopicController extends AbstractController
         $topic->setSticky(!$topic->isSticky());
 
         $this->topicRepository->update($topic);
-        //TODO cache
         $this->redirect('show', 'Topic', null, ['topic' => $topic]);
     }
 
@@ -293,7 +291,6 @@ class TopicController extends AbstractController
         }
 
         $this->topicRepository->update($topic);
-        //TODO cache
         $this->redirect('show', 'Topic', null, ['topic' => $topic]);
     }
 
@@ -305,7 +302,7 @@ class TopicController extends AbstractController
     public function moveAction(Topic $topic)
     {
         SecurityUtility::assertAccessPermission('Topic.move', $topic);
-        $boards = $boards = $this->boardRepository->getAllowedBoards()->toArray();
+        $boards = $boards = $this->boardRepository->getAllowedBoards();
         $this->view->assignMultiple(['boards' => $boards, 'topic' => $topic]);
     }
 
@@ -320,18 +317,13 @@ class TopicController extends AbstractController
         SecurityUtility::assertAccessPermission('Topic.move', $topic);
         SecurityUtility::assertAccessPermission('Topic.move', $destinationBoard);
 
-        $previousBoard = $topic->getBoard();
-
-        //Because Board->topics is not annotated with @cascade remove, the topic does not get deleted when removing it from previous board
-        $previousBoard->removeTopic($topic);
-        $destinationBoard->addTopic($topic);
-        // PostsCount of Board only gets updated when a post is added to a topic, not when a topic is added to the board.
-        $destinationBoard->_increasePostsCount($topic->getPostsCount());
-        $this->boardRepository->update($previousBoard);
-        $this->boardRepository->update($destinationBoard);
+        $oldBoard = $topic->getBoard();
+        $topic->setBoard($destinationBoard);
         $this->topicRepository->update($topic);
 
-        //TODO cache
+        $oldBoard->flushCache();
+        $destinationBoard->flushCache();
+
         $this->redirect('show', 'Topic', null, ['topic' => $topic]);
     }
 
@@ -359,6 +351,7 @@ class TopicController extends AbstractController
             $posts[] = $this->request->getArgument('post');
         }
         $this->arguments->getArgument('posts')->setValue($posts);
+        $this->request->setArgument('posts', $posts);
 
         $newTopic = $this->request->getArgument('newTopic');
         CreationUtility::prepareTopicForValidation($this->arguments->getArgument('newTopic'), $newTopic);
@@ -381,28 +374,34 @@ class TopicController extends AbstractController
             throw new AccessValidationException(LocalizationUtility::translate('exception.accessValidation',
                 'typo3bb'));
         }
-        $oldTopic->removePost($firstPost);
-        $postObjects = [];
-        foreach ($posts as $post) {
-            $postObject = $this->postRepository->findByUid($post);
-            if ($postObject->getTopic() == $oldTopic) {
-                $postObjects[] = $postObject;
-                $oldTopic->removePost($postObject);
-            }
-        }
-        // We need to persist the old topic here, otherwise the updated posts will have topic = 0
-        $this->topicRepository->update($oldTopic);
-        $this->persistenceManager->persistAll();
 
         TopicFactory::createTopic($oldTopic->getBoard(), $newTopic, $firstPost);
         $this->topicRepository->add($newTopic);
         $this->postRepository->update($firstPost);
-        foreach ($postObjects as $post) {
-            $newTopic->addPost($post);
-            $this->postRepository->update($post);
+        foreach ($posts as $post) {
+            /** @var Post $postObject */
+            $postObject = $this->postRepository->findByUid($post);
+            if ($postObject->getTopic()->getUid() == $oldTopic->getUid()) {
+                $postObject->setTopic($newTopic);
+                $this->postRepository->update($postObject);
+            }
         }
 
-        //TODO cache
+        // for simplicity, post is persisted and the latestPostCrdate for both topics is determined afterwards
+        $this->persistenceManager->persistAll();
+        $allPosts = array_reverse($oldTopic->getPosts()->toArray());
+        if (isset($allPosts[0])) {
+            $oldTopic->setLatestPostCrdate($allPosts[0]->getCrdate());
+        }
+        $allPosts = array_reverse($newTopic->getPosts()->toArray());
+        if (isset($allPosts[0])) {
+            $newTopic->setLatestPostCrdate($allPosts[0]->getCrdate());
+        }
+        $this->topicRepository->update($oldTopic);
+        $this->topicRepository->update($newTopic);
+
+        $oldTopic->flushCache();
+        $newTopic->flushCache();
         $this->redirect('show', 'Board', $this->extensionName, ['board' => $newTopic->getBoard()]);
     }
 
@@ -415,7 +414,7 @@ class TopicController extends AbstractController
         SecurityUtility::assertAccessPermission('Topic.join', $topic);
         $this->view->assign('topic', $topic);
         if (is_null($topic2)) {
-            $boards = $this->boardRepository->getAllowedBoards()->toArray();
+            $boards = $this->boardRepository->getAllowedBoards();
 
             $this->view->assign('boards', $boards);
         } else {
@@ -452,14 +451,23 @@ class TopicController extends AbstractController
         /** @var Post $post */
         $posts = $topic2->getPosts()->toArray();
         foreach ($posts as $post) {
-            $topic2->removePost($post);
-            $topic1->addPost($post);
+            $post->setTopic($topic1);
             $this->postRepository->update($post);
         }
+        $this->topicRepository->add($topic1);
         $this->topicRepository->remove($topic2);
+
+        // for simplicity, post is persisted and the latestPostCrdate for both topics is determined afterwards
+        $this->persistenceManager->persistAll();
+        $allPosts = array_reverse($topic1->getPosts()->toArray());
+        if (isset($allPosts[0])) {
+            $topic1->setLatestPostCrdate($allPosts[0]->getCrdate());
+        }
         $this->topicRepository->update($topic1);
 
-        //TODO cache
+        $topic1->flushCache();
+        $topic2->flushCache();
+
         $this->redirect('show', 'Board', $this->extensionName, ['board' => $topic1->getBoard()]);
     }
 

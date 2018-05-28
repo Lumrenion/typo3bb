@@ -72,4 +72,20 @@ class ProcessBoardsHook
             $persistenceManager->persistAll();
         }
     }
+
+    /**
+     * @param $status
+     * @param $table
+     * @param $id
+     * @param array $fieldArray
+     * @param \TYPO3\CMS\Core\DataHandling\DataHandler $pObj
+     */
+    public function processDatamap_afterDatabaseOperations($status, $table, $id, array $fieldArray, DataHandler &$pObj)
+    {
+        if ($table == 'tx_typo3bb_domain_model_board') {
+            /** @var Board $board */
+            $board = GeneralUtility::makeInstance(ObjectManager::class)->get(BoardRepository::class)->findByUid($id);
+            $board->flushCache();
+        }
+    }
 }

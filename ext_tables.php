@@ -17,7 +17,7 @@ if (!defined('TYPO3_MODE')) {
     ['Backend' => 'index, newForumCategory, newBoard'],
     [
         'access' => 'user,group',
-        'icon' => 'EXT:typo3bb/Resources/Public/Icons/module_m1.svg',
+        'icon' => 'EXT:typo3bb/ext_icon.svg',
         'labels' => 'LLL:EXT:typo3bb/Resources/Private/Language/locallang_m1.xlf',
         'navigationComponentId' => 'typo3-pagetree'
     ]

@@ -78,7 +78,7 @@ class Poll extends AbstractEntity
      * The choices the poll contains
      *
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\LumIT\Typo3bb\Domain\Model\PollChoice>
-     * @TYPO3\CMS\Extbase\Annotation\ORM\Cascade("remove")
+     * @cascade remove
      * @validate NotEmpty
      * @lazy
      */

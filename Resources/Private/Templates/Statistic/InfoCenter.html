@@ -9,7 +9,7 @@
         <h2><f:translate key="plugin.statistics.infoCenter.headline.label" /></h2>
 
         <h3>
-            <i class="fa fa-comments-o fa-fw"></i> <f:translate key="plugin.statistics.infoCenter.latestPosts.headline.label" />
+            <i class="far fa-comments fa-fw"></i> <f:translate key="plugin.statistics.infoCenter.latestPosts.headline.label" />
             (<f:link.page pageUid="{settings.pid.unreadPosts}"><f:translate key="plugin.statistics.infoCenter.latestPosts.unreadPostsLink" /></f:link.page>)
         </h3>
         <f:for each="{latestPosts}" as="latestPost">
@@ -18,7 +18,7 @@
                     <f:translate key="latestPost.topic.label" />&nbsp;<f:link.action controller="Topic" action="show" pageUid="{settings.pid.forum}"
                                                                                      arguments="{topic: latestPost.topic, post: latestPost}">{latestPost.topic.title}</f:link.action>
                     <f:translate key="latestPost.author.label" />&nbsp;<f:if condition="{latestPost.author}">
-                        <f:then><f:link.action controller="FrontendUser" action="show" extensionName="IglarpTemplate" pluginName="User-Profile" pageUid="{settings.pid.profile"
+                        <f:then><f:link.action controller="FrontendUser" action="show" extensionName="IglarpTemplate" pluginName="User-Profile" pageUid="{settings.pid.profile}"
                                                arguments="{user: latestPost.author}">{latestPost.authorName}</f:link.action></f:then>
                         <f:else>{latestPost.authorName}</f:else>
                     </f:if>
@@ -29,7 +29,7 @@
             </div>
         </f:for>
 
-        <h3><i class="fa fa-bar-chart fa-fw"></i> <f:translate key="plugin.statistics.infoCenter.statisticsSummary.headline.label" /></h3>
+        <h3><i class="fas fa-chart-bar fa-fw"></i> <f:translate key="plugin.statistics.infoCenter.statisticsSummary.headline.label" /></h3>
         <p>
             <f:translate key="plugin.statistics.infoCenter.statisticsSummary.counts" arguments="{0: postsCount, 1: topicsCount, 2: membersCount}" />.
             <f:translate key="plugin.statistics.infoCenter.statisticsSummary.newestMember" />&nbsp;<f:link.action controller="FrontendUser" action="show" extensionName="IglarpTemplate" pluginName="User-Profile" pageUid="{settings.pid.profile}"
@@ -44,7 +44,7 @@
             </f:link.page>
         </p>
 
-        <h3><i class="fa fa-users fa-fw"></i> <f:translate key="plugin.statistics.infoCenter.onlineUsers.headline.label" /></h3>
+        <h3><i class="fas fa-users fa-fw"></i> <f:translate key="plugin.statistics.infoCenter.onlineUsers.headline.label" /></h3>
         <p>
             <tbb:format.csv subject="{onlineUsers}" as="author">
                 <f:link.action action="show" controller="FrontendUser" extensionName="IglarpTemplate" pluginName="User-Profile" arguments="{user: author}" pageUid="{settings.pid.profile}">

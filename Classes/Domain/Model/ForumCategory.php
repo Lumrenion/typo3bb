@@ -29,7 +29,6 @@ namespace LumIT\Typo3bb\Domain\Model;
  ***************************************************************/
 use LumIT\Typo3bb\Domain\Repository\BoardRepository;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
@@ -37,7 +36,7 @@ use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
  * A forum category is displayed on the index page of the bulletin board and
  * contains boards.
  */
-class ForumCategory extends AbstractEntity
+class ForumCategory extends AbstractCachableModel
 {
 
     /**
@@ -52,11 +51,22 @@ class ForumCategory extends AbstractEntity
      * Boards in this cateogry
      *
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\LumIT\Typo3bb\Domain\Model\Board>
-     * @TYPO3\CMS\Extbase\Annotation\ORM\Cascade("remove")
+     * @cascade remove
      * @lazy
      */
     protected $boards = null;
 
+
+    /********************************************
+     *                                          *
+     *                                          *
+     *             META INFORMATION             *
+     *  Information not persisted in database   *
+     *     collected at runtime and cached      *
+     *                                          *
+     *                                          *
+     ********************************************/
+    
     /**
      * @var \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
      */
@@ -148,6 +158,12 @@ class ForumCategory extends AbstractEntity
         $this->boards = $boards;
     }
 
+    
+    
+    /******************************************************************************************************************/
+    
+    
+    
     /**
      * Returns the boards the current user is allowed to see
      *
@@ -155,12 +171,41 @@ class ForumCategory extends AbstractEntity
      */
     public function getAllowedBoards()
     {
-        if (is_null($this->allowedBoards)) {
-            $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-            /** @var BoardRepository $boardRepository */
-            $boardRepository = $objectManager->get(BoardRepository::class);
+        if ($this->allowedBoards === null) {
+            $boardRepository = GeneralUtility::makeInstance(ObjectManager::class)->get(BoardRepository::class);
             $this->allowedBoards = $boardRepository->getAllowedBoards($this);
         }
+        if (is_array($this->allowedBoards)) {
+            $boardRepository = GeneralUtility::makeInstance(ObjectManager::class)->get(BoardRepository::class);
+            $allowedBoards = [];
+            foreach ($this->allowedBoards as $allowedBoard) {
+                $subBoard = $boardRepository->findByUid($allowedBoard);
+                if (!empty($subBoard)) {
+                    $allowedBoards[] = $subBoard;
+                }
+            }
+            $this->allowedBoards = $allowedBoards;
+        }
         return $this->allowedBoards;
+    }
+
+
+    /******************************************************************************************************************/
+
+
+
+    protected function _getCacheableAttributesPerUsergroup()
+    {
+        $allowedBoardObjects = $this->getAllowedBoards();
+        $allowedBoards = [];
+        foreach ($allowedBoardObjects as $allowedBoardObject) {
+            $allowedBoards[] = $allowedBoardObject->getUid();
+        }
+
+        $cachedAttributes = [
+            'allowedBoards' => $allowedBoards
+        ];
+
+        return $cachedAttributes;
     }
 }

@@ -33,8 +33,8 @@ use LumIT\Typo3bb\Domain\Repository\FrontendUserRepository;
 use LumIT\Typo3bb\Domain\Repository\PostRepository;
 use LumIT\Typo3bb\Utility\FrontendUserUtility;
 use LumIT\Typo3bb\Utility\SecurityUtility;
+use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
@@ -42,7 +42,7 @@ use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
  * A board can contain subboards and posts.
  * Boards without parent board need a forumCategory
  */
-class Board extends AbstractEntity
+class Board extends AbstractCachableModel
 {
 
     /**
@@ -78,6 +78,7 @@ class Board extends AbstractEntity
      * Topics of this board
      *
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\LumIT\Typo3bb\Domain\Model\Topic>
+     * @cascade remove
      * @lazy
      */
     protected $topics = null;
@@ -86,15 +87,10 @@ class Board extends AbstractEntity
      * sub boards of the board
      *
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\LumIT\Typo3bb\Domain\Model\Board>
-     * @TYPO3\CMS\Extbase\Annotation\ORM\Cascade("remove")
+     * @cascade remove
      * @lazy
      */
     protected $subBoards = null;
-
-    /**
-     * @var \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
-     */
-    protected $allowedSubBoards = null;
 
     /**
      * @var string
@@ -115,6 +111,7 @@ class Board extends AbstractEntity
      * The users subscribed this topic
      *
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\LumIT\Typo3bb\Domain\Model\FrontendUser>
+     * @cascade remove
      * @lazy
      */
     protected $subscribers = null;
@@ -135,61 +132,6 @@ class Board extends AbstractEntity
     protected $forumCategory = null;
 
     /**
-     * Count of subBoards in board. Added for performance
-     *
-     * @var int
-     */
-    protected $subBoardsCount = 0;
-    /**
-     * Count of topics in board. Added for performance
-     *
-     * @var int
-     */
-    protected $topicsCount = 0;
-
-    /**
-     * Count of posts in all topics of board. Added for performance
-     *
-     * @var int
-     */
-    protected $postsCount = 0;
-
-    /**
-     * Pointer to the latest post. Added for perfornace
-     *
-     * @var \LumIT\Typo3bb\Domain\Model\Post
-     * @lazy
-     */
-    protected $latestPost = null;
-
-    /**
-     * The Crdate of the latest post. Enables sorting of topics without database join
-     *
-     * @var \DateTime
-     */
-    protected $latestPostCrdate = null;
-
-
-    /**
-     * Not persisted attribute, so the viewable latest post needs only to get detected once per Board-Object
-     *
-     * @var int
-     */
-    protected $viewableTopicsCount = null;
-    /**
-     * Not persisted attribute, so the viewable latest post needs only to get detected once per Board-Object
-     *
-     * @var int
-     */
-    protected $viewablePostsCount = null;
-    /**
-     * Not persisted attribute, so the viewable latest post needs only to get detected once per Board-Object
-     *
-     * @var Post
-     */
-    protected $viewableLatestPost = null;
-
-    /**
      * @var bool
      */
     protected $txKesearchIndex = true;
@@ -204,6 +146,49 @@ class Board extends AbstractEntity
      */
     protected $moderatorsArray = null;
 
+
+    /********************************************
+     *                                          *
+     *                                          *
+     *             META INFORMATION             *
+     *  Information not persisted in database   *
+     *     collected at runtime and cached      *
+     *                                          *
+     *                                          *
+     ********************************************/
+
+    /**
+     * Not persisted attribute, will be determined on demand and cached here
+     *
+     * @var \LumIT\Typo3bb\Domain\Model\Post
+     */
+    protected $latestPost = null;
+
+    /**
+     * Not persisted attribute, a performance shortcut for latestPost->getCrdate
+     *
+     * @var \DateTime
+     */
+    protected $latestPostCrdate = null;
+
+    /**
+     * Not persisted attribute, count of posts in board
+     *
+     * @var int
+     */
+    protected $postsCount = null;
+
+    /**
+     * Not persisted attribute, so the viewable latest post needs only to get detected once per Board-Object
+     *
+     * @var Post
+     */
+    protected $viewableLatestPost = null;
+
+    /**
+     * @var \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
+     */
+    protected $allowedSubBoards = null;
 
     /**
      * __construct
@@ -325,14 +310,6 @@ class Board extends AbstractEntity
     public function addTopic(Topic $topic)
     {
         $this->topics->attach($topic);
-
-        $topic->setBoard($this);
-        $this->_increaseTopicsCount();
-    }
-
-    public function _increaseTopicsCount($amount = 1)
-    {
-        $this->topicsCount += $amount;
     }
 
     /**
@@ -344,41 +321,6 @@ class Board extends AbstractEntity
     public function removeTopic(Topic $topicToRemove)
     {
         $this->topics->detach($topicToRemove);
-        $this->_resetLatestPost();
-        $this->_resetPostsCount();
-        $this->_resetTopicCount();
-    }
-
-    /**
-     * @access private
-     */
-    public function _resetLatestPost()
-    {
-        /** @var $latestPost Post */
-        $latestPost = null;
-        foreach ($this->topics as $topic) {
-            /** @var $topic Topic */
-            /** @noinspection PhpUndefinedMethodInspection */
-            if ($topic->getLatestPost() instanceof Post) {
-                $latestTopicPostTimestamp = $topic->getLatestPost()->getCrdate();
-                if ($latestPost === null || $latestTopicPostTimestamp > $latestPost->getCrdate()) {
-                    $latestPost = $topic->getLatestPost();
-                }
-            }
-        }
-
-        $this->latestPost = $latestPost;
-    }
-
-    /**
-     * @access private
-     */
-    public function _resetPostsCount()
-    {
-        $this->postsCount = 0;
-        foreach ($this->getTopics() as $topic) {
-            $this->postsCount += $topic->getPostsCount();
-        }
     }
 
     /**
@@ -403,14 +345,6 @@ class Board extends AbstractEntity
     }
 
     /**
-     * @access private
-     */
-    public function _resetTopicCount()
-    {
-        $this->topicsCount = $this->topics->count();
-    }
-
-    /**
      * Adds a Board
      *
      * @param \LumIT\Typo3bb\Domain\Model\Board $subBoard
@@ -431,22 +365,6 @@ class Board extends AbstractEntity
     public function removeSubBoard(Board $subBoardToRemove)
     {
         $this->subBoards->detach($subBoardToRemove);
-    }
-
-    /**
-     * Returns the boards the current user is allowed to see
-     *
-     * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
-     */
-    public function getAllowedSubBoards()
-    {
-        if (is_null($this->allowedSubBoards)) {
-            $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-            /** @var BoardRepository $boardRepository */
-            $boardRepository = $objectManager->get(BoardRepository::class);
-            $this->allowedSubBoards = $boardRepository->getAllowedBoards($this);
-        }
-        return $this->allowedSubBoards;
     }
 
     /**
@@ -669,52 +587,6 @@ class Board extends AbstractEntity
         $this->parentBoard = $parentBoard;
     }
 
-    public function _increasePostsCount($amount = 1)
-    {
-        $this->postsCount += $amount;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getSubBoardsCount()
-    {
-        return $this->subBoardsCount;
-    }
-
-    /**
-     * @param mixed $subBoardsCount
-     */
-    public function setSubBoardsCount($subBoardsCount)
-    {
-        $this->subBoardsCount = $subBoardsCount;
-    }
-
-    /**
-     * @return string
-     */
-    public function getRootlineString()
-    {
-        return implode(' > ', array_map(function ($board) {
-            return $board->getTitle();
-        }, $this->getRootline()));
-    }
-
-    /**
-     * @return array
-     */
-    public function getRootline()
-    {
-        if ($this->parentBoard !== null) {
-            $rootline = $this->parentBoard->getRootline();
-        } else {
-            $rootline[] = $this->getForumCategory();
-        }
-
-        $rootline[] = $this;
-        return $rootline;
-    }
-
     /**
      * Returns the forumCategory
      *
@@ -734,152 +606,6 @@ class Board extends AbstractEntity
     public function setForumCategory($forumCategory)
     {
         $this->forumCategory = $forumCategory;
-    }
-
-    /**
-     * @return int
-     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
-     */
-    public function getViewablePostsCount()
-    {
-        if ($this->viewablePostsCount == null) {
-            $count = 0;
-            if (SecurityUtility::checkAccessPermission('Board.show', $this)) {
-                foreach ($this->getSubBoards() as $subBoard) {
-                    $count += $subBoard->getViewablePostsCount();
-                }
-                $count += $this->getPostsCount();
-            }
-            $this->viewablePostsCount = $count;
-        }
-        return $this->viewablePostsCount;
-    }
-
-    /**
-     * @return int
-     */
-    public function getPostsCount()
-    {
-        return $this->postsCount;
-    }
-
-    /**
-     * @param int $postsCount
-     */
-    public function setPostsCount($postsCount)
-    {
-        $this->postsCount = $postsCount;
-    }
-
-    /**
-     * @return int
-     */
-    public function getViewableTopicsCount()
-    {
-        if ($this->viewableTopicsCount == null) {
-            $count = 0;
-            if (SecurityUtility::checkAccessPermission('Board.show', $this)) {
-                foreach ($this->getSubBoards() as $subBoard) {
-                    $count += $subBoard->getViewableTopicsCount();
-                }
-                $count += $this->getTopicsCount();
-            }
-            $this->viewableTopicsCount = $count;
-        }
-        return $this->viewableTopicsCount;
-    }
-
-    /**
-     * @return int
-     */
-    public function getTopicsCount()
-    {
-        return $this->topicsCount;
-    }
-
-    /**
-     * @param int $topicsCount
-     */
-    public function setTopicsCount($topicsCount)
-    {
-        $this->topicsCount = $topicsCount;
-    }
-
-    /**
-     * @return \LumIT\Typo3bb\Domain\Model\Post|null
-     */
-    public function getViewableLatestPost()
-    {
-        if ($this->viewableLatestPost == null) {
-            $boardWithLatestPost = $this->_getBoardWithTrueLatestPost($this);
-            if ($boardWithLatestPost != null) {
-                $this->viewableLatestPost = $boardWithLatestPost->getLatestPost();
-            }
-        }
-
-        return $this->viewableLatestPost;
-    }
-
-    /**
-     * @param \LumIT\Typo3bb\Domain\Model\Board $board
-     * @return \LumIT\Typo3bb\Domain\Model\Board|null
-     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
-     */
-    public function _getBoardWithTrueLatestPost($board)
-    {
-        $boardWithTrueLatestPost = null;
-        if (SecurityUtility::checkAccessPermission('Board.show', $board)) {
-            $boardWithTrueLatestPost = $board;
-            foreach ($board->getSubBoards() as $subBoard) {
-                $boardWithLatestPost = $this->_getBoardWithTrueLatestPost($subBoard);
-                if ($boardWithLatestPost != null && $boardWithTrueLatestPost->getLatestPostCrdate() < $boardWithLatestPost->getLatestPostCrdate()) {
-                    $boardWithTrueLatestPost = $boardWithLatestPost;
-                }
-            }
-        }
-
-        return $boardWithTrueLatestPost;
-    }
-
-    /**
-     * Returns the latestPostCrdate
-     *
-     * @return \DateTime $latestPostCrdate
-     */
-    public function getLatestPostCrdate()
-    {
-        return $this->latestPostCrdate;
-    }
-
-    /**
-     * Sets the latestPostCrdate
-     *
-     * @param \DateTime $latestPostCrdate
-     * @return void
-     */
-    public function setLatestPostCrdate($latestPostCrdate)
-    {
-        $this->latestPostCrdate = $latestPostCrdate;
-    }
-
-    /**
-     * @return \LumIT\Typo3bb\Domain\Model\Post
-     */
-    public function getLatestPost()
-    {
-        return $this->latestPost;
-    }
-
-    /**
-     * Sets the latestPost
-     *
-     * @param \LumIT\Typo3bb\Domain\Model\Post $latestPost
-     * @return void
-     */
-    public function setLatestPost($latestPost)
-    {
-        $this->latestPost = $latestPost;
-        $this->latestPostCrdate = $latestPost->getCrdate();
     }
 
     /**
@@ -904,7 +630,7 @@ class Board extends AbstractEntity
         $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
         /** @var PostRepository $postRepository */
         $postRepository = $objectManager->get(PostRepository::class);
-        if ($postRepository->findUnread($frontendUser, $this)->count() > 0) {
+        if ($postRepository->countUnread($frontendUser, $this) > 0) {
             return false;
         }
 
@@ -931,5 +657,212 @@ class Board extends AbstractEntity
     public function setTxKesearchIndex($txKesearchIndex)
     {
         $this->txKesearchIndex = $txKesearchIndex;
+    }
+
+
+
+    /******************************************************************************************************************/
+
+
+
+    /**
+     * @return int
+     */
+    public function getPostsCount()
+    {
+        if ($this->postsCount === null) {
+            $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('tx_typo3bb_domain_model_post');
+            $queryBuilder->count('post.uid')
+                ->from('tx_typo3bb_domain_model_post', 'post')
+                ->leftJoin(
+                    'post',
+                    'tx_typo3bb_domain_model_topic',
+                    'topic',
+                    $queryBuilder->expr()->eq('topic.uid', $queryBuilder->quoteIdentifier('post.topic'))
+                )->leftJoin(
+                    'topic',
+                    'tx_typo3bb_domain_model_board',
+                    'board',
+                    $queryBuilder->expr()->eq('board.uid', $queryBuilder->quoteIdentifier('topic.board'))
+                )->where($queryBuilder->expr()->eq('board.uid', $queryBuilder->createNamedParameter($this->getUid(), \PDO::PARAM_INT)));
+            $postsCount = $queryBuilder->execute()->fetchColumn(0);
+
+            $this->postsCount = is_numeric($postsCount) ? $postsCount : 0;
+        }
+
+        return $this->postsCount;
+    }
+
+    /**
+     * @return \LumIT\Typo3bb\Domain\Model\Post
+     */
+    public function getLatestPost()
+    {
+        if ($this->latestPost === null) {
+            $postRepository = GeneralUtility::makeInstance(ObjectManager::class)->get(PostRepository::class);
+            $this->latestPost = $postRepository->findLatestInBoard($this);
+        }
+        if (is_numeric($this->latestPost)) {
+            $postRepository = GeneralUtility::makeInstance(ObjectManager::class)->get(PostRepository::class);
+            $this->latestPost = $postRepository->findByUid($this->latestPost);
+        }
+        return $this->latestPost;
+    }
+
+    public function getLatestPostCrdate()
+    {
+        if ($this->latestPostCrdate === null) {
+            $latestPost = $this->getLatestPost();
+            $this->latestPostCrdate = $latestPost ? $latestPost->getCrdate() : 0;
+        }
+        return $this->latestPostCrdate;
+    }
+
+    /**
+     * @return \LumIT\Typo3bb\Domain\Model\Post|null
+     */
+    public function getViewableLatestPost()
+    {
+        if ($this->viewableLatestPost === null) {
+            $boardWithLatestPost = $this->_getBoardWithTrueLatestPost($this);
+            $this->viewableLatestPost = $boardWithLatestPost->getLatestPost();
+        }
+        if (is_numeric($this->viewableLatestPost)) {
+            $postRepository = GeneralUtility::makeInstance(ObjectManager::class)->get(PostRepository::class);
+            $this->viewableLatestPost = $postRepository->findByUid($this->viewableLatestPost);
+        }
+        return $this->viewableLatestPost;
+    }
+
+    /**
+     * Returns the boards the current user is allowed to see
+     *
+     * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
+     */
+    public function getAllowedSubBoards()
+    {
+        if ($this->allowedSubBoards === null) {
+            $boardRepository = GeneralUtility::makeInstance(ObjectManager::class)->get(BoardRepository::class);
+            $this->allowedSubBoards = $boardRepository->getAllowedBoards($this);
+        }
+        if (is_array($this->allowedSubBoards)) {
+            $boardRepository = GeneralUtility::makeInstance(ObjectManager::class)->get(BoardRepository::class);
+            $allowedSubBoards = [];
+            foreach ($this->allowedSubBoards as $allowedSubBoard) {
+                $subBoard = $boardRepository->findByUid($allowedSubBoard);
+                if (!empty($subBoard)) {
+                    $allowedSubBoards[] = $subBoard;
+                }
+            }
+            $this->allowedSubBoards = $allowedSubBoards;
+        }
+        return $this->allowedSubBoards;
+    }
+
+
+    /******************************************************************************************************************/
+
+
+    /**
+     * @return array
+     */
+    public function getRootline()
+    {
+        if ($this->parentBoard !== null) {
+            $rootline = $this->parentBoard->getRootline();
+        } else {
+            $rootline[] = $this->getForumCategory();
+        }
+
+        $rootline[] = $this;
+        return $rootline;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRootlineString()
+    {
+        return implode(' > ', array_map(function ($board) {
+            return $board->getTitle();
+        }, $this->getRootline()));
+    }
+
+
+    /**
+     * @param \LumIT\Typo3bb\Domain\Model\Board $board
+     * @return \LumIT\Typo3bb\Domain\Model\Board|null
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
+     */
+    protected function _getBoardWithTrueLatestPost($board)
+    {
+        $boardWithTrueLatestPost = null;
+        if (SecurityUtility::checkAccessPermission('Board.show', $board)) {
+            $boardWithTrueLatestPost = $board;
+            foreach ($board->getSubBoards() as $subBoard) {
+                $boardWithLatestPost = $this->_getBoardWithTrueLatestPost($subBoard);
+
+                if (
+                    $boardWithLatestPost != null
+                    && $boardWithTrueLatestPost->getLatestPostCrdate() < $boardWithLatestPost->getLatestPostCrdate()
+                ) {
+                    $boardWithTrueLatestPost = $boardWithLatestPost;
+                }
+            }
+        }
+
+        return $boardWithTrueLatestPost;
+    }
+
+
+    /******************************************************************************************************************/
+
+
+
+    protected function _getCacheableAttributes()
+    {
+        $latestPost = $this->getLatestPost();
+        $latestPostUid = $latestPost ? $latestPost->getUid() : 0;
+        $latestPostCrdate = $latestPost ? $latestPost->getCrdate() : 0;
+        $postsCount = $this->getPostsCount();
+
+        $cachedAttributes = [
+            'postsCount' => $postsCount,
+            'latestPost' => $latestPostUid,
+            'latestPostCrdate' => $latestPostCrdate
+        ];
+
+        return $cachedAttributes;
+    }
+
+    protected function _getCacheableAttributesPerUsergroup()
+    {
+
+        $viewableLatestPost = $this->getViewableLatestPost();
+        $viewableLatestPostUid = $viewableLatestPost ? $viewableLatestPost->getUid() : 0;
+
+        $allowedSubBoardObjects = $this->getAllowedSubBoards();
+        $allowedSubBoards = [];
+        foreach ($allowedSubBoardObjects as $allowedSubBoard) {
+            $allowedSubBoards[] = $allowedSubBoard->getUid();
+        }
+
+        $cachedAttributes = [
+            'viewableLatestPost' => $viewableLatestPostUid,
+            'allowedSubBoards' => $allowedSubBoards
+        ];
+
+        return $cachedAttributes;
+    }
+
+    public function flushCache()
+    {
+        parent::flushCache();
+        if (!empty($this->parentBoard)) {
+            $this->parentBoard->flushCache();
+        }
+        if (!empty($this->forumCategory)) {
+            $this->forumCategory->flushCache();
+        }
     }
 }

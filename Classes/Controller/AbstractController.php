@@ -75,15 +75,19 @@ abstract class AbstractController extends ActionController
         $this->frontendUser = FrontendUserUtility::getCurrentUser();
 
         if ($this->response instanceof Response) {
-            $tinymceLangKey = $this->configurationManager->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT)['config.']['tinymceLangKey'];
-            if (empty($tinymceLangKey)) {
-                $tinymceLangKey = 'en_GB';
-            }
+            $ckeditorSettings = RteUtility::prepareSmilies($this->settings['emoticonPath']);
+            $ckeditorSettings['language'] = $this->configurationManager->getConfiguration(
+                ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT
+            )['config.']['tinymceLangKey'] ?: 'en_GB';
 
-            $this->response->addAdditionalHeaderData('<script>'
-                . 'var typo3bb_emoticons = ' . json_encode(RteUtility::prepareSmilies($this->settings['emoticonPath'])) . ';'
-                . 'var typo3bb_tinymce_langKey = "' . $tinymceLangKey . '";'
-                . '</script>');
+            $this->response->addAdditionalHeaderData('
+<script>
+window.LumIT = window.LumIT || {};
+window.LumIT.Typo3bb = window.LumIT.Typo3bb || (window.LumIT.Typo3bb = {});
+window.LumIT.Typo3bb.Constants = window.LumIT.Typo3bb.Constants || (window.LumIT.Typo3bb.Constants = {});
+window.LumIT.Typo3bb.Constants["ckeditorSettings"] = ' . json_encode($ckeditorSettings) . ';
+</script>'
+            );
         }
     }
 

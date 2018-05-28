@@ -147,7 +147,7 @@ class FrontendUserRepository extends \TYPO3\CMS\Extbase\Domain\Repository\Fronte
     public function findOnlineUsers()
     {
         $query = $this->createQuery();
-        $query->matching($query->greaterThanOrEqual('isOnline', strtotime('-15 minutes')));
+        $query->matching($query->greaterThanOrEqual('isOnline', strtotime('-5 minutes')));
         return $query->execute();
     }
 

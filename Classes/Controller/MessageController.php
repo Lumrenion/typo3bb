@@ -94,9 +94,9 @@ class MessageController extends AbstractController
                     'text' => $parentMessage->getSender()->getUser()->getDisplayName()
                 ];
             }
-            /** @var MessageParticipant $receiver */
+            /** @var MessageParticipant $messageReceiver */
             foreach ($parentMessage->getReceivers() as $messageReceiver) {
-                if (!empty($messageReceiver->getUser()) && $messageReceiver->getUser() != $this->frontendUser) {
+                if (!empty($messageReceiver->getUser()) && $messageReceiver->getUser()->getUid() != $this->frontendUser->getUid()) {
                     $receiverText .= $messageReceiver->getUser()->getUsername() . ',';
                     $receiversArray[] = [
                         'id' => $messageReceiver->getUser()->getUsername(),

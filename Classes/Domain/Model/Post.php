@@ -69,7 +69,7 @@ class Post extends AbstractEntity
      * Single Attachment to the post
      *
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\LumIT\Typo3bb\Domain\Model\Attachment>
-     * @TYPO3\CMS\Extbase\Annotation\ORM\Cascade("remove")
+     * @cascade remove
      */
     protected $attachments = null;
 

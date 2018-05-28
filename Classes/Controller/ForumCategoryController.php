@@ -45,7 +45,7 @@ class ForumCategoryController extends AbstractController
      * @var \LumIT\Typo3bb\Domain\Repository\BoardRepository
      * @inject
      */
-    protected $boardController = null;
+    protected $boardRepository = null;
 
     /**
      * action list
@@ -54,7 +54,7 @@ class ForumCategoryController extends AbstractController
      */
     public function listAction()
     {
-        $boards = $this->boardController->getAllowedBoards();
+        $boards = $this->boardRepository->getAllowedBoards();
 
         $this->view->assign('allBoards', $boards);
     }

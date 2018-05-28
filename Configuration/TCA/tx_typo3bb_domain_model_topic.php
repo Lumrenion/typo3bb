@@ -30,14 +30,14 @@ return [
     'columns' => [
         'hidden' => [
             'exclude' => 1,
-            'label' => 'LLL:EXT:lang/locallang_general.xlf:LGL.hidden',
+            'label' => 'LLL:EXT:lang/Resources/Private/Language/locallang_general.xlf:LGL.hidden',
             'config' => [
                 'type' => 'check',
             ],
         ],
         'starttime' => [
             'exclude' => 1,
-            'label' => 'LLL:EXT:lang/locallang_general.xlf:LGL.starttime',
+            'label' => 'LLL:EXT:lang/Resources/Private/Language/locallang_general.xlf:LGL.starttime',
             'config' => [
                 'type' => 'input',
                 'renderType' => 'inputDateTime',
@@ -55,7 +55,7 @@ return [
         ],
         'endtime' => [
             'exclude' => 1,
-            'label' => 'LLL:EXT:lang/locallang_general.xlf:LGL.endtime',
+            'label' => 'LLL:EXT:lang/Resources/Private/Language/locallang_general.xlf:LGL.endtime',
             'config' => [
                 'type' => 'input',
                 'renderType' => 'inputDateTime',
@@ -95,15 +95,6 @@ return [
             'config' => [
                 'type' => 'check',
                 'default' => 0
-            ]
-        ],
-        'posts_count' => [
-            'exclude' => 1,
-            'label' => 'LLL:EXT:typo3bb/Resources/Private/Language/locallang_db.xlf:tx_typo3bb_domain_model_topic.posts_count',
-            'config' => [
-                'type' => 'input',
-                'size' => 4,
-                'eval' => 'int'
             ]
         ],
         'posts' => [
@@ -167,24 +158,6 @@ return [
                 'autoSizeMax' => 30,
                 'maxitems' => 9999,
                 'multiple' => 0,
-            ],
-        ],
-        'readers' => [
-            'exclude' => 1,
-            'label' => 'LLL:EXT:typo3bb/Resources/Private/Language/locallang_db.xlf:tx_typo3bb_domain_model_topic.readers',
-            'config' => [
-                'type' => 'passthrough',
-            ],
-        ],
-        'latest_post' => [
-            'exclude' => 1,
-            'label' => '',
-            'config' => [
-                'type' => 'select',
-                'renderType' => 'selectSingle',
-                'foreign_table' => 'tx_typo3bb_domain_model_post',
-                'minitems' => 0,
-                'maxitems' => 1,
             ],
         ],
         'latest_post_crdate' => [

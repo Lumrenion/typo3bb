@@ -56,7 +56,7 @@ class RegistrationProcessHook extends RegistrationProcessHooks
     ) {
         $queryBuilder = $this->getQuerBuilder();
         $queryBuilder->update('fe_users')
-            ->where('uid', $dataArray['uid'])
+            ->where($queryBuilder->expr()->eq('uid', $dataArray['uid']))
             ->set('signature', RteUtility::sanitizeHtml($dataArray['signature']))
             ->execute();
     }
@@ -88,9 +88,17 @@ class RegistrationProcessHook extends RegistrationProcessHooks
         Data $pObj
     ) {
         $queryBuilder = $this->getQuerBuilder();
+        $latestPosts = $queryBuilder->select('uid')
+            ->from('tx_typo3bb_domain_model_post')
+            ->orderBy('uid', 'DESC')
+            ->setMaxResults(1)
+            ->execute()->fetchAll();
+
+        $queryBuilder = $this->getQuerBuilder();
         $queryBuilder->update('fe_users')
             ->where($queryBuilder->expr()->eq('uid', $dataArray['uid']))
             ->set('tx_typo3bb_display_name', $dataArray['username'])
+            ->set('last_read_post', $latestPosts[0]['uid'])
             ->execute();
 
         StatisticUtility::addRegister();

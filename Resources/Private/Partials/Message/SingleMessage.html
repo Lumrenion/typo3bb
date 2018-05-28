@@ -6,10 +6,7 @@
             <a class="hidden" id="message-{message.uid}">&nbsp;</a>
             <div class="typo3bb-message{f:if(condition: message.viewed, else: ' new')}">
                 <f:if condition="{message.viewed}"><f:else>
-                    <i class="fa fa-caret-up fa-rotate-45 fa-5x typo3bb-message-new-indicator" aria-hidden="true"></i>
-                    <i class="fa fa-caret-up fa-rotate-135 fa-5x typo3bb-message-new-indicator" aria-hidden="true"></i>
-                    <i class="fa fa-caret-up fa-rotate-225 fa-5x typo3bb-message-new-indicator" aria-hidden="true"></i>
-                    <i class="fa fa-caret-up fa-rotate-315 fa-5x typo3bb-message-new-indicator" aria-hidden="true"></i>
+                    <i class="fas fa-caret-up fa-6x typo3bb-unread-indicator" data-fa-transform="rotate-315" aria-hidden="true"></i>
                     <span class="sr-only"><f:translate key="messages.inbox.newMessageLabel" /></span>
                 </f:else></f:if>
                 <div class="row">
@@ -18,9 +15,16 @@
                         <div class="typo3bb-message-info-wrapper">
                             <dl class="typo3bb-message-sender-info">
                                 <dt class="typo3bb-message-sender-avatar-container">
-                                    <tbb:image width="90" src="{message.sender.user.image.0.originalResource.publicUrl}" class="image-responsive img-thumbnail"
+                                    <tbb:image as="userImage" width="90" src="{message.sender.user.image.0.uid}" treatIdAsReference="true" class="image-responsive img-thumbnail"
                                                alt="{frontendUser.displayName}" title="{frontendUser.displayName}">
-                                        <i class="fa fa-user fa-5x" aria-hidden="true"></i>
+                                        <f:if condition="{userImage}">
+                                            <f:then>
+                                                <f:format.htmlentitiesDecode>{userImage}</f:format.htmlentitiesDecode>
+                                            </f:then>
+                                            <f:else>
+                                                <i class="fas fa-user-circle fa-6x" aria-hidden="true"></i>
+                                            </f:else>
+                                        </f:if>
                                     </tbb:image>
                                 </dt>
                                 <dt class="typo3bb-message-sender-info-main">
@@ -38,7 +42,7 @@
                                 </dt>
                                 <f:if condition="{message.sender.user}">
                                     <dd class="typo3bb-message-sender-info-posts">
-                                        <f:translate key="fe_users.postsCount.label" arguments="{0: message.sender.user.postsCount}"/><br/>
+                                        <f:translate key="fe_users.postsCount.label" arguments="{0: '{message.sender.user.createdPosts -> f:count()}'}"/><br/>
                                     </dd>
                                     <dd class="typo3bb-message-sender-info-joined">
                                         <f:translate key="post.author.crdate.label" arguments="{0: '{f:format.date(date: message.sender.user.crdate, format: \'d.m.Y\')}'}" />
@@ -54,12 +58,12 @@
                             <ul class="typo3bb-message-options pull-right">
                                 <li>
                                     <f:link.action action="new" controller="Message" arguments="{parentMessage: message}" class="btn btn-default">
-                                        <i class="fa fa-reply{f:if(condition: '{f:count(subject: message.receivers)} > 1', then: '-all')}"></i>
+                                        <i class="fas fa-reply{f:if(condition: '{f:count(subject: message.receivers)} > 1', then: '-all')}"></i>
                                     </f:link.action>
                                 </li>
                                 <li>
                                     <f:link.action action="delete" controller="Message" arguments="{message: message, from: context}" class="btn btn-default">
-                                        <i class="fa fa-trash"></i>
+                                        <i class="fas fa-trash"></i>
                                     </f:link.action>
                                 </li>
                             </ul>

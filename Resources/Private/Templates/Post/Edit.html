@@ -11,8 +11,6 @@
 
         <f:flashMessages />
 
-        <f:render partial="FormErrors" arguments="{object:Post}" />
-
         <f:form action="update" enctype="multipart/form-data" name="post" object="{post}" >
             <f:render partial="Post/FormFields" section="Content" arguments="{post:post}" />
             <f:form.submit class="btn btn-default" value="{f:translate(key: 'post.edit.submit.label')}" />

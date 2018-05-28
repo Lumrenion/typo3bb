@@ -15,9 +15,17 @@
                                 <f:if condition="{post.author}">
                                     <f:then>
                                         <dt class="author-avatar-container">
-                                            <tbb:image width="90" src="{post.author.image.0.originalResource.publicUrl}" class="image-responsive img-thumbnail profile-user-image"
-                                                     alt="{frontendUser.displayName}" title="{frontendUser.displayName}">
-                                                <i class="fa fa-user fa-5x" aria-hidden="true"></i>
+                                            <tbb:image as="userImage" width="90" src="{post.author.image.0.originalResource.uid}"
+                                                       treatIdAsReference="true" class="image-responsive img-thumbnail profile-user-image"
+                                                       alt="{frontendUser.displayName}" title="{frontendUser.displayName}">
+                                                <f:if condition="{userImage}">
+                                                    <f:then>
+                                                        <f:format.htmlentitiesDecode>{userImage}</f:format.htmlentitiesDecode>
+                                                    </f:then>
+                                                    <f:else>
+                                                        <i class="fas fa-user-circle fa-6x" aria-hidden="true"></i>
+                                                    </f:else>
+                                                </f:if>
                                             </tbb:image>
                                         </dt>
                                         <dt class="post-author-info-main">
@@ -35,7 +43,7 @@
                                         </dt>
                                         <f:if condition="{post.author}">
                                             <dd class="post-author-info-posts">
-                                                <f:translate key="fe_users.postsCount.label" arguments="{0: post.author.postsCount}"/><br/>
+                                                <f:translate key="fe_users.postsCount.label" arguments="{0: '{post.author.createdPosts -> f:count()}'}"/><br/>
                                             </dd>
                                             <dd class="post-author-info-joined">
                                                 <f:translate key="post.author.crdate.label" arguments="{0: '{f:format.date(date: post.author.crdate, format: \'d.m.Y\')}'}" />
@@ -56,7 +64,7 @@
                             </f:if>
 
                             <div class="post-heading">
-                                <h3><f:link.action action="show" controller="Topic" arguments="{topic: post.topic, post: post}" pageUid="{settings.pid.forum}" section="post-{post.uid}">{post.topic.title}</f:link.action></h3>
+                                <h3><f:link.action action="show" controller="Topic" arguments="{topic: post.topic, post: post}" pageUid="{settings.pid.forum}" section="post-{post.uid}">{post.topic.title -> f:format.htmlentitiesDecode()}</f:link.action></h3>
                                 <f:format.date format="d.m.Y H:i">{post.crdate}</f:format.date>
                             </div>
 
@@ -66,7 +74,7 @@
                                 <div class="post-attachments">
                                     <f:for each="{post.attachments}" as="attachment">
                                         <f:link.action action="download" controller="Attachment" pageUid="{settings.pid.forum}" arguments="{attachment: attachment}">
-                                            <i class="fa fa-paperclip fa-fw" aria-hidden="true"></i> <f:translate key="post.attachment.download" arguments="{0: attachment.originalFileName}" />
+                                            <i class="fas fa-paperclip fa-fw" aria-hidden="true"></i> <f:translate key="post.attachment.download" arguments="{0: attachment.originalFileName}" />
                                         </f:link.action> <small>(<f:translate key="post.attachment.downloadCount" arguments="{0: attachment.downloadCount}" />)</small> <br>
                                     </f:for>
                                 </div>

@@ -31,7 +31,6 @@ namespace LumIT\Typo3bb\Domain\Model;
 use LumIT\Typo3bb\Domain\Repository\PostRepository;
 use LumIT\Typo3bb\Utility\FrontendUserUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
@@ -40,9 +39,8 @@ use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
  * Topics are user created.
  * It might be a poll.
  */
-class Topic extends AbstractEntity
+class Topic extends AbstractCachableModel
 {
-
     /**
      * title
      *
@@ -73,16 +71,10 @@ class Topic extends AbstractEntity
     protected $crdate = null;
 
     /**
-     * Number of posts, added for performance reasons
-     *
-     * @var int
-     */
-    protected $postsCount = 0;
-
-    /**
      * posts
      *
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\LumIT\Typo3bb\Domain\Model\Post>
+     * @cascade remove
      * @lazy
      */
     protected $posts = null;
@@ -123,24 +115,9 @@ class Topic extends AbstractEntity
      *
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\LumIT\Typo3bb\Domain\Model\Reader>
      * @lazy
-     * @TYPO3\CMS\Extbase\Annotation\ORM\Cascade("remove")
+     * @cascade remove
      */
     protected $readers = null;
-
-    /**
-     * Pointer to the latest post of the topic.
-     *
-     * @var \LumIT\Typo3bb\Domain\Model\Post
-     * @lazy
-     */
-    protected $latestPost = null;
-
-    /**
-     * The Crdate of the latest post. Enables sorting of topics without database join
-     *
-     * @var \DateTime
-     */
-    protected $latestPostCrdate = null;
 
     /**
      * The Board the Topic is in
@@ -153,6 +130,33 @@ class Topic extends AbstractEntity
      * @var int
      */
     protected $views = 0;
+
+    /**
+     * The Crdate of the latest post. Enables sorting of topics without database join
+     *
+     * @var \DateTime
+     */
+    protected $latestPostCrdate = null;
+
+
+    /********************************************
+     *                                          *
+     *                                          *
+     *             META INFORMATION             *
+     *  Information not persisted in database   *
+     *     collected at runtime and cached      *
+     *                                          *
+     *                                          *
+     ********************************************/
+
+
+    /**
+     * Pointer to the latest post of the topic.
+     *
+     * @var \LumIT\Typo3bb\Domain\Model\Post
+     * @lazy
+     */
+    protected $latestPost = null;
 
     /**
      * __construct
@@ -285,28 +289,6 @@ class Topic extends AbstractEntity
     }
 
     /**
-     * Returns the postsCount
-     *
-     * @return int $postsCount
-     */
-    public function getPostsCount()
-    {
-        return $this->postsCount;
-    }
-
-    /**
-     * Sets the postsCount
-     *
-     * @param int $postsCount
-     * @return void
-     */
-    public function setPostsCount($postsCount)
-    {
-        $this->postsCount = $postsCount;
-    }
-
-
-    /**
      * Adds a Post
      *
      * @param \LumIT\Typo3bb\Domain\Model\Post $post
@@ -315,25 +297,6 @@ class Topic extends AbstractEntity
     public function addPost(Post $post)
     {
         $this->posts->attach($post);
-
-        $post->setTopic($this);
-        $this->postsCount++;
-        // if there are no posts in this topic yet, set the needed data
-        if ($this->posts->count() == 0) {
-            $this->setCrdate($post->getCrdate());
-            $this->setAuthor($post->getAuthor());
-            $this->setAuthorName($post->getTrueAuthorName());
-        }
-        // if the added post is newer than the latestPost, change latestPost
-        if ($this->latestPost === null || $this->latestPost->getCrdate() < $post->getCrdate()) {
-            $this->setLatestPost($post);
-        }
-
-        $this->board->_increasePostsCount();
-        // if the added post is newer than the boards latestPost, change latestPost
-        if ($this->board->getLatestPost() === null || $this->board->getLatestPost()->getCrdate() < $post->getCrdate()) {
-            $this->board->setLatestPost($post);
-        }
     }
 
     /**
@@ -345,19 +308,6 @@ class Topic extends AbstractEntity
     public function removePost(Post $postToRemove)
     {
         $this->posts->detach($postToRemove);
-
-        $this->postsCount--;
-        if ($this->latestPost->getUid() == $postToRemove->getUid()) {
-            $postsArray = $this->posts->toArray();
-            if (count($postsArray) > 0) {
-                $this->setLatestPost(array_pop($postsArray));
-            }
-        }
-
-        $this->board->_increasePostsCount(-1);
-        if ($this->board->getLatestPost() === $postToRemove) {
-            $this->board->_resetLatestPost();
-        }
     }
 
     /**
@@ -580,30 +530,9 @@ class Topic extends AbstractEntity
         $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
         /** @var PostRepository $postRepository */
         $postRepository = $objectManager->get(PostRepository::class);
-        $unreadCount = $postRepository->findUnread($frontendUser, null, $this)->count();
+        $unreadCount = $postRepository->countUnread($frontendUser, null, $this);
+
         return $unreadCount == 0;
-    }
-
-    /**
-     * Returns the latestPost
-     *
-     * @return \LumIT\Typo3bb\Domain\Model\Post $latestPost
-     */
-    public function getLatestPost()
-    {
-        return $this->latestPost;
-    }
-
-    /**
-     * Sets the latestPost
-     *
-     * @param \LumIT\Typo3bb\Domain\Model\Post $latestPost
-     * @return void
-     */
-    public function setLatestPost($latestPost)
-    {
-        $this->latestPost = $latestPost;
-        $this->latestPostCrdate = $latestPost->getCrdate();
     }
 
     /**
@@ -673,5 +602,62 @@ class Topic extends AbstractEntity
     public function addView()
     {
         $this->views++;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getTstamp()
+    {
+        return $this->tstamp;
+    }
+
+    /**
+     * @param \DateTime $tstamp
+     */
+    public function setTstamp($tstamp)
+    {
+        $this->tstamp = $tstamp;
+    }
+
+
+    /******************************************************************************************************************/
+
+
+    /**
+     * Returns the latestPost
+     *
+     * @return \LumIT\Typo3bb\Domain\Model\Post $latestPost
+     */
+    public function getLatestPost()
+    {
+        if ($this->latestPost === null) {
+            $postRepository = GeneralUtility::makeInstance(ObjectManager::class)->get(PostRepository::class);
+            $this->latestPost = $postRepository->findLatestInTopic($this);
+        }
+        if (is_numeric($this->latestPost)) {
+            $postRepository = GeneralUtility::makeInstance(ObjectManager::class)->get(PostRepository::class);
+            $this->latestPost = $postRepository->findByUid($this->latestPost);
+        }
+        return $this->latestPost;
+    }
+
+
+
+    protected function _getCacheableAttributes()
+    {
+        $latestPostUid = $this->getLatestPost() ? $this->getLatestPost()->getUid() : 0;
+
+        $cachedAttributes = [
+            'latestPost' => $latestPostUid
+        ];
+
+        return $cachedAttributes;
+    }
+
+    public function flushCache()
+    {
+        parent::flushCache();
+        $this->getBoard()->flushCache();
     }
 }

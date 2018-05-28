@@ -30,18 +30,16 @@ class TopicFactory
      */
     public static function createTopic($board, $topic, $post, $poll = null, $attachments = [])
     {
-        $board->addTopic($topic);
+        $topic->setBoard($board);
         if (!empty($poll)) {
             $poll->getEndtime()->add(new \DateInterval('PT23H59M'));
             $topic->setPoll($poll);
         }
+        $topic->setLatestPostCrdate($post->getCrdate());
 
         PostFactory::createPost($topic, $post, $attachments);
 
         $topic->setAuthorName($post->getTrueAuthorName());
-        if (!empty($post->getAuthor())) {
-            $topic->setAuthor($post->getAuthor());
-            $topic->getAuthor()->addCreatedTopic($topic);
-        }
+        $topic->setAuthor($post->getAuthor());
     }
 }
