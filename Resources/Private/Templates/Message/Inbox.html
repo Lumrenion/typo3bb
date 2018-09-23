@@ -8,13 +8,13 @@
         <div class="profile-header">
             <div class="pull-right">
                 <f:link.action action="outbox" class="btn btn-default" title="{f:translate(key: 'messages.header.action.outbox')}" additionalAttributes="{aria-label: '{f:translate(key: \'messages.header.action.outbox\')}'}">
-                    <span class="fa-stack">
-                        <i class="fa fa-inbox fa-fw fa-stack-2x"></i>
-                        <i class="fa fa-arrow-circle-up fa-stack-1x"></i>
+                    <span class="fa-layers fa-2x" aria-hidden="true">
+                        <i class="fas fa-inbox fa-fw"></i>
+                        <i class="fas fa-arrow-circle-up" data-fa-transform="shrink-9 right-2 down-0.5"></i>
                     </span>
                 </f:link.action>
                 <f:link.action action="new" class="btn btn-default" title="{f:translate(key: 'messages.header.action.new')}" additionalAttributes="{aria-label: '{f:translate(key: \'messages.header.action.new\')}'}">
-                    <i class="fa fa-envelope-o fa-2x"></i>
+                    <i class="far fa-envelope fa-2x"></i>
                 </f:link.action>
             </div>
             <h1><f:translate key="messages.inbox.headline" /></h1>

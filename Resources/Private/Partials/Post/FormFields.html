@@ -7,6 +7,7 @@
 
         <div class="form-group">
             <label for="topic-author-name"><f:translate key="formLabels.post.authorName" /></label>
+            <f:render partial="FieldError" section="Main" arguments="{for: 'newPost.authorName'}" />
             <f:security.ifAuthenticated>
                 <f:then>
                     <f:form.textfield value="{f:if(condition: post, then: post.authorName, else: frontendUser.displayName)}" class="form-control" id="topic-author-name" additionalAttributes="{disabled: 'disabled'}" />
@@ -19,6 +20,7 @@
 
         <div class="form-group">
             <label for="post-text"><f:translate key="formLabels.post.text"/></label>
+            <f:render partial="FieldError" section="Main" arguments="{for: 'newPost.text'}" />
             <f:form.textarea property="text" value="{quotedText}" class="form-control typo3bb-rte-editor" id="post-text" rows="10" />
         </div>
 
@@ -30,6 +32,7 @@
             </f:for>
             <div class="form-group">
                 <label for="post-new-attachments"><f:translate key="formLabels.post.attachment.add" /></label>
+                <f:render partial="FieldError" section="Main" arguments="{for: 'newPost.attachments'}" />
                 <f:form.upload id="post-new-attachments" name="attachments" multiple="true" class="form-control" />
             </div>
         </div>

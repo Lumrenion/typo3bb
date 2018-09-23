@@ -713,7 +713,10 @@ class Board extends AbstractCachableModel
     {
         if ($this->latestPostCrdate === null) {
             $latestPost = $this->getLatestPost();
-            $this->latestPostCrdate = $latestPost ? $latestPost->getCrdate() : 0;
+            $this->latestPostCrdate = $latestPost ? $latestPost->getCrdate() : (new \DateTime())->setTimestamp(0);
+        }
+        if (is_numeric($this->latestPostCrdate)) {
+            $this->latestPostCrdate = (new \DateTime())->setTimestamp($this->latestPostCrdate);
         }
         return $this->latestPostCrdate;
     }
@@ -725,7 +728,7 @@ class Board extends AbstractCachableModel
     {
         if ($this->viewableLatestPost === null) {
             $boardWithLatestPost = $this->_getBoardWithTrueLatestPost($this);
-            $this->viewableLatestPost = $boardWithLatestPost->getLatestPost();
+            $this->viewableLatestPost = $boardWithLatestPost ? $boardWithLatestPost->getLatestPost() : 0;
         }
         if (is_numeric($this->viewableLatestPost)) {
             $postRepository = GeneralUtility::makeInstance(ObjectManager::class)->get(PostRepository::class);
@@ -823,7 +826,7 @@ class Board extends AbstractCachableModel
     {
         $latestPost = $this->getLatestPost();
         $latestPostUid = $latestPost ? $latestPost->getUid() : 0;
-        $latestPostCrdate = $latestPost ? $latestPost->getCrdate() : 0;
+        $latestPostCrdate = $latestPost ? $latestPost->getCrdate()->getTimestamp() : 0;
         $postsCount = $this->getPostsCount();
 
         $cachedAttributes = [

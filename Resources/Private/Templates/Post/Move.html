@@ -9,17 +9,21 @@
 
             <h1><f:translate key="topic.move.headline" /></h1>
             <p><f:translate key="post.move.destinationTopic.label" />:</p>
-            <f:form action="executeMove" controller="Post" arguments="{post: post}">
-                <f:for each="{topics}" as="rootline" key="uid">
-                    <div class="radio">
-                        <label>
-                            <f:form.radio name="destination" value="{uid}" checked="{post.topic.uid} == {uid}" />
-                            <f:format.raw>{rootline}</f:format.raw>
-                        </label>
+            <div class="panel-group" id="forum-categories" role="tablist" aria-multiselectable="true">
+                <f:groupedFor each="{boards}" groupBy="forumCategory" groupKey="forumCategory" as="categoryBoards">
+                    <div class="panel panel-default">
+                        <div class="panel-heading" role="tab" data-toggle="collapse" data-target="#forum-category-{forumCategory.uid}"
+                             data-parent="#forum-categories" aria-controls="forum-category-{forumCategory.uid}">
+                            <f:format.htmlentitiesDecode>{forumCategory.title}</f:format.htmlentitiesDecode>
+                        </div>
+                        <div id="forum-category-{forumCategory.uid}" class="panel-collapse collapse" role="tabpanel">
+                            <div class="panel-body">
+                                <f:render partial="Post/Move/ListBoards" arguments="{post: post, boards: categoryBoards}" />
+                            </div>
+                        </div>
                     </div>
-                </f:for>
-                <f:form.submit value="{f:translate(key: 'post.move.submit')}" class="btn btn-default" />
-            </f:form>
+                </f:groupedFor>
+            </div>
         </div>
     </f:section>
 </div>

@@ -48,7 +48,7 @@ class PaginatePostsController extends PaginateBaseController
 
     public function initializeIndexAction()
     {
-        if (!empty($this->configuration['currentPost'])) {
+        if (!empty($this->configuration['currentPost']) && !$this->request->hasArgument('currentPage')) {
             $itemsPerPage = (int)$this->configuration['itemsPerPage'];
             $positionOfPost = $this->objects->getPosition($this->configuration['currentPost']);
             $this->currentPage = (int)(ceil($positionOfPost / $itemsPerPage));

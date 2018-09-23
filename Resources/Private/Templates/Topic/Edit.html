@@ -10,8 +10,6 @@
 
     <h1><f:translate key="topic.edit.headline.label" arguments="{0: topic.title}" /></h1>
 
-    <f:render partial="FormErrors" arguments="{object:Topic}" />
-
     <f:form action="update" enctype="multipart/form-data" name="topic" object="{topic}" >
         <f:render partial="Topic/FormFields" arguments="{_all}" section="Content" />
         <f:form.submit class="btn btn-default" value="{f:translate(key: 'topic.edit.submit.label')}" />

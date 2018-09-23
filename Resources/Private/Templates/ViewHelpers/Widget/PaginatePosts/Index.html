@@ -21,10 +21,10 @@
                 <li class="previous">
                     <f:if condition="{pagination.previousPage} > 1">
                         <f:then>
-                            <f:widget.link arguments="{currentPage: pagination.previousPage}" addQueryStringMethod="{configuration.addQueryStringMethod}" section="{configuration.section}" additionalAttributes="{aria-label: '{f:translate(key.widget.pagination.previous)}'}">&laquo;</f:widget.link>
+                            <f:widget.link arguments="{currentPage: pagination.previousPage}" addQueryStringMethod="{configuration.addQueryStringMethod}" section="{configuration.section}" additionalAttributes="{aria-label: '{f:translate(key: \'widget.pagination.previous\')}'}">&laquo;</f:widget.link>
                         </f:then>
                         <f:else>
-                            <f:widget.link addQueryStringMethod="{configuration.addQueryStringMethod}" section="{configuration.section}" additionalAttributes="{aria-label: '{f:translate(key.widget.pagination.previous)}'}">&laquo;</f:widget.link>
+                            <f:widget.link addQueryStringMethod="{configuration.addQueryStringMethod}" section="{configuration.section}" additionalAttributes="{aria-label: '{f:translate(key: \'widget.pagination.previous\')}'}">&laquo;</f:widget.link>
                         </f:else>
                     </f:if>
                 </li>
@@ -75,7 +75,7 @@
         <f:if condition="{pagination.nextPage}">
             <f:then>
                 <li class="next">
-                    <f:widget.link arguments="{currentPage: pagination.nextPage}" addQueryStringMethod="{configuration.addQueryStringMethod}" section="{configuration.section}" additionalAttributes="{aria-label: '{f:translate(key.widget.pagination.next)}'}">&raquo;</f:widget.link>
+                    <f:widget.link arguments="{currentPage: pagination.nextPage}" addQueryStringMethod="{configuration.addQueryStringMethod}" section="{configuration.section}" additionalAttributes="{aria-label: '{f:translate(key: \'widget.pagination.next\')}'}">&raquo;</f:widget.link>
                 </li>
             </f:then>
             <f:else>

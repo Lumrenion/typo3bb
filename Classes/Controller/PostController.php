@@ -117,7 +117,7 @@ class PostController extends AbstractController
             ['post' => $newPost, 'controllerContext' => $this->controllerContext]);
 
         $newPost->getTopic()->flushCache();
-        $this->forward('showNewPost', 'Topic', null, ['topic' => $newPost->getTopic()]);
+        $this->redirect('show', 'Topic', null, ['topic' => $newPost->getTopic(), 'post' => $newPost]);
     }
 
     /**

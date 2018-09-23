@@ -83,9 +83,20 @@ class ProcessBoardsHook
     public function processDatamap_afterDatabaseOperations($status, $table, $id, array $fieldArray, DataHandler &$pObj)
     {
         if ($table == 'tx_typo3bb_domain_model_board') {
-            /** @var Board $board */
-            $board = GeneralUtility::makeInstance(ObjectManager::class)->get(BoardRepository::class)->findByUid($id);
-            $board->flushCache();
+            $board = null;
+
+            $boardRepository = GeneralUtility::makeInstance(ObjectManager::class)->get(BoardRepository::class);
+            if ($status === 'new') {
+                if (!empty($fieldArray['parent_board'])) {
+                    $board = $boardRepository->findByUid($fieldArray['parent_board']);
+                }
+            } else {
+                $board = $boardRepository->findByUid($id);
+            }
+
+            if ($board instanceof Board) {
+                $board->flushCache();
+            }
         }
     }
 }

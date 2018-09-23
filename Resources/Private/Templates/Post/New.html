@@ -9,8 +9,6 @@
     <tbb:breadcrumb rootline="{topic.rootline}" />
     <h1><f:translate key="post.new.headline.label" arguments="{0: topic.title}" /></h1>
 
-    <f:render partial="FormErrors" arguments="{object:Post}" />
-
     <f:form action="create" enctype="multipart/form-data" name="newPost" object="{newPost}">
         <f:render partial="Post/FormFields" section="Content" arguments="{_all}" />
         <f:form.submit class="btn btn-default" value="{f:translate(key: 'post.new.submit.label')}" />

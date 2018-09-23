@@ -10,15 +10,15 @@
         <div class="profile-header">
             <div class="pull-right">
                 <f:link.action action="inbox" class="btn btn-default" title="{f:translate(key: 'messages.header.action.inbox')}" additionalAttributes="{aria-label: '{f:translate(key: \'messages.header.action.inbox\')}'}">
-                    <span class="fa-stack">
-                        <i class="fa fa-inbox fa-stack-2x"></i>
-                        <i class="fa fa-arrow-circle-down fa-stack-1x"></i>
+                    <span class="fa-layers fa-2x" aria-hidden="true">
+                        <i class="fas fa-inbox fa-fw"></i>
+                        <i class="fas fa-arrow-circle-down" data-fa-transform="shrink-9 right-2 down-0.5"></i>
                     </span>
                 </f:link.action>
                 <f:link.action action="outbox" class="btn btn-default" title="{f:translate(key: 'messages.header.action.outbox')}" additionalAttributes="{aria-label: '{f:translate(key: \'messages.header.action.outbox\')}'}">
-                    <span class="fa-stack">
-                        <i class="fa fa-inbox fa-fw fa-stack-2x"></i>
-                        <i class="fa fa-arrow-circle-up fa-stack-1x"></i>
+                    <span class="fa-layers fa-2x" aria-hidden="true">
+                        <i class="fas fa-inbox fa-fw"></i>
+                        <i class="fas fa-arrow-circle-up" data-fa-transform="shrink-9 right-2 down-0.5"></i>
                     </span>
                 </f:link.action>
             </div>

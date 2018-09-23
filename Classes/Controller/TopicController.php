@@ -110,20 +110,17 @@ class TopicController extends AbstractController
      */
     public function showNewPostAction(Topic $topic)
     {
+        /** @var Post $post */
         $post = null;
-        if (!is_null($this->frontendUser)) {
-            $reader = $this->readerRepository->findByTopicAndFrontendUser($topic, $this->frontendUser);
-            if (!empty($reader)) {
-                $post = $reader->getPost();
-                $nextPost = $this->postRepository->findNext($post);
-                if ($nextPost instanceof Post) {
-                    $post = $nextPost;
-                }
-            }
+        if ($this->frontendUser !== null) {
+            $posts = $this->postRepository->findUnread($this->frontendUser, null, $topic);
+            $post = $posts[0] ?? null;
         }
+
         if (is_null($post) || $post->getTopic()->getUid() != $topic->getUid()) {
             $post = $topic->getLatestPost();
         }
+
         $this->redirectToUri(UrlUtility::getPostUrl($this->uriBuilder, $post, $topic));
     }
 
@@ -152,6 +149,7 @@ class TopicController extends AbstractController
 
         $firstPost = $this->request->getArgument('post');
         CreationUtility::preparePostForValidation($this->arguments->getArgument('post'), $firstPost);
+        $firstPost['text'] = RteUtility::sanitizeHtml($firstPost['text']);
         $this->request->setArgument('post', $firstPost);
 
         $this->request->setArgument('topic', $newTopic);
@@ -197,12 +195,14 @@ class TopicController extends AbstractController
     public function editAction(Topic $topic)
     {
         SecurityUtility::assertAccessPermission('Topic.edit', $topic);
-        $this->view->assignMultiple(['topic' => $topic, 'board' => $topic->getBoard(), 'poll' => $topic->getPoll()]);
+        $firstPost = $topic->getPosts()->toArray()[0];
+        $this->view->assignMultiple(['topic' => $topic, 'post' => $firstPost, 'board' => $topic->getBoard(), 'poll' => $topic->getPoll()]);
     }
 
     public function initializeUpdateAction()
     {
         $topic = $this->request->getArgument('topic');
+
         CreationUtility::prepareTopicForValidation($this->arguments->getArgument('topic'), $topic);
 
         if ($this->request->hasArgument('poll')) {
@@ -213,6 +213,10 @@ class TopicController extends AbstractController
             CreationUtility::preparePollForValidation($this->arguments->getArgument('poll'), $topic['poll']);
         }
 
+        $firstPost = $this->request->getArgument('post');
+        $firstPost['text'] = RteUtility::sanitizeHtml($firstPost['text']);
+        $this->request->setArgument('post', $firstPost);
+
         $this->request->setArgument('topic', $topic);
     }
 
@@ -220,24 +224,24 @@ class TopicController extends AbstractController
      * action update
      *
      * @param \LumIT\Typo3bb\Domain\Model\Topic $topic
+     * @param \LumIT\Typo3bb\Domain\Model\Post $post
      * @param \LumIT\Typo3bb\Domain\Model\Poll $poll
      * @param array $attachments
      * @return void
      */
-    public function updateAction(Topic $topic, $poll = null, $attachments = [])
+    public function updateAction(Topic $topic, $post, $poll = null, $attachments = [])
     {
         SecurityUtility::assertAccessPermission('Topic.edit', $topic);
         if ($topic->_isDirty('sticky')) {
             SecurityUtility::assertAccessPermission('Topic.pin', $topic);
         }
-        /** @var Post $firstPost */
-        $firstPost = &$topic->getPosts()->toArray()[0];
-        if ($firstPost->_isDirty()) {
-            $firstPost->setText(RteUtility::sanitizeHtml($firstPost->getText()));
-            $firstPost->setEditor($this->frontendUser);
+
+        if ($post->_isDirty()) {
+            $post->setEditor($this->frontendUser);
+            $this->postRepository->update($post);
         }
         if (!empty($attachments)) {
-            PostFactory::processAttachments($firstPost, $attachments);
+            PostFactory::processAttachments($post, $attachments);
         }
 
         if (!empty($poll)) {

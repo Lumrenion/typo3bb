@@ -9,8 +9,6 @@
 
         <h1><f:translate key="topic.new.headline.label" /></h1>
 
-        <f:render partial="FormErrors" arguments="{object:Topic}" />
-
         <f:form action="create" enctype="multipart/form-data" name="topic" object="{topic}">
             <f:render partial="Topic/CreateFormFields" section="Content" arguments="{_all}" />
             <f:form.submit class="btn btn-default" value="{f:translate(key: 'topic.new.submit.label')}" />

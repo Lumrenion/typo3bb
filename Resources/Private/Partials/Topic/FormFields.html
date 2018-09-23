@@ -6,29 +6,34 @@
 
     <div class="form-group">
         <label for="topic-author-name"><f:translate key="formLabels.post.authorName" /></label>
+        <f:render partial="FieldError" section="Main" arguments="{for: 'topic.authorName'}" />
         <f:form.textfield value="{topic.authorName}" class="form-control" id="topic-author-name" disabled="true" />
     </div>
     <div class="form-group">
         <label for="topic-title"><f:translate key="formLabels.topic.title"/> <span class="required">(required)</span></label>
+        <f:render partial="FieldError" section="Main" arguments="{for: 'topic.title'}" />
         <f:form.textfield property="title" class="form-control" id="topic-title" />
     </div>
 
     <hr>
 
     <div class="form-group">
+        <f:form.hidden name="post[__identity]" value="{post.uid}" />
         <label for="post-text"><f:translate key="formLabels.post.text"/></label>
-        <f:form.textarea property="posts.0.text" class="form-control typo3bb-rte-editor" id="post-text" rows="10" />
+        <f:render partial="FieldError" section="Main" arguments="{for: 'post.text'}" />
+        <f:form.textarea name="post[text]" value="{post.text}" class="form-control typo3bb-rte-editor" id="post-text" rows="10" />
     </div>
 
 
     <div class="attachments">
-        <f:for each="{topic.posts.0.attachments}" as="attachment">
+        <f:for each="{post.attachments}" as="attachment">
             <f:link.action action="remove" controller="Attachment" arguments="{attachment: attachment, returnTo: 'editTopic'}">
                 <f:translate key="formLabels.post.attachment.remove" arguments="{0: attachment.originalFileName}" />
             </f:link.action><br>
         </f:for>
         <div class="form-group">
             <label for="post-new-attachments"><f:translate key="formLabels.post.attachment.add" /></label>
+            <f:render partial="FieldError" section="Main" arguments="{for: 'attachments'}" />
             <f:form.upload id="post-new-attachments" name="attachments" multiple="true" class="form-control" />
         </div>
     </div>

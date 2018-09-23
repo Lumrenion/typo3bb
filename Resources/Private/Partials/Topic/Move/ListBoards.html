@@ -10,14 +10,14 @@
              data-parent="" aria-controls="board-{board.uid}">
             <f:if condition="{board} == {topic.board}">
                 <f:then>
-                    <span class="btn btn-default btn-sm disabled"><i class="fa fa-share fa-lg" aria-hidden="true"></i></span>
+                    <span class="btn btn-default btn-sm disabled"><i class="fas fa-share fa-lg" aria-hidden="true"></i></span>
                 </f:then>
                 <f:else>
                     <f:link.action action="executeMove" controller="Topic" arguments="{topic: topic, destinationBoard: board}"
                                    title="{f:translate(key: 'topic.join.step1.joinLabel', arguments: '{0: topic.title, 1: topic2.title}')}"
                                    additionalAttributes="{aria-label: '{f:translate(key: \'topic.join.step1.joinLabel\', arguments: \'{0: topic.title, 1: topic2.title}\')}'}"
                                    class="btn btn-default btn-sm">
-                        <i class="fa fa-share fa-lg" aria-hidden="true"></i>
+                        <i class="fas fa-share fa-lg" aria-hidden="true"></i>
                     </f:link.action>
                 </f:else>
             </f:if>

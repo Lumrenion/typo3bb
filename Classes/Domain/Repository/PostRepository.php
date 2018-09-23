@@ -161,11 +161,13 @@ class PostRepository extends AbstractRepository
         }
         $queryBuilder->where(...$whereClauses);
 
+        $queryBuilder->orderBy('post.crdate', 'ASC');
+
         if ($returnQueryBuilder) {
             return $queryBuilder;
         }
 
-        return $queryBuilder->execute()->fetchAll();
+        $postsArray = $queryBuilder->execute()->fetchAll();
         $dataMapper = $this->objectManager->get(DataMapper::class);
         return $dataMapper->map($this->objectType, $postsArray);
     }

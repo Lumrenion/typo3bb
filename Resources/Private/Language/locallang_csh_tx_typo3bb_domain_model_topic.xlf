@@ -36,9 +36,6 @@
             <trans-unit id="readers.description">
                 <source>The users that have read this topic</source>
             </trans-unit>
-            <trans-unit id="latest_post.description">
-                <source>Pointer to the latest post of the topic.</source>
-            </trans-unit>
         </body>
     </file>
 </xliff>

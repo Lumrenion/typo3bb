@@ -12,25 +12,25 @@
         </div>
         <div id="board-{board.uid}" class="panel-collapse collapse" role="tabpanel">
             <div class="panel-body">
-                <f:render partial="Topic/Join/ListBoards" arguments="{topic: topic, boards: board.allowedSubBoards}" />
+                <f:render partial="Post/Move/ListBoards" arguments="{post: post, boards: board.allowedSubBoards}" />
                 <f:if condition="{board.allowedSubBoards}"><br><br></f:if>
 
-                <f:for each="{board.topics}" as="topic2">
-                    <f:if condition="{topic.uid} == {topic2.uid}">
+                <f:for each="{board.topics}" as="destinationTopic">
+                    <f:if condition="{post.topic.uid} == {destinationTopic.uid}">
                         <f:then>
-                            <span class="btn btn-default btn-sm disabled"><i class="fas fa-share-alt fa-lg fa-rotate-180" aria-hidden="true"></i></span>
+                            <span class="btn btn-default btn-sm disabled"><i class="fas fa-paste fa-lg" aria-hidden="true"></i></span>
                         </f:then>
                         <f:else>
-                            <f:link.action action="join" controller="Topic" arguments="{topic: topic, topic2: topic2}"
-                                           title="{f:translate(key: 'topic.join.step1.joinLabel', arguments: '{0: topic.title, 1: topic2.title}')}"
-                                           additionalAttributes="{aria-label: '{f:translate(key: \'topic.join.step1.joinLabel\', arguments: \'{0: topic.title, 1: topic2.title}\')}'}"
+                            <f:link.action action="executeMove" controller="Post" arguments="{post: post, destination: destinationTopic}"
+                                           title="{f:translate(key: 'post.move.submit')}"
+                                           additionalAttributes="{aria-label: '{f:translate(key: \'post.move.submit\')}'}"
                                            class="btn btn-default btn-sm">
-                                <i class="fas fa-share-alt fa-lg fa-rotate-180" aria-hidden="true"></i>
+                                <i class="fas fa-paste fa-lg" aria-hidden="true"></i>
                             </f:link.action>
                         </f:else>
                     </f:if>
-                    <f:link.action action="show" controller="Topic" arguments="{topic: topic2}" target="_blank">
-                        <f:format.htmlentitiesDecode>{topic2.title}</f:format.htmlentitiesDecode>
+                    <f:link.action action="show" controller="Topic" arguments="{topic: destinationTopic}" target="_blank">
+                        <f:format.htmlentitiesDecode>{destinationTopic.title}</f:format.htmlentitiesDecode>
                     </f:link.action><br>
                 </f:for>
             </div>

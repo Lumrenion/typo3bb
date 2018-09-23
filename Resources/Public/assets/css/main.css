@@ -108,7 +108,7 @@
         margin-right: -15px;
         padding: 15px 0 15px 0; } }
     .forum-topic-post-wrapper .forum-topic-post .post-author-info-wrapper dl.post-author-info {
-      padding: 15px;
+      padding: 5px;
       margin-bottom: 0;
       text-align: left;
       border: 0 solid #CCCCCC;
@@ -141,9 +141,10 @@
             float: none;
             margin-right: 0; } }
         .forum-topic-post-wrapper .forum-topic-post .post-author-info-wrapper dl.post-author-info dt.author-avatar-container img {
-          max-width: 40px;
-          max-height: 40px;
-          border-radius: 1000px; }
+          max-width: 75px;
+          max-height: 75px;
+          width: auto;
+          height: auto; }
           @media screen and (min-width: 992px) {
             .forum-topic-post-wrapper .forum-topic-post .post-author-info-wrapper dl.post-author-info dt.author-avatar-container img {
               margin-bottom: 8px;
