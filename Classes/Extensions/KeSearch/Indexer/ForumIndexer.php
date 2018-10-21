@@ -1,6 +1,6 @@
 <?php
 
-namespace LumIT\Typo3bb\Indexer;
+namespace LumIT\Typo3bb\Extensions\KeSearch\Indexer;
 
 /***************************************************************
  * Copyright notice

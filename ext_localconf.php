@@ -105,8 +105,8 @@ $GLOBALS ['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['pro
 $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/class.tslib_fe.php']['checkDataSubmission'][$_EXTKEY] = \LumIT\Typo3bb\Hook\ProcessFrontendUsersHook::class;
 
 // Hook for registering ke_search indexer for forum posts
-$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['registerIndexerConfiguration'][] = \LumIT\Typo3bb\Indexer\ForumIndexer::class;
-$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['customIndexer'][] = \LumIT\Typo3bb\Indexer\ForumIndexer::class;
+$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['registerIndexerConfiguration'][] = \LumIT\Typo3bb\Extensions\KeSearch\Indexer\ForumIndexer::class;
+$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['customIndexer'][] = \LumIT\Typo3bb\Extensions\KeSearch\Indexer\ForumIndexer::class;
 
 /******************************************
  *
