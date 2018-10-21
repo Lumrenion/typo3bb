@@ -90,6 +90,7 @@ class PostController extends AbstractController
 
     public function initializeCreateAction()
     {
+        // TODO if a new post was created while creating this post in the same topic, return to newAction with a notice
         $newPost = $this->request->getArgument('newPost');
 
         CreationUtility::preparePostForValidation($this->arguments->getArgument('newPost'), $newPost);

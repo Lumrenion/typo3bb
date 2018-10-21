@@ -147,19 +147,6 @@ if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('sr_feuser_regi
         \LumIT\Typo3bb\Extensions\SrFeuserRegister\Hook\RegistrationProcessHook::class;
 }
 
-if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('sf_register')) {
-    /** Hook before frontend users are saved (in frontend) to sanitize HTML */
-    $signalSlotDispatcher->connect(
-        \Evoweb\SfRegister\Controller\FeuserEditController::class, 'saveAction',
-        \LumIT\Typo3bb\Slot\FrontendUserSlot::class, 'sanitizeHtmlSignatureBeforeSave'
-    );
-    /** Hook when frontend users are added - increase today's registrations by 1 */
-    $signalSlotDispatcher->connect(
-        \Evoweb\SfRegister\Controller\FeuserCreateController::class, 'saveAction',
-        \LumIT\Typo3bb\Utility\StatisticUtility::class, 'addRegister'
-    );
-}
-
 // TYPO3 Queries lack the ability of counting queries with a statement set
 $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][\TYPO3\CMS\Extbase\Persistence\Generic\Storage\Typo3DbBackend::class] = [
     'className' => \LumIT\Typo3bb\Xclass\Extbase\Persistence\Generic\Storage\Typo3DbBackend::class,

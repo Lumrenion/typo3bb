@@ -28,7 +28,6 @@ return [
     'columns' => [
         'crdate' => [
             'exclude' => 1,
-            'label' => 'LLL:EXT:lang/locallang_general.xml:LGL.crdate',
             'config' => [
                 'type' => 'passthrough'
             ],
@@ -49,7 +48,8 @@ return [
                 'type' => 'text',
                 'cols' => 40,
                 'rows' => 15,
-                'eval' => 'trim,required'
+                'eval' => 'trim,required',
+                'default' => ''
             ]
         ],
         'sender' => [

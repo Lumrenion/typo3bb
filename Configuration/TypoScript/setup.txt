@@ -162,5 +162,4 @@ plugin.tx_typo3bb {
 }
 
 <INCLUDE_TYPOSCRIPT: source="FILE:EXT:typo3bb/Configuration/TypoScript/Extensions/extbase.ts">
-<INCLUDE_TYPOSCRIPT: source="FILE:EXT:typo3bb/Configuration/TypoScript/Extensions/sf_register.ts">
 <INCLUDE_TYPOSCRIPT: source="FILE:EXT:typo3bb/Configuration/TypoScript/Extensions/sr_feuser_register.ts">

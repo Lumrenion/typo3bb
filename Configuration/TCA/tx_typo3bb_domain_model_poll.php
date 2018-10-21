@@ -29,7 +29,7 @@ return [
 
         'endtime' => [
             'exclude' => 1,
-            'label' => 'LLL:EXT:lang/locallang_general.xlf:LGL.endtime',
+            'label' => 'LLL:EXT:lang/Resources/Private/Language/locallang_general.xlf:LGL.endtime',
             'config' => [
                 'type' => 'input',
                 'renderType' => 'inputDateTime',

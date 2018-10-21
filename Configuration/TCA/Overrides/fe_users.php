@@ -13,7 +13,8 @@ $tmp_typo3bb_columns = [
         'config' => [
             'type' => 'text',
             'size' => 30,
-            'eval' => 'trim'
+            'eval' => 'trim',
+            'default' => ''
         ]
     ],
     
@@ -23,7 +24,8 @@ $tmp_typo3bb_columns = [
         'config' => [
             'type' => 'text',
             'size' => 30,
-            'eval' => 'trim'
+            'eval' => 'trim',
+            'default' => ''
         ],
     ],
     'created_topics' => [

@@ -37,7 +37,7 @@ return [
                 'file',
                 [
                     'appearance' => [
-                        'createNewRelationLinkTitle' => 'LLL:EXT:cms/locallang_ttc.xlf:media.addFileReference'
+                        'createNewRelationLinkTitle' => 'LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:media.addFileReference'
                     ],
                     'overrideChildTca' => [
                         'types' => [

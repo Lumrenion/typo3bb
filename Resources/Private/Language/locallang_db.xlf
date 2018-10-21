@@ -232,6 +232,13 @@
             <trans-unit id="tx_typo3bb_domain_model_message.sender">
                 <source>Sender</source>
             </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_message.receivers">
+                <source>Receivers</source>
+            </trans-unit>
+
+            <trans-unit id="tx_typo3bb_domain_model_statistic">
+                <source>TYPO3bb Statistics</source>
+            </trans-unit>
 
             <trans-unit id="tx_typo3bb_domain_model_frontendusergroup.global_moderator_group">
                 <source>Global Moderator Group</source>
