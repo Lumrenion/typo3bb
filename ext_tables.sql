@@ -23,7 +23,9 @@ CREATE TABLE tx_typo3bb_domain_model_forumcategory (
 
     PRIMARY KEY (uid),
     KEY parent (pid),
-    KEY language (l10n_parent,sys_language_uid)
+    KEY language (l10n_parent,sys_language_uid),
+    KEY deleted (deleted),
+    KEY hidden (hidden)
 
 );
 
@@ -46,7 +48,6 @@ CREATE TABLE tx_typo3bb_domain_model_board (
     moderator_groups varchar(255) DEFAULT '' NOT NULL,
     parent_board int(11) unsigned DEFAULT '0',
     forum_category int(11) unsigned DEFAULT '0',
-    latest_post_crdate int(11) unsigned DEFAULT NULL,
     subscribers int(11) unsigned DEFAULT '0' NOT NULL,
 
     tx_kesearch_index tinyint(4) unsigned DEFAULT '1' NOT NULL,
@@ -65,7 +66,11 @@ CREATE TABLE tx_typo3bb_domain_model_board (
 
     PRIMARY KEY (uid),
     KEY parent (pid),
-    KEY language (l10n_parent,sys_language_uid)
+    KEY parent_board (parent_board),
+    KEY forum_category(forum_category),
+    KEY language (l10n_parent,sys_language_uid),
+    KEY deleted (deleted),
+    KEY hidden (hidden)
 
 );
 
@@ -80,7 +85,6 @@ CREATE TABLE tx_typo3bb_domain_model_topic (
     title varchar(255) DEFAULT '' NOT NULL,
     sticky tinyint(1) unsigned DEFAULT '0' NOT NULL,
     closed tinyint(1) unsigned DEFAULT '0' NOT NULL,
-    latest_post_crdate int(11) unsigned DEFAULT '0' NOT NULL,
     posts int(11) unsigned DEFAULT '0' NOT NULL,
     poll int(11) unsigned DEFAULT '0',
     author int(11) unsigned DEFAULT '0',
@@ -94,13 +98,12 @@ CREATE TABLE tx_typo3bb_domain_model_topic (
     crdate int(11) unsigned DEFAULT '0' NOT NULL,
     cruser_id int(11) unsigned DEFAULT '0' NOT NULL,
     deleted tinyint(4) unsigned DEFAULT '0' NOT NULL,
-    hidden tinyint(4) unsigned DEFAULT '0' NOT NULL,
-    starttime int(11) unsigned DEFAULT '0' NOT NULL,
-    endtime int(11) unsigned DEFAULT '0' NOT NULL,
 
     PRIMARY KEY (uid),
-    KEY parent (pid)
-
+    KEY parent (pid),
+    KEY board (board),
+    KEY deleted (deleted),
+    KEY author (author)
 );
 
 #
@@ -127,7 +130,11 @@ CREATE TABLE tx_typo3bb_domain_model_post (
     deleted tinyint(4) unsigned DEFAULT '0' NOT NULL,
 
     PRIMARY KEY (uid),
-    KEY parent (pid)
+    KEY parent (pid),
+    KEY topic (topic),
+    KEY deleted (deleted),
+    KEY author (author),
+    KEY editor (editor)
 
 );
 
@@ -174,7 +181,8 @@ CREATE TABLE tx_typo3bb_domain_model_pollchoice (
     cruser_id int(11) unsigned DEFAULT '0' NOT NULL,
 
     PRIMARY KEY (uid),
-    KEY parent (pid)
+    KEY parent (pid),
+    KEY poll (poll)
 
 );
 
@@ -221,7 +229,10 @@ CREATE TABLE tx_typo3bb_domain_model_reader (
 
     PRIMARY KEY (uid),
     KEY uid_local (user),
-    KEY uid_foreign (topic)
+    KEY uid_foreign (topic),
+    KEY post (post),
+    KEY `user` (user),
+    KEY topic (topic)
 );
 
 #
@@ -280,7 +291,8 @@ CREATE TABLE tx_typo3bb_domain_model_message (
     cruser_id int(11) unsigned DEFAULT '0' NOT NULL,
 
     PRIMARY KEY (uid),
-    KEY parent (pid)
+    KEY parent (pid),
+    KEY sender (sender)
 );
 
 #
@@ -298,7 +310,8 @@ CREATE TABLE tx_typo3bb_domain_model_messageparticipant (
     deleted tinyint(1) unsigned DEFAULT '0' NOT NULL,
 
     PRIMARY KEY (uid),
-    KEY parent (pid)
+    KEY parent (pid),
+    KEY `user` (user)
 );
 
 #
@@ -314,7 +327,8 @@ CREATE TABLE tx_typo3bb_domain_model_attachment (
     download_count int(11) unsigned NOT NULL DEFAULT '0',
 
     PRIMARY KEY (uid),
-    KEY parent (pid)
+    KEY parent (pid),
+    KEY post (post)
 );
 
 CREATE TABLE tx_typo3bb_domain_model_statistic (

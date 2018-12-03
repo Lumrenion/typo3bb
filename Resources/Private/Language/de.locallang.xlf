@@ -79,10 +79,6 @@
                 <source>Posts Count</source>
                 <target>Anzahl Beiträge</target>
             </trans-unit>
-            <trans-unit id="tx_typo3bb_domain_model_topic.latest_post_crdate">
-                <source>Latest Post Crdate</source>
-                <target>Erstellungsdatum des letzten Beitrags</target>
-            </trans-unit>
             <trans-unit id="tx_typo3bb_domain_model_topic.posts">
                 <source>Posts</source>
                 <target>Beiträge</target>

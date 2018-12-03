@@ -671,23 +671,24 @@ class Board extends AbstractCachableModel
     public function getPostsCount()
     {
         if ($this->postsCount === null) {
-            $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('tx_typo3bb_domain_model_post');
-            $queryBuilder->count('post.uid')
-                ->from('tx_typo3bb_domain_model_post', 'post')
-                ->leftJoin(
-                    'post',
-                    'tx_typo3bb_domain_model_topic',
-                    'topic',
-                    $queryBuilder->expr()->eq('topic.uid', $queryBuilder->quoteIdentifier('post.topic'))
-                )->leftJoin(
-                    'topic',
-                    'tx_typo3bb_domain_model_board',
-                    'board',
-                    $queryBuilder->expr()->eq('board.uid', $queryBuilder->quoteIdentifier('topic.board'))
-                )->where($queryBuilder->expr()->eq('board.uid', $queryBuilder->createNamedParameter($this->getUid(), \PDO::PARAM_INT)));
-            $postsCount = $queryBuilder->execute()->fetchColumn(0);
+            $postsCount = $this->cacheInstance->getAttribute('postsCount');
+            if ($postsCount !== null) {
+                $this->postsCount = $postsCount;
+            } else {
+                $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('tx_typo3bb_domain_model_post');
+                $queryBuilder->count('post.uid')
+                    ->from('tx_typo3bb_domain_model_post', 'post')
+                    ->leftJoin(
+                        'post',
+                        'tx_typo3bb_domain_model_topic',
+                        'topic',
+                        $queryBuilder->expr()->eq('topic.uid', $queryBuilder->quoteIdentifier('post.topic'))
+                    )->where($queryBuilder->expr()->eq('topic.board', $queryBuilder->createNamedParameter($this->getUid(), \PDO::PARAM_INT)));
+                $postsCount = $queryBuilder->execute()->fetchColumn(0);
 
-            $this->postsCount = is_numeric($postsCount) ? $postsCount : 0;
+                $this->postsCount = is_numeric($postsCount) ? $postsCount : 0;
+                $this->cacheInstance->setAttribute('postsCount', $this->postsCount);
+            }
         }
 
         return $this->postsCount;
@@ -699,25 +700,32 @@ class Board extends AbstractCachableModel
     public function getLatestPost()
     {
         if ($this->latestPost === null) {
+            $latestPost = $this->cacheInstance->getAttribute('latestPost');
             $postRepository = GeneralUtility::makeInstance(ObjectManager::class)->get(PostRepository::class);
-            $this->latestPost = $postRepository->findLatestInBoard($this);
+            if (!empty($latestPost)) {
+                $this->latestPost = $postRepository->findByUid($latestPost);
+            } else {
+                $this->latestPost = $postRepository->findLatestInBoard($this);
+                $this->cacheInstance->setAttribute('latestPost', $this->latestPost->getUid());
+            }
         }
-        if (is_numeric($this->latestPost)) {
-            $postRepository = GeneralUtility::makeInstance(ObjectManager::class)->get(PostRepository::class);
-            $this->latestPost = $postRepository->findByUid($this->latestPost);
-        }
+
         return $this->latestPost;
     }
 
     public function getLatestPostCrdate()
     {
         if ($this->latestPostCrdate === null) {
-            $latestPost = $this->getLatestPost();
-            $this->latestPostCrdate = $latestPost ? $latestPost->getCrdate() : (new \DateTime())->setTimestamp(0);
+            $latestPostCrdate = $this->cacheInstance->getAttribute('latestPostCrdate');
+            if (!empty($latestPostCrdate)) {
+                $this->latestPostCrdate = (new \DateTime())->setTimestamp($latestPostCrdate);
+            } else {
+                $latestPost = $this->getLatestPost();
+                $this->latestPostCrdate = $latestPost ? $latestPost->getCrdate() : (new \DateTime())->setTimestamp(0);
+                $this->cacheInstance->setAttribute('latestPostCrdate', $this->latestPostCrdate->getTimestamp());
+            }
         }
-        if (is_numeric($this->latestPostCrdate)) {
-            $this->latestPostCrdate = (new \DateTime())->setTimestamp($this->latestPostCrdate);
-        }
+
         return $this->latestPostCrdate;
     }
 
@@ -727,13 +735,16 @@ class Board extends AbstractCachableModel
     public function getViewableLatestPost()
     {
         if ($this->viewableLatestPost === null) {
-            $boardWithLatestPost = $this->_getBoardWithTrueLatestPost($this);
-            $this->viewableLatestPost = $boardWithLatestPost ? $boardWithLatestPost->getLatestPost() : 0;
-        }
-        if (is_numeric($this->viewableLatestPost)) {
+            $viewableLatestPost = $this->cacheInstance->getUsergroupAttribute('viewableLatestPost');
             $postRepository = GeneralUtility::makeInstance(ObjectManager::class)->get(PostRepository::class);
-            $this->viewableLatestPost = $postRepository->findByUid($this->viewableLatestPost);
+            if (!empty($viewableLatestPost)) {
+                $this->viewableLatestPost = $postRepository->findByUid($viewableLatestPost);
+            } else {
+                $this->viewableLatestPost = $postRepository->findLatestRecursive($GLOBALS['TSFE']->gr_list, $this);
+                $this->cacheInstance->setUsergroupAttribute('viewableLatestPost', ($this->viewableLatestPost ? $this->viewableLatestPost->getUid() : 0));
+            }
         }
+
         return $this->viewableLatestPost;
     }
 
@@ -745,20 +756,24 @@ class Board extends AbstractCachableModel
     public function getAllowedSubBoards()
     {
         if ($this->allowedSubBoards === null) {
+            $this->allowedSubBoards = [];
+            $allowedSubBoards = $this->cacheInstance->getUsergroupAttribute('allowedSubBoards');
             $boardRepository = GeneralUtility::makeInstance(ObjectManager::class)->get(BoardRepository::class);
-            $this->allowedSubBoards = $boardRepository->getAllowedBoards($this);
-        }
-        if (is_array($this->allowedSubBoards)) {
-            $boardRepository = GeneralUtility::makeInstance(ObjectManager::class)->get(BoardRepository::class);
-            $allowedSubBoards = [];
-            foreach ($this->allowedSubBoards as $allowedSubBoard) {
-                $subBoard = $boardRepository->findByUid($allowedSubBoard);
-                if (!empty($subBoard)) {
-                    $allowedSubBoards[] = $subBoard;
+            if ($allowedSubBoards !== null) {
+                foreach ($allowedSubBoards as $allowedSubBoard) {
+                    $this->allowedSubBoards[] = $boardRepository->findByUid($allowedSubBoard);
                 }
+            } else {
+                $this->allowedSubBoards = $boardRepository->getAllowedBoards($this);
+                $allowedSubBoardIds = [];
+                /** @var \LumIT\Typo3bb\Domain\Model\Board $allowedSubBoard */
+                foreach ($allowedSubBoards as $allowedSubBoard) {
+                    $allowedSubBoardIds[] = $allowedSubBoard->getUid();
+                }
+                $this->cacheInstance->setUsergroupAttribute('allowedSubBoards', $allowedSubBoardIds);
             }
-            $this->allowedSubBoards = $allowedSubBoards;
         }
+
         return $this->allowedSubBoards;
     }
 
@@ -782,81 +797,20 @@ class Board extends AbstractCachableModel
     }
 
     /**
+     * @param string $delimiter
      * @return string
      */
-    public function getRootlineString()
+    public function getRootlineString($delimiter = ' > ')
     {
-        return implode(' > ', array_map(function ($board) {
+        return implode($delimiter, array_map(function ($board) {
             return $board->getTitle();
         }, $this->getRootline()));
-    }
-
-
-    /**
-     * @param \LumIT\Typo3bb\Domain\Model\Board $board
-     * @return \LumIT\Typo3bb\Domain\Model\Board|null
-     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
-     */
-    protected function _getBoardWithTrueLatestPost($board)
-    {
-        $boardWithTrueLatestPost = null;
-        if (SecurityUtility::checkAccessPermission('Board.show', $board)) {
-            $boardWithTrueLatestPost = $board;
-            foreach ($board->getSubBoards() as $subBoard) {
-                $boardWithLatestPost = $this->_getBoardWithTrueLatestPost($subBoard);
-
-                if (
-                    $boardWithLatestPost != null
-                    && $boardWithTrueLatestPost->getLatestPostCrdate() < $boardWithLatestPost->getLatestPostCrdate()
-                ) {
-                    $boardWithTrueLatestPost = $boardWithLatestPost;
-                }
-            }
-        }
-
-        return $boardWithTrueLatestPost;
     }
 
 
     /******************************************************************************************************************/
 
 
-
-    protected function _getCacheableAttributes()
-    {
-        $latestPost = $this->getLatestPost();
-        $latestPostUid = $latestPost ? $latestPost->getUid() : 0;
-        $latestPostCrdate = $latestPost ? $latestPost->getCrdate()->getTimestamp() : 0;
-        $postsCount = $this->getPostsCount();
-
-        $cachedAttributes = [
-            'postsCount' => $postsCount,
-            'latestPost' => $latestPostUid,
-            'latestPostCrdate' => $latestPostCrdate
-        ];
-
-        return $cachedAttributes;
-    }
-
-    protected function _getCacheableAttributesPerUsergroup()
-    {
-
-        $viewableLatestPost = $this->getViewableLatestPost();
-        $viewableLatestPostUid = $viewableLatestPost ? $viewableLatestPost->getUid() : 0;
-
-        $allowedSubBoardObjects = $this->getAllowedSubBoards();
-        $allowedSubBoards = [];
-        foreach ($allowedSubBoardObjects as $allowedSubBoard) {
-            $allowedSubBoards[] = $allowedSubBoard->getUid();
-        }
-
-        $cachedAttributes = [
-            'viewableLatestPost' => $viewableLatestPostUid,
-            'allowedSubBoards' => $allowedSubBoards
-        ];
-
-        return $cachedAttributes;
-    }
 
     public function flushCache()
     {

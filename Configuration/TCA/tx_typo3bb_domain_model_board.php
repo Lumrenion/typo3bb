@@ -287,11 +287,6 @@ return [
                     ['', 0],
                 ],
             ],
-        ],
-        'latest_post_crdate' => [
-            'config' => [
-                'type' => 'passthrough'
-            ]
         ]
     ],
 ];

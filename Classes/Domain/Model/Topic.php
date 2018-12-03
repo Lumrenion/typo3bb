@@ -632,28 +632,19 @@ class Topic extends AbstractCachableModel
     public function getLatestPost()
     {
         if ($this->latestPost === null) {
+            $latestPost = $this->cacheInstance->getUsergroupAttribute('latestPost');
             $postRepository = GeneralUtility::makeInstance(ObjectManager::class)->get(PostRepository::class);
-            $this->latestPost = $postRepository->findLatestInTopic($this);
+            if (!empty($latestPost)) {
+                $this->latestPost = $postRepository->findByUid($latestPost);
+                $this->cacheInstance->setAttribute('latestPost', $latestPost->getUid() ?? 0);
+            } else {
+                $this->latestPost = $postRepository->findLatestInTopic($this);
+            }
         }
-        if (is_numeric($this->latestPost)) {
-            $postRepository = GeneralUtility::makeInstance(ObjectManager::class)->get(PostRepository::class);
-            $this->latestPost = $postRepository->findByUid($this->latestPost);
-        }
+
         return $this->latestPost;
     }
 
-
-
-    protected function _getCacheableAttributes()
-    {
-        $latestPostUid = $this->getLatestPost() ? $this->getLatestPost()->getUid() : 0;
-
-        $cachedAttributes = [
-            'latestPost' => $latestPostUid
-        ];
-
-        return $cachedAttributes;
-    }
 
     public function flushCache()
     {

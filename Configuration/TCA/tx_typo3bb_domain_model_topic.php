@@ -10,68 +10,20 @@ return [
         'hideTable' => 1,
 
         'delete' => 'deleted',
-        'enablecolumns' => [
-            'disabled' => 'hidden',
-            'starttime' => 'starttime',
-            'endtime' => 'endtime',
-        ],
-        'searchFields' => 'title,sticky,closed,posts_count,latest_post_crdate,posts,poll,author,author_name,subscribers,latest_post,',
+        'enablecolumns' => [],
+        'searchFields' => 'title,sticky,closed,posts,poll,author,author_name,subscribers,latest_post,',
         'iconfile' => 'EXT:typo3bb/Resources/Public/Icons/tx_typo3bb_domain_model_topic.gif'
     ],
     'interface' => [
-        'showRecordFieldList' => 'hidden, title, sticky, closed, posts_count, latest_post_crdate, posts, poll, author, author_name, subscribers, readers, latest_post',
+        'showRecordFieldList' => 'title, sticky, closed, posts, poll, author, author_name, subscribers, readers, latest_post',
     ],
     'types' => [
-        '1' => ['showitem' => 'hidden, --palette--;;1, title, sticky, closed, author, author_name, poll, posts, --div--;LLL:EXT:cms/locallang_ttc.xlf:tabs.access, starttime, endtime'],
+        '1' => ['showitem' => '--palette--;;1, title, sticky, closed, author, author_name, poll, posts'],
     ],
     'palettes' => [
         '1' => ['showitem' => ''],
     ],
     'columns' => [
-        'hidden' => [
-            'exclude' => 1,
-            'label' => 'LLL:EXT:lang/Resources/Private/Language/locallang_general.xlf:LGL.hidden',
-            'config' => [
-                'type' => 'check',
-            ],
-        ],
-        'starttime' => [
-            'exclude' => 1,
-            'label' => 'LLL:EXT:lang/Resources/Private/Language/locallang_general.xlf:LGL.starttime',
-            'config' => [
-                'type' => 'input',
-                'renderType' => 'inputDateTime',
-                'size' => 13,
-                'eval' => 'datetime',
-                'checkbox' => 0,
-                'default' => 0,
-                'range' => [
-                    'lower' => mktime(0, 0, 0, date('m'), date('d'), date('Y'))
-                ],
-                'behaviour' => [
-                    'allowLanguageSynchronization' => 1
-                ]
-            ],
-        ],
-        'endtime' => [
-            'exclude' => 1,
-            'label' => 'LLL:EXT:lang/Resources/Private/Language/locallang_general.xlf:LGL.endtime',
-            'config' => [
-                'type' => 'input',
-                'renderType' => 'inputDateTime',
-                'size' => 13,
-                'eval' => 'datetime',
-                'checkbox' => 0,
-                'default' => 0,
-                'range' => [
-                    'lower' => mktime(0, 0, 0, date('m'), date('d'), date('Y'))
-                ],
-                'behaviour' => [
-                    'allowLanguageSynchronization' => 1
-                ]
-            ],
-        ],
-
         'title' => [
             'exclude' => 1,
             'label' => 'LLL:EXT:typo3bb/Resources/Private/Language/locallang_db.xlf:tx_typo3bb_domain_model_topic.title',
@@ -158,21 +110,6 @@ return [
                 'autoSizeMax' => 30,
                 'maxitems' => 9999,
                 'multiple' => 0,
-            ],
-        ],
-        'latest_post_crdate' => [
-            'exclude' => 1,
-            'label' => 'LLL:EXT:typo3bb/Resources/Private/Language/locallang_db.xlf:tx_typo3bb_domain_model_topic.latest_post_crdate',
-            'config' => [
-                'type' => 'input',
-                'renderType' => 'inputDateTime',
-                'size' => 13,
-                'eval' => 'datetime',
-                'checkbox' => 0,
-                'default' => 0,
-                'range' => [
-                    'lower' => mktime(0, 0, 0, date('m'), date('d'), date('Y'))
-                ],
             ],
         ],
         'board' => [

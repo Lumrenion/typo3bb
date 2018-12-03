@@ -29,6 +29,7 @@ namespace LumIT\Typo3bb\Domain\Repository;
  ***************************************************************/
 use LumIT\Typo3bb\Domain\Model\Board;
 use LumIT\Typo3bb\Domain\Model\ForumCategory;
+use LumIT\Typo3bb\Utility\StringUtility;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\Generic\Mapper\DataMapper;
@@ -68,15 +69,22 @@ class BoardRepository extends AbstractRepository
         }
 
         $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('tx_typo3bb_domain_model_board');
-        $queryBuilder->select('*')
-            ->from('tx_typo3bb_domain_model_board')
-            ->where($queryBuilder->expr()->eq($parentField, $uid))
-            ->andWhere('hasAccess(tx_typo3bb_domain_model_board.uid, \'' . $usergroups . '\') = TRUE');
+        $queryBuilder->select('board.*', 'board_recursive.read_permissions AS read_permissions_recursive')
+            ->from('tx_typo3bb_domain_model_board', 'board')
+            ->leftJoin('board', 'view_tx_typo3bb_board_recursive_information', 'board_recursive', 'board.uid = board_recursive.uid')
+            ->where($queryBuilder->expr()->eq($parentField, $uid));
         foreach ($this->createQuery()->getOrderings() as $field => $ordering) {
             $queryBuilder->addOrderBy($field, $ordering);
         }
+        $boardStatement = $queryBuilder->execute();
 
-        $allowedBoards = $queryBuilder->execute()->fetchAll();
+        $allowedBoards = [];
+        while (($board = $boardStatement->fetch()) !== false) {
+            if (StringUtility::findAnyInAndStack($usergroups, $board['read_permissions_recursive'])) {
+                unset($board['read_permissions_recursive']);
+                $allowedBoards[] = $board;
+            }
+        }
 
         $dataMapper = $this->objectManager->get(DataMapper::class);
         return $dataMapper->map($this->objectType, $allowedBoards);

@@ -87,7 +87,7 @@
                                             <f:translate key="latestPost.author.label" />&nbsp;<f:if condition="{board.viewableLatestPost.author}">
                                             <f:then><f:link.action action="show" controller="FrontendUser" extensionName="IglarpTemplate" pluginName="User-Profile" arguments="{user: board.viewableLatestPost.author}" pageUid="{settings.pid.profile}">{board.viewableLatestPost.authorName}</f:link.action></f:then>
                                             <f:else>{board.viewableLatestPost.authorName}</f:else></f:if><br>
-                                            <f:translate key="latestPost.topic.label" />&nbsp;<f:link.action action="show" controller="Topic" arguments="{topic: board.viewableLatestPost.topic, post: board.viewableLatestPost}"><f:format.htmlentitiesDecode>{board.viewableLatestPost.topic.title}</f:format.htmlentitiesDecode></f:link.action><br>
+                                            <f:translate key="latestPost.topic.label" />&nbsp;<f:link.action action="show" controller="Topic" arguments="{topic: board.viewableLatestPost.topic, post: board.viewableLatestPost}" section="post-{board.viewableLatestPost.uid}"><f:format.htmlentitiesDecode>{board.viewableLatestPost.topic.title}</f:format.htmlentitiesDecode></f:link.action><br>
                                             <f:translate key="latestPost.crdate.label" />&nbsp;<f:format.date format="d.m.Y, H:i">{board.viewableLatestPost.crdate}</f:format.date>
                                         </f:if>
                                     </small>

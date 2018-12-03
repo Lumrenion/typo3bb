@@ -33,6 +33,7 @@ use LumIT\Typo3bb\Domain\Model\Topic;
 use LumIT\Typo3bb\Utility\FrontendUserUtility;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Domain\Model\FrontendUser;
 use TYPO3\CMS\Extbase\Persistence\Generic\Mapper\DataMapper;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
@@ -184,6 +185,65 @@ class PostRepository extends AbstractRepository
         $queryBuilder = $this->findUnread($frontendUser, $board, $topic, $all, true);
         $queryBuilder->count('post.uid');
         return (int)$queryBuilder->execute()->fetchColumn(0);
+    }
+
+    /**
+     * Find the latest post of a board recursively. Considers the read_permission
+     * @param $usergroups
+     * @param $board
+     * @return null
+     */
+    public function findLatestRecursive($usergroups, $board) {
+        if ($board instanceof Board) {
+            $board = $board->getUid();
+        }
+        if (is_array($usergroups)) {
+            $usergroups = implode(',', $usergroups);
+        }
+        $usergroups = implode(',', GeneralUtility::intExplode(',', $usergroups, true));
+
+        $recursiveInformationQueryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('tx_typo3bb_domain_model_post');
+        $recursiveInformationQueryBuilder->select('*')
+            ->from('view_tx_typo3bb_board_latest_post', 'latest_post')
+            ->join('latest_post',
+                'view_tx_typo3bb_board_recursive_information', 'recursive_information',
+                $recursiveInformationQueryBuilder->expr()->eq('latest_post.board', $recursiveInformationQueryBuilder->quoteIdentifier('recursive_information.uid'))
+            );
+
+        $latestPostRecursiveQueryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('tx_typo3bb_domain_model_post');
+        $latestPostRecursiveQueryBuilder->select('children.uid as board')
+            ->addSelectLiteral($latestPostRecursiveQueryBuilder->expr()->max('latest_post.post', 'post'))
+            ->from('view_tx_typo3bb_board_children', 'children');
+        $latestPostRecursiveQueryBuilder->getConcreteQueryBuilder()->join($latestPostRecursiveQueryBuilder->quoteIdentifier('children'),
+            sprintf('(%s)', $recursiveInformationQueryBuilder->getSQL()), $latestPostRecursiveQueryBuilder->quoteIdentifier('latest_post'),
+            $latestPostRecursiveQueryBuilder->expr()->inSet('latest_post.rootline', $latestPostRecursiveQueryBuilder->quoteIdentifier('children.uid'))
+        );
+        $latestPostRecursiveQueryBuilder->where($latestPostRecursiveQueryBuilder->expr()->eq('children.uid', $board));
+
+        $latestPostRecursiveQueryBuilder->getSQL();
+        if (!empty($usergroups)) {
+            $latestPostRecursiveQueryBuilder->andWhere($latestPostRecursiveQueryBuilder->expr()->comparison(
+                'findMultipleInAndSet(\'' . $usergroups . '\', ' . $latestPostRecursiveQueryBuilder->quoteIdentifier('latest_post.read_permissions') . ')',
+                '=',
+                'TRUE'
+            ));
+        }
+        $latestPostRecursiveQueryBuilder->groupBy('children.uid');
+        $latestPostRecursiveQueryBuilder->setMaxResults(1);
+
+        $postQueryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('tx_typo3bb_domain_model_post');
+        $postQueryBuilder->select('post.*')
+            ->from('tx_typo3bb_domain_model_post', 'post');
+        $postQueryBuilder->getConcreteQueryBuilder()
+            ->innerJoin($postQueryBuilder->quoteIdentifier('post'),
+                sprintf('(%s)', $latestPostRecursiveQueryBuilder->getSQL()), $postQueryBuilder->quoteIdentifier('latest_post_recursive'),
+                $postQueryBuilder->expr()->eq('post.uid', $postQueryBuilder->quoteIdentifier('latest_post_recursive.post'))
+            );
+
+        $postsArray = $postQueryBuilder->execute()->fetchAll();
+        $dataMapper = $this->objectManager->get(DataMapper::class);
+        $postObjects = $dataMapper->map($this->objectType, $postsArray);
+        return $postObjects[0] ?? null;
     }
 
     /**

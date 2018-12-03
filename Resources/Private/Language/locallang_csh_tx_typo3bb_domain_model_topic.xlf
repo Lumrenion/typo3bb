@@ -18,9 +18,6 @@
             <trans-unit id="posts_count.description">
                 <source>Number of posts, added for performance reasons</source>
             </trans-unit>
-            <trans-unit id="latest_post_crdate.description">
-                <source>The Crdate of the latest post. Enables sorting of topics without database join</source>
-            </trans-unit>
             <trans-unit id="posts.description">
                 <source>posts</source>
             </trans-unit>

@@ -9,6 +9,9 @@
 
             <f:render partial="Poll/Show" section="Content" arguments="{_all}" />
 
+            <div class="forum-topic-actions">
+                <f:render partial="Topic/Options" section="Content" arguments="{topic: topic}" />
+            </div>
             <tbb:widget.paginatePosts objects="{topic.posts}" as="paginatedPosts" currentPost="{currentPost}" configuration="{itemsPerPage: 20, insertAbove: 1, insertBelow: 1, maximumNumberOfLinks: 10, currentPost: currentPost}">
                 <f:for each="{paginatedPosts}" as="post">
                     <f:if condition="{post}">
