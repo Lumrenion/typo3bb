@@ -112,6 +112,21 @@ return [
                 'multiple' => 0,
             ],
         ],
+        'latest_post_crdate' => [
+            'exclude' => 1,
+            'label' => 'LLL:EXT:typo3bb/Resources/Private/Language/locallang_db.xlf:tx_typo3bb_domain_model_topic.latest_post_crdate',
+            'config' => [
+                'type' => 'input',
+                'renderType' => 'inputDateTime',
+                'size' => 13,
+                'eval' => 'datetime',
+                'checkbox' => 0,
+                'default' => 0,
+                'range' => [
+                    'lower' => mktime(0, 0, 0, date('m'), date('d'), date('Y'))
+                ],
+            ],
+        ],
         'board' => [
             'exclude' => 1,
             'label' => '',

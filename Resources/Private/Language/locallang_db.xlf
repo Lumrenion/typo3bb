@@ -88,6 +88,9 @@
             <trans-unit id="tx_typo3bb_domain_model_topic.posts_count">
                 <source>Posts Count</source>
             </trans-unit>
+            <trans-unit id="tx_typo3bb_domain_model_topic.latest_post_crdate">
+                <source>Latest Post Crdate</source>
+            </trans-unit>
             <trans-unit id="tx_typo3bb_domain_model_topic.posts">
                 <source>Posts</source>
             </trans-unit>

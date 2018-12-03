@@ -85,6 +85,7 @@ CREATE TABLE tx_typo3bb_domain_model_topic (
     title varchar(255) DEFAULT '' NOT NULL,
     sticky tinyint(1) unsigned DEFAULT '0' NOT NULL,
     closed tinyint(1) unsigned DEFAULT '0' NOT NULL,
+    latest_post_crdate int(11) unsigned DEFAULT '0' NOT NULL,
     posts int(11) unsigned DEFAULT '0' NOT NULL,
     poll int(11) unsigned DEFAULT '0',
     author int(11) unsigned DEFAULT '0',
