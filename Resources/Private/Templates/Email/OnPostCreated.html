@@ -12,8 +12,8 @@
                              2: post.topic.title
                          }" /><br>
         </f:format.htmlentitiesDecode>
-        <f:link.action pageUid="{settings.pid.forum}" action="show" controller="Topic" arguments="{topic: post.topic, post: post}" noCacheHash="1" absolute="1">
-            <f:uri.action pageUid="{settings.pid.forum}" action="show" controller="Topic" arguments="{topic: post.topic, post: post}" noCacheHash="1" absolute="1" />
+        <f:link.action pageUid="{settings.pid.forum}" action="show" controller="Topic" arguments="{topic: post.topic, '@widget_0': {currentPost: post}}" noCacheHash="1" absolute="1">
+            <f:uri.action pageUid="{settings.pid.forum}" action="show" controller="Topic" arguments="{topic: post.topic, '@widget_0': {currentPost: post}}" noCacheHash="1" absolute="1" />
         </f:link.action><br><br>
 
         <f:translate key="emailNotification.onPostCreated.unsubscribe" /><br><br>

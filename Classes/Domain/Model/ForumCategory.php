@@ -77,6 +77,7 @@ class ForumCategory extends AbstractCachableModel
      */
     public function __construct()
     {
+        parent::__construct();
         //Do not remove the next line: It would break the functionality
         $this->initStorageObjects();
     }

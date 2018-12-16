@@ -24,6 +24,7 @@ namespace LumIT\Typo3bb\ViewHelpers\Widget\Controller;
 
 use LumIT\Typo3bb\Domain\Model\Post;
 use LumIT\Typo3bb\Domain\Model\Reader;
+use LumIT\Typo3bb\Domain\Repository\PostRepository;
 use LumIT\Typo3bb\Domain\Repository\ReaderRepository;
 use LumIT\Typo3bb\Utility\FrontendUserUtility;
 
@@ -42,16 +43,18 @@ class PaginatePostsController extends PaginateBaseController
         'insertBelow' => true,
         'maximumNumberOfLinks' => 99,
         'addQueryStringMethod' => '',
-        'section' => '',
-        'currentPost' => ''
+        'section' => ''
     );
 
     public function initializeIndexAction()
     {
-        if (!empty($this->configuration['currentPost']) && !$this->request->hasArgument('currentPage')) {
-            $itemsPerPage = (int)$this->configuration['itemsPerPage'];
-            $positionOfPost = $this->objects->getPosition($this->configuration['currentPost']);
-            $this->currentPage = (int)(ceil($positionOfPost / $itemsPerPage));
+        if ($this->request->hasArgument('currentPost') && !$this->request->hasArgument('currentPage')) {
+            $currentPost = $this->objectManager->get(PostRepository::class)->findByUid($this->request->getArgument('currentPost'));
+            $positionOfPost = $this->objects->getPosition($currentPost);
+            if ($positionOfPost !== null) {
+                $itemsPerPage = (int)$this->configuration['itemsPerPage'];
+                $this->currentPage = (int)(ceil($positionOfPost / $itemsPerPage));
+            }
         }
     }
 

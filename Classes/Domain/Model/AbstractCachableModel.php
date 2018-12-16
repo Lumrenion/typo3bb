@@ -13,25 +13,34 @@ abstract class AbstractCachableModel extends AbstractEntity
      */
     protected $cacheInstance = null;
 
+    public function __construct()
+    {
+        $this->initializeCache();
+    }
+
 
     /**
      * @param bool $forceRenewal
      */
     public function initializeCache($forceRenewal = false)
     {
-        $this->cacheInstance = GeneralUtility::makeInstance(CacheInstance::class,
-            $this->_getEncodedCacheIdentifier(),
-            $this->_getEncodedCacheIdentifierPerUsergroup(),
-            $this->_getUsergroupCacheTag()
-        );
-        if ($forceRenewal) {
-            $this->cacheInstance->flush();
+        if ($this->cacheInstance === null) {
+            $this->cacheInstance = GeneralUtility::makeInstance(CacheInstance::class,
+                $this->_getEncodedCacheIdentifier(),
+                $this->_getEncodedCacheIdentifierPerUsergroup(),
+                $this->_getUsergroupCacheTag()
+            );
+            if ($forceRenewal) {
+                $this->cacheInstance->flush();
+            }
         }
     }
 
     public function flushCache()
     {
-        $this->cacheInstance->flush();
+        if ($this->cacheInstance !== null) {
+            $this->cacheInstance->flush();
+        }
     }
 
     /**

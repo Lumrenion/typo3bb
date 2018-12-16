@@ -7,9 +7,6 @@ class ObjectCreationSlot
 {
     public function afterMappingSingleRow($object)
     {
-        if (TYPO3_MODE !== 'FE') {
-            return;
-        }
         if ($object instanceof AbstractCachableModel) {
             $object->initializeCache();
         }

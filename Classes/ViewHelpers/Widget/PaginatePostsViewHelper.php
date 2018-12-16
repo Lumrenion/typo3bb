@@ -63,12 +63,6 @@ class PaginatePostsViewHelper extends PaginateViewHelper
      */
     protected $controller;
 
-    public function initializeArguments()
-    {
-        parent::initializeArguments();
-        $this->registerArgument('currentPost', 'LumIT\Typo3bb\Domain\Model\Post', 'The current post', false);
-    }
-
     /**
      * @param \LumIT\Typo3bb\ViewHelpers\Widget\Controller\PaginatePostsController $controller
      */

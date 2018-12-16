@@ -37,4 +37,16 @@ use TYPO3\CMS\Extbase\Persistence\Repository;
 abstract class AbstractRepository extends Repository
 {
     use RepositoryTrait;
+
+    /**
+     * @param int[] $uids
+     */
+    public function findByUidsMultiple($uids) {
+        if (empty($uids)) {
+            return [];
+        }
+        $query = $this->createQuery();
+        $query->matching($query->in('uid', $uids));
+        return $query->execute();
+    }
 }

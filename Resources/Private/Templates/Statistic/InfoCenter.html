@@ -16,7 +16,7 @@
             <div class="row">
                 <div class="col-xs-8">
                     <f:translate key="latestPost.topic.label" />&nbsp;<f:link.action controller="Topic" action="show" pageUid="{settings.pid.forum}"
-                                                                                     arguments="{topic: latestPost.topic, post: latestPost}">{latestPost.topic.title}</f:link.action>
+                                                                                     arguments="{topic: latestPost.topic, '@widget_0': {currentPost: latestPost}}">{latestPost.topic.title}</f:link.action>
                     <f:translate key="latestPost.author.label" />&nbsp;<f:if condition="{latestPost.author}">
                         <f:then><f:link.action controller="FrontendUser" action="show" extensionName="IglarpTemplate" pluginName="User-Profile" pageUid="{settings.pid.profile}"
                                                arguments="{user: latestPost.author}">{latestPost.authorName}</f:link.action></f:then>

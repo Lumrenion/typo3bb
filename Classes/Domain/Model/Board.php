@@ -195,6 +195,7 @@ class Board extends AbstractCachableModel
      */
     public function __construct()
     {
+        parent::__construct();
         //Do not remove the next line: It would break the functionality
         $this->initStorageObjects();
     }
@@ -736,13 +737,16 @@ class Board extends AbstractCachableModel
     {
         if ($this->viewableLatestPost === null) {
             $viewableLatestPost = $this->cacheInstance->getUsergroupAttribute('viewableLatestPost');
-            $postRepository = GeneralUtility::makeInstance(ObjectManager::class)->get(PostRepository::class);
-            if (!empty($viewableLatestPost)) {
-                $this->viewableLatestPost = $postRepository->findByUid($viewableLatestPost);
-            } else {
-                $this->viewableLatestPost = $postRepository->findLatestRecursive($GLOBALS['TSFE']->gr_list, $this);
-                $this->cacheInstance->setUsergroupAttribute('viewableLatestPost', ($this->viewableLatestPost ? $this->viewableLatestPost->getUid() : 0));
+            if ($viewableLatestPost === null || $viewableLatestPost > 0) {
+                $postRepository = GeneralUtility::makeInstance(ObjectManager::class)->get(PostRepository::class);
+                if ($viewableLatestPost !== null) {
+                    $this->viewableLatestPost = $postRepository->findByUid($viewableLatestPost);
+                } else {
+                    $this->viewableLatestPost = $postRepository->findLatestRecursive($GLOBALS['TSFE']->gr_list, $this);
+                    $this->cacheInstance->setUsergroupAttribute('viewableLatestPost', ($this->viewableLatestPost ? $this->viewableLatestPost->getUid() : 0));
+                }
             }
+
         }
 
         return $this->viewableLatestPost;
@@ -760,14 +764,12 @@ class Board extends AbstractCachableModel
             $allowedSubBoards = $this->cacheInstance->getUsergroupAttribute('allowedSubBoards');
             $boardRepository = GeneralUtility::makeInstance(ObjectManager::class)->get(BoardRepository::class);
             if ($allowedSubBoards !== null) {
-                foreach ($allowedSubBoards as $allowedSubBoard) {
-                    $this->allowedSubBoards[] = $boardRepository->findByUid($allowedSubBoard);
-                }
+                $this->allowedSubBoards = $boardRepository->findByUidsMultiple($allowedSubBoards);
             } else {
                 $this->allowedSubBoards = $boardRepository->getAllowedBoards($this);
                 $allowedSubBoardIds = [];
                 /** @var \LumIT\Typo3bb\Domain\Model\Board $allowedSubBoard */
-                foreach ($allowedSubBoards as $allowedSubBoard) {
+                foreach ($this->allowedSubBoards as $allowedSubBoard) {
                     $allowedSubBoardIds[] = $allowedSubBoard->getUid();
                 }
                 $this->cacheInstance->setUsergroupAttribute('allowedSubBoards', $allowedSubBoardIds);
