@@ -707,7 +707,7 @@ class Board extends AbstractCachableModel
                 $this->latestPost = $postRepository->findByUid($latestPost);
             } else {
                 $this->latestPost = $postRepository->findLatestInBoard($this);
-                $this->cacheInstance->setAttribute('latestPost', $this->latestPost->getUid());
+                $this->cacheInstance->setAttribute('latestPost', $this->latestPost ? $this->latestPost->getUid() : 0);
             }
         }
 
