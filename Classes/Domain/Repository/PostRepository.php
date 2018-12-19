@@ -48,9 +48,14 @@ class PostRepository extends AbstractRepository
      * topicRepository
      *
      * @var \LumIT\Typo3bb\Domain\Repository\TopicRepository
-     * @inject
+     *
      */
     protected $topicRepository = null;
+
+    public function injectTopicRepository(\LumIT\Typo3bb\Domain\Repository\TopicRepository $topicRepository)
+    {
+        $this->topicRepository = $topicRepository;
+    }
 
     /**
      * Returns the previous posts of specified post. If no post is specified, it returns the last posts of specified topic.

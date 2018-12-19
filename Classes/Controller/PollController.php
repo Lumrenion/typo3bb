@@ -29,6 +29,9 @@ namespace LumIT\Typo3bb\Controller;
  ***************************************************************/
 
 use LumIT\Typo3bb\Domain\Model\Topic;
+use LumIT\Typo3bb\Domain\Repository\FrontendUserRepository;
+use LumIT\Typo3bb\Domain\Repository\PollRepository;
+use LumIT\Typo3bb\Domain\Repository\TopicRepository;
 use LumIT\Typo3bb\Exception\AccessValidationException;
 use LumIT\Typo3bb\Utility\SecurityUtility;
 use TYPO3\CMS\Extbase\Persistence\Generic\Exception\UnsupportedMethodException;
@@ -42,21 +45,25 @@ class PollController extends AbstractController
 
     /**
      * @var \LumIT\Typo3bb\Domain\Repository\TopicRepository
-     * @inject
      */
     protected $topicRepository = null;
 
     /**
      * @var \LumIT\Typo3bb\Domain\Repository\PollRepository
-     * @inject
      */
     protected $pollRepository = null;
 
     /**
      * @var \LumIT\Typo3bb\Domain\Repository\FrontendUserRepository
-     * @inject
      */
     protected $frontendUserRepository = null;
+
+    public function __construct(TopicRepository $topicRepository, PollRepository $pollRepository, FrontendUserRepository $frontendUserRepository)
+    {
+        $this->topicRepository = $topicRepository;
+        $this->pollRepository = $pollRepository;
+        $frontendUserRepository = $frontendUserRepository;
+    }
 
     /**
      * @param \LumIT\Typo3bb\Domain\Model\Topic $topic

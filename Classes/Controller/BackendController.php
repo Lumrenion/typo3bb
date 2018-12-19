@@ -2,6 +2,7 @@
 
 namespace LumIT\Typo3bb\Controller;
 
+use LumIT\Typo3bb\Domain\Repository\ForumCategoryRepository;
 use TYPO3\CMS\Backend\Clipboard\Clipboard;
 use TYPO3\CMS\Backend\Template\Components\ButtonBar;
 use TYPO3\CMS\Backend\Utility\BackendUtility as BackendUtilityCore;
@@ -51,9 +52,13 @@ class BackendController extends ActionController
 
     /**
      * @var \LumIT\Typo3bb\Domain\Repository\ForumCategoryRepository
-     * @inject
      */
     protected $forumCategoryRepository = null;
+
+    public function __construct(ForumCategoryRepository $forumCategoryRepository)
+    {
+        $this->forumCategoryRepository = $forumCategoryRepository;
+    }
 
     /**
      * Function will be called before every other action

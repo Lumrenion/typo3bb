@@ -33,6 +33,11 @@ use LumIT\Typo3bb\Domain\Factory\TopicFactory;
 use LumIT\Typo3bb\Domain\Model\Board;
 use LumIT\Typo3bb\Domain\Model\Post;
 use LumIT\Typo3bb\Domain\Model\Topic;
+use LumIT\Typo3bb\Domain\Repository\BoardRepository;
+use LumIT\Typo3bb\Domain\Repository\PollRepository;
+use LumIT\Typo3bb\Domain\Repository\PostRepository;
+use LumIT\Typo3bb\Domain\Repository\ReaderRepository;
+use LumIT\Typo3bb\Domain\Repository\TopicRepository;
 use LumIT\Typo3bb\Exception\AccessValidationException;
 use LumIT\Typo3bb\Utility\CreationUtility;
 use LumIT\Typo3bb\Utility\RteUtility;
@@ -51,33 +56,37 @@ class TopicController extends AbstractController
      * topicRepository
      *
      * @var \LumIT\Typo3bb\Domain\Repository\TopicRepository
-     * @inject
      */
     protected $topicRepository = null;
 
     /**
      * @var \LumIT\Typo3bb\Domain\Repository\PollRepository
-     * @inject
      */
     protected $pollRepository = null;
 
     /**
      * @var \LumIT\Typo3bb\Domain\Repository\BoardRepository
-     * @inject
      */
     protected $boardRepository = null;
 
     /**
      * @var \LumIT\Typo3bb\Domain\Repository\PostRepository
-     * @inject
      */
     protected $postRepository = null;
 
     /**
      * @var \LumIT\Typo3bb\Domain\Repository\ReaderRepository
-     * @inject
      */
     protected $readerRepository = null;
+
+    public function __construct(TopicRepository $topicRepository, PollRepository $pollRepository, BoardRepository $boardRepository, PostRepository $postRepository, ReaderRepository $readerRepository)
+    {
+        $this->topicRepository = $topicRepository;
+        $this->pollRepository = $pollRepository;
+        $this->boardRepository = $boardRepository;
+        $this->postRepository = $postRepository;
+        $this->readerRepository = $readerRepository;
+    }
 
     /**
      * action show

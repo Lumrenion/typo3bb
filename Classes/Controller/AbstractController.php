@@ -37,6 +37,7 @@ use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Mvc\View\NotFoundView;
 use TYPO3\CMS\Extbase\Mvc\Web\Response;
+use TYPO3\CMS\Extbase\Persistence\PersistenceManagerInterface;
 
 
 /**
@@ -64,9 +65,12 @@ abstract class AbstractController extends ActionController
      * persistence manager
      *
      * @var \TYPO3\CMS\Extbase\Persistence\PersistenceManagerInterface
-     * @inject
      */
     protected $persistenceManager;
+
+    public function injectPersistenceManager(PersistenceManagerInterface $persistenceManager) {
+        $this->persistenceManager = $persistenceManager;
+    }
 
     public function initializeAction()
     {

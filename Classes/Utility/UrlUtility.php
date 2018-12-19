@@ -37,7 +37,7 @@ class UrlUtility implements SingletonInterface
     public static function getPostUrl(UriBuilder $uriBuilder, Post $post, Topic $topic = null)
     {
         $topic = is_null($topic) ? $post->getTopic() : $topic;
-        $uri = $uriBuilder->uriFor('show', ['topic' => $topic, 'post' => $post]);
+        $uri = $uriBuilder->uriFor('show', ['topic' => $topic, '@widget_0' => ['currentPost' => $post]]);
         $uri .= '#post-' . $post->getUid();
         return $uri;
     }

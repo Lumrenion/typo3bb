@@ -30,6 +30,10 @@ namespace LumIT\Typo3bb\Controller;
 use LumIT\Typo3bb\Domain\Model\Board;
 use LumIT\Typo3bb\Domain\Model\Reader;
 use LumIT\Typo3bb\Domain\Model\Topic;
+use LumIT\Typo3bb\Domain\Repository\BoardRepository;
+use LumIT\Typo3bb\Domain\Repository\FrontendUserRepository;
+use LumIT\Typo3bb\Domain\Repository\PostRepository;
+use LumIT\Typo3bb\Domain\Repository\ReaderRepository;
 use LumIT\Typo3bb\Exception\ActionNotAllowedException;
 use LumIT\Typo3bb\Utility\SecurityUtility;
 use TYPO3\CMS\Extbase\Persistence\Generic\LazyLoadingProxy;
@@ -45,27 +49,31 @@ class BoardController extends AbstractController
      * boardRepository
      *
      * @var \LumIT\Typo3bb\Domain\Repository\BoardRepository
-     * @inject
      */
     protected $boardRepository = null;
 
     /**
      * @var \LumIT\Typo3bb\Domain\Repository\ReaderRepository
-     * @inject
      */
     protected $readerRepository = null;
 
     /**
      * @var \LumIT\Typo3bb\Domain\Repository\PostRepository
-     * @inject
      */
     protected $postRepository = null;
 
     /**
      * @var \LumIT\Typo3bb\Domain\Repository\FrontendUserRepository
-     * @inject
      */
     protected $frontendUserRepository = null;
+
+    public function __construct(BoardRepository $boardRepository, ReaderRepository $readerRepository, PostRepository $postRepository, FrontendUserRepository $frontendUserRepository)
+    {
+        $this->boardRepository = $boardRepository;
+        $this->readerRepository = $readerRepository;
+        $this->postRepository = $postRepository;
+        $this->frontendUserRepository = $frontendUserRepository;
+    }
 
     /**
      * action show

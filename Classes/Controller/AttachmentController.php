@@ -29,6 +29,7 @@ namespace LumIT\Typo3bb\Controller;
  ***************************************************************/
 
 use LumIT\Typo3bb\Domain\Model\Attachment;
+use LumIT\Typo3bb\Domain\Repository\PostRepository;
 use LumIT\Typo3bb\Utility\SecurityUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
@@ -43,9 +44,13 @@ class AttachmentController extends AbstractController
      * postRepository
      *
      * @var \LumIT\Typo3bb\Domain\Repository\PostRepository
-     * @inject
      */
     protected $postRepository = null;
+
+    public function __construct(PostRepository $postRepository)
+    {
+        $this->postRepository = $postRepository;
+    }
 
     /**
      * @param \LumIT\Typo3bb\Domain\Model\Attachment $attachment

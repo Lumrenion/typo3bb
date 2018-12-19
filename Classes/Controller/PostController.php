@@ -30,6 +30,9 @@ namespace LumIT\Typo3bb\Controller;
 use LumIT\Typo3bb\Domain\Factory\PostFactory;
 use LumIT\Typo3bb\Domain\Model\Post;
 use LumIT\Typo3bb\Domain\Model\Topic;
+use LumIT\Typo3bb\Domain\Repository\BoardRepository;
+use LumIT\Typo3bb\Domain\Repository\PostRepository;
+use LumIT\Typo3bb\Domain\Repository\TopicRepository;
 use LumIT\Typo3bb\Exception\AccessValidationException;
 use LumIT\Typo3bb\Exception\ActionNotAllowedException;
 use LumIT\Typo3bb\Utility\CreationUtility;
@@ -49,21 +52,25 @@ class PostController extends AbstractController
      * postRepository
      *
      * @var \LumIT\Typo3bb\Domain\Repository\PostRepository
-     * @inject
      */
     protected $postRepository = null;
 
     /**
      * @var \LumIT\Typo3bb\Domain\Repository\TopicRepository
-     * @inject
      */
     protected $topicRepository = null;
 
     /**
      * @var \LumIT\Typo3bb\Domain\Repository\BoardRepository
-     * @inject
      */
     protected $boardRepository = null;
+
+    public function __construct(PostRepository $postRepository, TopicRepository $topicRepository, BoardRepository $boardRepository)
+    {
+        $this->postRepository = $postRepository;
+        $this->topicRepository = $topicRepository;
+        $this->boardRepository = $boardRepository;
+    }
 
     /**
      * action new

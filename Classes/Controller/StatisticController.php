@@ -27,6 +27,13 @@ namespace LumIT\Typo3bb\Controller;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+
+use LumIT\Typo3bb\Domain\Repository\BoardRepository;
+use LumIT\Typo3bb\Domain\Repository\ForumCategoryRepository;
+use LumIT\Typo3bb\Domain\Repository\FrontendUserRepository;
+use LumIT\Typo3bb\Domain\Repository\PostRepository;
+use LumIT\Typo3bb\Domain\Repository\StatisticRepository;
+use LumIT\Typo3bb\Domain\Repository\TopicRepository;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 
 /**
@@ -39,25 +46,21 @@ class StatisticController extends ActionController
      * postRepository
      *
      * @var \LumIT\Typo3bb\Domain\Repository\PostRepository
-     * @inject
      */
     protected $postRepository = null;
 
     /**
      * @var \LumIT\Typo3bb\Domain\Repository\TopicRepository
-     * @inject
      */
     protected $topicRepository = null;
 
     /**
      * @var \LumIT\Typo3bb\Domain\Repository\BoardRepository
-     * @inject
      */
     protected $boardRepository = null;
 
     /**
      * @var \LumIT\Typo3bb\Domain\Repository\ForumCategoryRepository
-     * @inject
      */
     protected $forumCategoryRepository = null;
 
@@ -65,15 +68,22 @@ class StatisticController extends ActionController
      * frontendUserRepository
      *
      * @var \LumIT\Typo3bb\Domain\Repository\FrontendUserRepository
-     * @inject
      */
     protected $frontendUserRepository = null;
 
     /**
      * @var \LumIT\Typo3bb\Domain\Repository\StatisticRepository
-     * @inject
      */
     protected $statisticRepository = null;
+
+    public function __construct(PostRepository $postRepository, TopicRepository $topicRepository, BoardRepository $boardRepository, ForumCategoryRepository $forumCategoryRepository, FrontendUserRepository $frontendUserRepository, StatisticRepository $statisticRepository)
+    {
+        $this->postRepository = $postRepository;
+        $this->topicRepository = $topicRepository;
+        $this->boardRepository = $boardRepository;
+        $this->forumCategoryRepository = $forumCategoryRepository;
+        $this->statisticRepository = $statisticRepository;
+    }
 
 
     /**

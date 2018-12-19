@@ -31,6 +31,8 @@ use LumIT\Typo3bb\Domain\Factory\MessageFactory;
 use LumIT\Typo3bb\Domain\Model\FrontendUser;
 use LumIT\Typo3bb\Domain\Model\Message;
 use LumIT\Typo3bb\Domain\Model\MessageParticipant;
+use LumIT\Typo3bb\Domain\Repository\FrontendUserRepository;
+use LumIT\Typo3bb\Domain\Repository\MessageRepository;
 use LumIT\Typo3bb\Utility\RteUtility;
 use LumIT\Typo3bb\Utility\SecurityUtility;
 
@@ -45,15 +47,19 @@ class MessageController extends AbstractController
      * messageRepository
      *
      * @var \LumIT\Typo3bb\Domain\Repository\MessageRepository
-     * @inject
      */
     protected $messageRepository = null;
 
     /**
      * @var \LumIT\Typo3bb\Domain\Repository\FrontendUserRepository
-     * @inject
      */
     protected $frontendUserRepository = null;
+
+    public function __construct(MessageRepository $messageRepository, FrontendUserRepository $frontendUserRepository)
+    {
+        $this->messageRepository = $messageRepository;
+        $this->frontendUserRepository = $frontendUserRepository;
+    }
 
     public function inboxAction()
     {

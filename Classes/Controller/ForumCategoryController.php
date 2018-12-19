@@ -2,6 +2,9 @@
 
 namespace LumIT\Typo3bb\Controller;
 
+use LumIT\Typo3bb\Domain\Repository\BoardRepository;
+use LumIT\Typo3bb\Domain\Repository\ForumCategoryRepository;
+
 /***************************************************************
  *
  *  Copyright notice
@@ -37,15 +40,19 @@ class ForumCategoryController extends AbstractController
      * forumCategoryRepository
      *
      * @var \LumIT\Typo3bb\Domain\Repository\ForumCategoryRepository
-     * @inject
      */
     protected $forumCategoryRepository = null;
 
     /**
      * @var \LumIT\Typo3bb\Domain\Repository\BoardRepository
-     * @inject
      */
     protected $boardRepository = null;
+
+    public function __construct(ForumCategoryRepository $forumCategoryRepository, BoardRepository $boardRepository)
+    {
+        $this->forumCategoryRepository = $forumCategoryRepository;
+        $this->boardRepository = $boardRepository;
+    }
 
     /**
      * action list
