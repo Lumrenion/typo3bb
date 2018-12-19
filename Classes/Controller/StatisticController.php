@@ -82,6 +82,7 @@ class StatisticController extends ActionController
         $this->topicRepository = $topicRepository;
         $this->boardRepository = $boardRepository;
         $this->forumCategoryRepository = $forumCategoryRepository;
+        $this->frontendUserRepository = $frontendUserRepository;
         $this->statisticRepository = $statisticRepository;
     }
 
