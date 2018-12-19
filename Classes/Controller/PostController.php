@@ -67,6 +67,7 @@ class PostController extends AbstractController
 
     public function __construct(PostRepository $postRepository, TopicRepository $topicRepository, BoardRepository $boardRepository)
     {
+        parent::__construct();
         $this->postRepository = $postRepository;
         $this->topicRepository = $topicRepository;
         $this->boardRepository = $boardRepository;

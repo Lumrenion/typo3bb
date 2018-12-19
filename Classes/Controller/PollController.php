@@ -60,9 +60,10 @@ class PollController extends AbstractController
 
     public function __construct(TopicRepository $topicRepository, PollRepository $pollRepository, FrontendUserRepository $frontendUserRepository)
     {
+        parent::__construct();
         $this->topicRepository = $topicRepository;
         $this->pollRepository = $pollRepository;
-        $frontendUserRepository = $frontendUserRepository;
+        $this->frontendUserRepository = $frontendUserRepository;
     }
 
     /**

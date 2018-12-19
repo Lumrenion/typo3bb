@@ -57,6 +57,7 @@ class BackendController extends ActionController
 
     public function __construct(ForumCategoryRepository $forumCategoryRepository)
     {
+        parent::__construct();
         $this->forumCategoryRepository = $forumCategoryRepository;
     }
 

@@ -49,6 +49,7 @@ class AttachmentController extends AbstractController
 
     public function __construct(PostRepository $postRepository)
     {
+        parent::__construct();
         $this->postRepository = $postRepository;
     }
 

@@ -50,6 +50,7 @@ class ForumCategoryController extends AbstractController
 
     public function __construct(ForumCategoryRepository $forumCategoryRepository, BoardRepository $boardRepository)
     {
+        parent::__construct();
         $this->forumCategoryRepository = $forumCategoryRepository;
         $this->boardRepository = $boardRepository;
     }

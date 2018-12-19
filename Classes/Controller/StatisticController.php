@@ -78,6 +78,7 @@ class StatisticController extends ActionController
 
     public function __construct(PostRepository $postRepository, TopicRepository $topicRepository, BoardRepository $boardRepository, ForumCategoryRepository $forumCategoryRepository, FrontendUserRepository $frontendUserRepository, StatisticRepository $statisticRepository)
     {
+        parent::__construct();
         $this->postRepository = $postRepository;
         $this->topicRepository = $topicRepository;
         $this->boardRepository = $boardRepository;

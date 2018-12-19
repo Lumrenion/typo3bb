@@ -57,6 +57,7 @@ class MessageController extends AbstractController
 
     public function __construct(MessageRepository $messageRepository, FrontendUserRepository $frontendUserRepository)
     {
+        parent::__construct();
         $this->messageRepository = $messageRepository;
         $this->frontendUserRepository = $frontendUserRepository;
     }

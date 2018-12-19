@@ -69,6 +69,7 @@ class BoardController extends AbstractController
 
     public function __construct(BoardRepository $boardRepository, ReaderRepository $readerRepository, PostRepository $postRepository, FrontendUserRepository $frontendUserRepository)
     {
+        parent::__construct();
         $this->boardRepository = $boardRepository;
         $this->readerRepository = $readerRepository;
         $this->postRepository = $postRepository;

@@ -81,6 +81,7 @@ class TopicController extends AbstractController
 
     public function __construct(TopicRepository $topicRepository, PollRepository $pollRepository, BoardRepository $boardRepository, PostRepository $postRepository, ReaderRepository $readerRepository)
     {
+        parent::__construct();
         $this->topicRepository = $topicRepository;
         $this->pollRepository = $pollRepository;
         $this->boardRepository = $boardRepository;
