@@ -173,20 +173,22 @@ class ForumCategory extends AbstractCachableModel
     public function getAllowedBoards()
     {
         if ($this->allowedBoards === null) {
+            $this->allowedBoards = [];
+            $allowedBoards = $this->cacheInstance->getUsergroupAttribute('allowedBoards');
             $boardRepository = GeneralUtility::makeInstance(ObjectManager::class)->get(BoardRepository::class);
-            $this->allowedBoards = $boardRepository->getAllowedBoards($this);
-        }
-        if (is_array($this->allowedBoards)) {
-            $boardRepository = GeneralUtility::makeInstance(ObjectManager::class)->get(BoardRepository::class);
-            $allowedBoards = [];
-            foreach ($this->allowedBoards as $allowedBoard) {
-                $subBoard = $boardRepository->findByUid($allowedBoard);
-                if (!empty($subBoard)) {
-                    $allowedBoards[] = $subBoard;
+            if ($allowedBoards !== null) {
+                $this->allowedBoards = $boardRepository->findByUidsMultiple($allowedBoards);
+            } else {
+                $this->allowedBoards = $boardRepository->getAllowedBoards($this);
+                $allowedBoardIds = [];
+                /** @var \LumIT\Typo3bb\Domain\Model\Board $allowedBoard */
+                foreach ($this->allowedBoards as $allowedBoard) {
+                    $allowedBoardIds[] = $allowedBoard->getUid();
                 }
+                $this->cacheInstance->setUsergroupAttribute('allowedBoards', $allowedBoardIds);
             }
-            $this->allowedBoards = $allowedBoards;
         }
+
         return $this->allowedBoards;
     }
 

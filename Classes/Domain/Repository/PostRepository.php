@@ -52,6 +52,10 @@ class PostRepository extends AbstractRepository
      */
     protected $topicRepository = null;
 
+    protected $softCache = [
+        'unreadPosts' => []
+    ];
+
     public function injectTopicRepository(\LumIT\Typo3bb\Domain\Repository\TopicRepository $topicRepository)
     {
         $this->topicRepository = $topicRepository;
@@ -93,103 +97,78 @@ class PostRepository extends AbstractRepository
         ))->execute();
     }
 
+    public function countUnread($frontendUser, $board = null, $topic = null) {
+        if ($frontendUser instanceof FrontendUser) $frontendUser = $frontendUser->getUid();
+        if ($board instanceof Board) $board = $board->getUid();
+        if ($topic instanceof Topic) $topic = $topic->getUid();
+
+        if (!isset($this->softCache['unreadPosts'][$frontendUser])) {
+            $this->softCache['unreadPosts'][$frontendUser] = [];
+            $queryBuilder = $this->getUnreadQueryBuilder($frontendUser);
+            $topicUnreadCounts = $queryBuilder->execute()->fetchAll();
+
+            $this->softCache['unreadPosts'][$frontendUser] = $topicUnreadCounts;
+        }
+
+        if ($topic !== null) {
+            $unreadCount = 0;
+            foreach ($this->softCache['unreadPosts'][$frontendUser] as $row) {
+                if ($row['topic'] == $topic) {
+                    $unreadCount += $row['unreadCount'];
+                }
+            }
+            return $unreadCount;
+        }
+
+        // when $board is set, we count unread topics, not unread posts
+        $unreadCount = 0;
+        foreach ($this->softCache['unreadPosts'][$frontendUser] as $row) {
+            if ($board === null || $row['board'] == $board) {
+                $unreadCount++;
+            }
+        }
+        return $unreadCount;
+    }
+
+
+
     /**
      * Returns the first unread post of each readable topic.
      * If $board is specified, only posts in the specified board are returned.
+     * If $topic is specified, only the first unread post in the topic is returned.
      *
      * @param \LumIT\Typo3bb\Domain\Model\FrontendUser|int $frontendUser
      * @param Board|int $board
      * @param Topic|int $topic
-     * @param bool      $all
-     * @param bool      $returnQueryBuilder
-     * @return Post[]|QueryBuilder
-     * //TODO it might be possible to simplify the resulting query (replace sub queries with joins)
+     * @return Post|Post[]
      */
-    public function findUnread($frontendUser, $board = null, $topic = null, $all = false, $returnQueryBuilder = false)
+    public function findUnread($frontendUser, $board = null, $topic = null)
     {
-        if (!($frontendUser instanceof FrontendUser)) {
-            $frontendUser = $this->objectManager->get(FrontendUserRepository::class)->findByUid($frontendUser);
-        }
-        $usergroups = FrontendUserUtility::getUsergroupList($frontendUser);
+        $queryBuilder = $this->getUnreadQueryBuilder($frontendUser);
 
-
-        $maxReaderPostSelect = $this->objectManager->get(ConnectionPool::class)->getQueryBuilderForTable('tx_typo3bb_domain_model_reader');
-        $maxReaderPostSelect->addSelectLiteral($maxReaderPostSelect->expr()->max('reader.post'))
-            ->from('tx_typo3bb_domain_model_reader', 'reader')
-            ->where(
-                $maxReaderPostSelect->expr()->eq('reader.user', $frontendUser->getUid()),
-                $maxReaderPostSelect->expr()->eq('reader.topic', 'topic.uid')
-            );
-        $readerTopicsSelect = $this->objectManager->get(ConnectionPool::class)->getQueryBuilderForTable('tx_typo3bb_domain_model_reader');
-        $readerTopicsSelect->select('reader.topic')
-            ->from('tx_typo3bb_domain_model_reader', 'reader')
-            ->where($readerTopicsSelect->expr()->eq('reader.user', $frontendUser->getUid()));
-        $lastReadPostSelect = $this->objectManager->get(ConnectionPool::class)->getQueryBuilderForTable('fe_users');
-        $lastReadPostSelect->select('feuser.last_read_post')
-            ->from('fe_users', 'feuser')
-            ->where($lastReadPostSelect->expr()->eq('feuser.uid', $frontendUser->getUid()));
-
-        $innerQueryBuilder = $this->objectManager->get(ConnectionPool::class)->getQueryBuilderForTable('tx_typo3bb_domain_model_post');
-        if ($all) {
-            $innerQueryBuilder->addSelect('innerpost.uid');
-        } else {
-            $innerQueryBuilder->addSelectLiteral($innerQueryBuilder->expr()->min('innerpost.uid'));
-        }
-        $innerQueryBuilder->from('tx_typo3bb_domain_model_post', 'innerpost')
-            ->where(
-                $innerQueryBuilder->expr()->eq('innerpost.topic', 'topic.uid'),
-                $innerQueryBuilder->expr()->orX(
-                    $innerQueryBuilder->expr()->gt('innerpost.uid', '(' . $maxReaderPostSelect->getSQL() . ')'),
-                    $innerQueryBuilder->expr()->notIn('innerpost.topic', '(' . $readerTopicsSelect->getSQL() . ')')
-                ),
-                $innerQueryBuilder->expr()->gt('innerpost.uid', '(' . $lastReadPostSelect->getSQL() . ')')
-            );
-
-        $queryBuilder = $this->objectManager->get(ConnectionPool::class)->getQueryBuilderForTable('tx_typo3bb_domain_model_post');
-        $queryBuilder->select('post.*')
-            ->from('tx_typo3bb_domain_model_post', 'post')
-            ->rightJoin('post', 'tx_typo3bb_domain_model_topic', 'topic', $queryBuilder->expr()->andX(
-                $queryBuilder->expr()->eq('topic.uid', 'post.topic'),
-                $queryBuilder->expr()->{$all ? 'in' : 'eq'}('post.uid', '(' . $innerQueryBuilder->getSQL() . ')')
-            ))->leftJoin('post', 'tx_typo3bb_domain_model_board', 'board', $queryBuilder->expr()->eq('topic.board', 'board.uid'));
-        $whereClauses = [
-            $queryBuilder->expr()->isNotNull('post.uid'),
-            $queryBuilder->expr()->comparison('hasAccess(board.uid, \'' . $usergroups . '\')', '=', 'TRUE')
-        ];
-        if ($frontendUser->getLastReadPost() != null) {
-            $whereClauses[] = $queryBuilder->expr()->gt('post.uid', $frontendUser->getLastReadPost()->getUid());
-        }
-        if ($board != null) {
-            $whereClauses[] = $queryBuilder->expr()->eq('board.uid', $board instanceof Board ? $board->getUid() : $board);
-        }
-        if ($topic != null) {
-            $whereClauses[] = $queryBuilder->expr()->eq('topic.uid', $topic instanceof Topic ? $topic->getUid() : $topic);
-        }
-        $queryBuilder->where(...$whereClauses);
-
-        $queryBuilder->orderBy('post.crdate', 'ASC');
-
-        if ($returnQueryBuilder) {
-            return $queryBuilder;
+        $unreadPosts = $queryBuilder->execute()->fetchAll();
+        $unreadFirstPosts = [];
+        foreach ($unreadPosts as $unreadPost) {
+            if (!isset($unreadFirstPosts[$unreadPost['topic']])) {
+                $unreadFirstPosts[$unreadPost['topic']] = $unreadPost['post'];
+            } else {
+                if ($unreadFirstPosts[$unreadPost['topic']] > $unreadPost['post']) {
+                    $unreadFirstPosts[$unreadPost['topic']] = $unreadPost['post'];
+                }
+            }
         }
 
-        $postsArray = $queryBuilder->execute()->fetchAll();
-        $dataMapper = $this->objectManager->get(DataMapper::class);
-        return $dataMapper->map($this->objectType, $postsArray);
-    }
+        if ($topic !== null) {
+            $topic = $topic instanceof Topic ? $topic->getUid() : $topic;
+            return $this->findByUid($unreadFirstPosts[$topic]);
+        }
 
-    /**
-     * @param \LumIT\Typo3bb\Domain\Model\FrontendUser|int $frontendUser
-     * @param Board|int $board
-     * @param Topic|int $topic
-     * @param bool      $all
-     * @return int
-     */
-    public function countUnread($frontendUser, $board = null, $topic = null, $all = false)
-    {
-        $queryBuilder = $this->findUnread($frontendUser, $board, $topic, $all, true);
-        $queryBuilder->count('post.uid');
-        return (int)$queryBuilder->execute()->fetchColumn(0);
+        $unreadPosts = [];
+        foreach ($unreadFirstPosts as $unreadFirstPost) {
+            $unreadPosts[] = $this->findByUid($unreadFirstPost);
+        }
+
+        return $unreadPosts;
     }
 
     /**
@@ -257,6 +236,7 @@ class PostRepository extends AbstractRepository
      * @param int $limit
      *
      * @return QueryResultInterface
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
      */
     public function findLatest($usergroups, $boards = null, $limit = 0)
     {
@@ -320,6 +300,7 @@ class PostRepository extends AbstractRepository
      * @param \LumIT\Typo3bb\Domain\Model\Post $currentPost
      *
      * @return \LumIT\Typo3bb\Domain\Model\Post
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
      */
     public function findNext($currentPost)
     {
@@ -334,5 +315,68 @@ class PostRepository extends AbstractRepository
             'uid' => QueryInterface::ORDER_ASCENDING
         ]);
         return $query->execute()->getFirst();
+    }
+
+
+    /**
+     * Returns ['board' => $boardUid, 'topic' => $topicUid, 'post' => $postUid] of all unread posts
+     *
+     * @param \LumIT\Typo3bb\Domain\Model\FrontendUser|int $frontendUser $frontendUser
+     * @return QueryBuilder
+     *
+     * //TODO it might be possible to simplify the resulting query (replace sub queries with joins)
+     */
+    protected function getUnreadQueryBuilder($frontendUser) {
+        if (!($frontendUser instanceof FrontendUser)) {
+            $frontendUser = $this->objectManager->get(FrontendUserRepository::class)->findByUid($frontendUser);
+        }
+        $usergroups = FrontendUserUtility::getUsergroupList($frontendUser);
+
+
+        $maxReaderPostSelect = $this->objectManager->get(ConnectionPool::class)->getQueryBuilderForTable('tx_typo3bb_domain_model_reader');
+        $maxReaderPostSelect->addSelectLiteral($maxReaderPostSelect->expr()->max('reader.post'))
+            ->from('tx_typo3bb_domain_model_reader', 'reader')
+            ->where(
+                $maxReaderPostSelect->expr()->eq('reader.user', $frontendUser->getUid()),
+                $maxReaderPostSelect->expr()->eq('reader.topic', 'topic.uid')
+            );
+        $readerTopicsSelect = $this->objectManager->get(ConnectionPool::class)->getQueryBuilderForTable('tx_typo3bb_domain_model_reader');
+        $readerTopicsSelect->select('reader.topic')
+            ->from('tx_typo3bb_domain_model_reader', 'reader')
+            ->where($readerTopicsSelect->expr()->eq('reader.user', $frontendUser->getUid()));
+        $lastReadPostSelect = $this->objectManager->get(ConnectionPool::class)->getQueryBuilderForTable('fe_users');
+        $lastReadPostSelect->select('feuser.last_read_post')
+            ->from('fe_users', 'feuser')
+            ->where($lastReadPostSelect->expr()->eq('feuser.uid', $frontendUser->getUid()));
+
+        $innerQueryBuilder = $this->objectManager->get(ConnectionPool::class)->getQueryBuilderForTable('tx_typo3bb_domain_model_post');
+        $innerQueryBuilder->addSelect('innerpost.uid');
+        $innerQueryBuilder->from('tx_typo3bb_domain_model_post', 'innerpost')
+            ->where(
+                $innerQueryBuilder->expr()->eq('innerpost.topic', 'topic.uid'),
+                $innerQueryBuilder->expr()->orX(
+                    $innerQueryBuilder->expr()->gt('innerpost.uid', '(' . $maxReaderPostSelect->getSQL() . ')'),
+                    $innerQueryBuilder->expr()->notIn('innerpost.topic', $readerTopicsSelect->getSQL())
+                ),
+                $innerQueryBuilder->expr()->gt('innerpost.uid', '(' . $lastReadPostSelect->getSQL() . ')')
+            );
+
+        $queryBuilder = $this->objectManager->get(ConnectionPool::class)->getQueryBuilderForTable('tx_typo3bb_domain_model_post');
+        $queryBuilder->select('topic.uid as topic', 'topic.board as board', 'post.uid as post')
+            ->from('tx_typo3bb_domain_model_post', 'post')
+            ->rightJoin('post', 'tx_typo3bb_domain_model_topic', 'topic', $queryBuilder->expr()->andX(
+                $queryBuilder->expr()->eq('topic.uid', 'post.topic'),
+                $queryBuilder->expr()->in('post.uid', $innerQueryBuilder->getSQL())
+            ))->leftJoin('post', 'tx_typo3bb_domain_model_board', 'board', $queryBuilder->expr()->eq('topic.board', 'board.uid'));
+        $whereClauses = [
+            $queryBuilder->expr()->isNotNull('post.uid'),
+            $queryBuilder->expr()->comparison('hasAccess(board.uid, \'' . $usergroups . '\')', '=', 'TRUE')
+        ];
+        if ($frontendUser->getLastReadPost() != null) {
+            $whereClauses[] = $queryBuilder->expr()->gt('post.uid', $frontendUser->getLastReadPost()->getUid());
+        }
+        $queryBuilder->where(...$whereClauses);
+
+        return $queryBuilder;
     }
 }

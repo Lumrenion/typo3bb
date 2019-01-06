@@ -123,8 +123,7 @@ class TopicController extends AbstractController
         /** @var Post $post */
         $post = null;
         if ($this->frontendUser !== null) {
-            $posts = $this->postRepository->findUnread($this->frontendUser, null, $topic);
-            $post = $posts[0] ?? null;
+            $post = $this->postRepository->findUnread($this->frontendUser, null, $topic);
         }
 
         if (is_null($post) || $post->getTopic()->getUid() != $topic->getUid()) {
